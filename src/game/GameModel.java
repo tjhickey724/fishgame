@@ -77,7 +77,7 @@ public class GameModel {
 	public int herz=4;
 	
 	// NOT USING ...
-	PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
+	//PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
 	
 	// HMMMM...
 	public int mode = 1;
