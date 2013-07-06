@@ -107,44 +107,46 @@ public class ParamsUI extends JFrame {
 			public void actionPerformed(ActionEvent e){
 				gm.mRate =(Integer) minmodel.getValue();
 				gm.sRate =(Integer) maxmodel.getValue();
+				script=scr.getText();
+				SubjectID=subId.getText();
+				ExperimenterID=expId.getText();
 				if (gameTypeModel.getValue().equals("Scripted")){
 					gm.scripted=true;
 					type = "Scripted";
+					gm.typescript=script;
 				} else {
 					gm.scripted=false;
 					type = "Random";
 				}
 				if (speedmodel0.getValue().equals("fast")){
-					gm.goodaudiohz=9;
+					gm.goodaudiohz=fast;
 				} else if (speedmodel0.getValue().equals("slow")){
-					gm.goodaudiohz=4;
+					gm.goodaudiohz=slow;
 				}else if (speedmodel0.getValue().equals("none")){
 					gm.goodaudiohz=0;
 				}
 				if (speedmodel1.getValue().equals("fast")){
-					gm.badaudiohz=9;
+					gm.badaudiohz=fast;
 				} else if (speedmodel1.getValue().equals("slow")){
-					gm.badaudiohz=4;
+					gm.badaudiohz=slow;
 				}else if (speedmodel1.getValue().equals("none")){
 					gm.badaudiohz=0;
 				}
 				if (speedmodel2.getValue().equals("fast")){
-					gm.goodvisualhz=9;
+					gm.goodvisualhz=fast;
 				} else if (speedmodel2.getValue().equals("slow")){
-					gm.goodvisualhz=4;
+					gm.goodvisualhz=slow;
 				}else if (speedmodel2.getValue().equals("none")){
 					gm.goodvisualhz=0;
 				}
 				if (speedmodel3.getValue().equals("fast")){
-					gm.badvisualhz=9;
+					gm.badvisualhz=fast;
 				} else if (speedmodel3.getValue().equals("slow")){
-					gm.badvisualhz=4;
+					gm.badvisualhz=slow;
 				}else if (speedmodel3.getValue().equals("none")){
 					gm.badvisualhz=0;
 				}
-				script=scr.getText();
-				SubjectID=subId.getText();
-				ExperimenterID=expId.getText();
+
 			
 				
 				System.out.println(gm.badaudiohz);
