@@ -11,16 +11,16 @@ public class KeyBoardTest{
 	JTextArea inputText;
 	JTextArea feedBackText;
 	
-	public static void main(String[] args){
-		EventQueue.invokeLater(new Runnable()
-			{
-			@Override
-			public void run(){
-				new KeyBoardTest();
-				}
-			}
-		);
-			}
+	//public static void main(String[] args){
+	//	EventQueue.invokeLater(new Runnable()
+	//		{
+	//		@Override
+	//		public void run(){
+	//			new KeyBoardTest();
+//				}
+	//		}
+	//	);
+	//		}
 	
 	public KeyBoardTest(){
 		JFrame gui = new JFrame();

@@ -19,7 +19,7 @@ public class DrawDemo {
 	private GameModel gm;
 	private javax.swing.Timer  timer;
 	public JFrame frame;
-	public JFrame params;
+	
 	public GameView gameboard;
 	private JLabel status;
 	private JSlider speedSlider;
@@ -39,10 +39,8 @@ public class DrawDemo {
 		
 		this.gm=gamemodel;
 		//this window will have the settings we can adjust
-		params = new JFrame("Settings");
-		params.setSize(500,500);
-		params.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		params.setLayout(new BorderLayout());
+
+		
 		
 		
 		// first we create the Frame with a border layout
@@ -107,13 +105,13 @@ public class DrawDemo {
 		buttonPanel.add(stopButton);
 	//	buttonPanel.add(resetButton);
 		
-		// now create the speedSlider
+		// now create the speedSlider--- is this necessary?
 		speedSlider = new JSlider(JSlider.VERTICAL,1,40,4);
 		speedSlider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
 			   int v = speedSlider.getValue();
 			   //timer.setDelay(1000/v);
-			   gm.herz=v;
+			   gm.goodaudiohz=v;
 			}
 		});
 	
@@ -124,7 +122,7 @@ public class DrawDemo {
 		frame.add(buttonPanel,BorderLayout.EAST);
 		frame.add(status,BorderLayout.SOUTH);
 		//frame.add(speedSlider,BorderLayout.WEST);
-		params.add(speedSlider,BorderLayout.WEST);
+		//params.add(speedSlider,BorderLayout.WEST);
 		//frame.pack();
 
 	}
@@ -140,7 +138,7 @@ public class DrawDemo {
 		// now we create the StepButtonListener
 		// and add it as a listener to the timer
 		myDemo.frame.setVisible(true);
-
+		
 		myDemo.timer = new Timer(10,myDemo.stepButtonListener);
 		myDemo.timer.setDelay(50);
 		myDemo.timer.start();

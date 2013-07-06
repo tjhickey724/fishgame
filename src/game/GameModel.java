@@ -54,9 +54,9 @@ public class GameModel {
 	private long gameStart = startTime;
 	
 	// mRate is the minimum time between fish, in tenths of a second
-	public int mRate = 50;
-	// sRate is the variable rate added to the minimum rate, creating a range of random numbers from 3 to 7 seconds.
-	public int sRate = 40;
+	public int mRate = 40;
+	// sRate is the maximum time between fish
+	public int sRate = 90;
 	
 	public int score;
 	// this is a temporary variable, we'll be reading from a file eventually
@@ -74,7 +74,10 @@ public class GameModel {
     // we're not using this anymore 
 	public String log = "";
 	// we should have goodherz and badherz probably ...
-	public int herz=4;
+	public int goodvisualhz=4;
+	public int badvisualhz=9;
+	public int badaudiohz=9;
+	public int goodaudiohz=4;
 	
 	// NOT USING ...
 	//PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
@@ -105,7 +108,7 @@ public class GameModel {
 	 * @return
 	 */
 	private long updateNextFishTime(){
-		long r = Math.abs(rand.nextLong()) % (sRate*100000000);
+		long r = Math.abs(rand.nextLong()) % ((sRate-mRate)*100000000);
 		long m = mRate*100000000L;
 		System.out.println("nft:"+ m+","+r);
 		return( this.nextFishTime+ m+ r);	
@@ -177,7 +180,13 @@ public class GameModel {
 		a.vy=0;
 		a.species=spec;
 		a.origin=or;
-		a.colorHerz=this.herz;
+		// need to add statement for audiohz
+		if (spec==Species.good){
+			a.colorHerz=this.goodvisualhz;
+		} else if (spec==Species.bad) {
+			a.colorHerz=this.badvisualhz;
+		}
+		
 		//log+="Actor event.BirthTime:"+a.birthTime+" Type:"+a.species+" Side:"+a.origin+"\n";
 		//writer.println("Actor event.BirthTime:"+a.birthTime+" Type:"+a.species+" Side:"+a.origin+"\n");
 		logfile.write("Actor event.BirthTime:"+a.birthTime+" Type:"+a.species+" Side:"+a.origin+"\n");
