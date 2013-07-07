@@ -1,3 +1,3 @@
 package game;
 
-public enum Species {good, bad, avatar};
+public enum Species {good, bad, avatar, none};

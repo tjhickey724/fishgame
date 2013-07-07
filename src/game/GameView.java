@@ -67,6 +67,12 @@ public class GameView extends JPanel{
 				//feedBackText.append("Key Released: " + e.getKeyChar() + "\n");
 			}
 			
+			/**
+			 * returns true if the key press was correct
+			 * @param c
+			 * @param lastFish
+			 * @return
+			 */
 			private boolean hitCorrectKey(char c,GameActor lastFish){
 				Species s = lastFish.species;
 				boolean onLeft = lastFish.origin==0;
@@ -89,7 +95,9 @@ public class GameView extends JPanel{
 				// when there are no fish!!
 				if (gm.actors.size()==0) {
 					String log="KeyPress for no fish!" ;
-					gm.writeToLog(log);
+					//gm.writeToLog(log);
+					gm.writeToLog(new GameEvent(e.getKeyChar()));
+					badclip.play();
 					return;
 				}
 				//otherwise, get the last fish (should only be one!)
@@ -107,7 +115,8 @@ public class GameView extends JPanel{
 				String log = e.getKeyChar()+" "+responseTime/1000000.0+" "
 					      +correctResponse+" "+lastFish;
 				System.out.println(log);
-				gm.writeToLog(log);
+				//gm.writeToLog(log);
+				gm.writeToLog(new GameEvent(e.getKeyChar(),lastFish));
 				
 				// play the appropriate sound and modify the score
 				if (correctResponse){
@@ -121,6 +130,9 @@ public class GameView extends JPanel{
 		};
 		this.addKeyListener(kl);
 	}
+	
+	
+
 	
 	/**
 	 * toViewCoords(x) converts from model coordinates to pixels

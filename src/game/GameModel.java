@@ -128,6 +128,16 @@ public class GameModel {
 			System.out.println("Error writing to log "+e);
 		}
 	}
+	
+	public void writeToLog(GameEvent e){
+		try{
+			long theTime = (System.nanoTime()-this.gameStart);
+			double theSeconds = (theTime/1000000.0);
+			this.logfile.write(theSeconds+GameEvent.sep+e+"\n");
+		} catch(Exception err){
+			System.out.println("Error writing GameEvent to log "+err);
+		}
+	}
 
 
 	
@@ -243,6 +253,8 @@ public class GameModel {
 	
 	public void start(){
 		paused = false;
+		this.nextFishTime = System.nanoTime();
+		this.nextFishTime = updateNextFishTime(); 
 	}
 	
 	public void stop(){
@@ -324,7 +336,8 @@ public class GameModel {
 				lastFish.ct.stop();
 				this.actors.clear();
 				//System.out.println("missed fish!!");
-				this.writeToLog("missed fish!");
+				//this.writeToLog("missed fish!");
+				this.writeToLog(new GameEvent(lastFish));
 				//this.writeToLog("- "+duration/1000000.0+" false "+lastFish);
 			}
 			randomSpawnActor();

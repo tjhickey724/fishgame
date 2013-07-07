@@ -74,7 +74,7 @@ public class DrawDemo {
 					public void actionPerformed(ActionEvent e){
 						gm.start();
 						gm.gameOver=false;
-						gm.writeToLog("start session");
+						gm.writeToLog(new GameEvent("startgame"));
 						status.setText("game in play");
 					}
 				});
@@ -82,9 +82,9 @@ public class DrawDemo {
 		stopButton.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					gm.stop();
 					status.setText("game paused");
-					gm.writeToLog("end session");
+					gm.writeToLog(new GameEvent("stopgame"));
+					gm.stop();
 				}
 			});
 		
