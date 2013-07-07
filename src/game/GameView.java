@@ -34,7 +34,7 @@ public class GameView extends JPanel{
 	private GameModel gm = null;
 	ArrayList<String> keylog = new ArrayList<String>();
 	public boolean gameActive = false;
-	private BufferedImage streamImage, streamImage2;
+	private BufferedImage streamImage, streamImage2,fishL,fishR;
 	
 	public GameView(final GameModel gm) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		super();
@@ -48,6 +48,8 @@ public class GameView extends JPanel{
 		try {
 			streamImage = ImageIO.read(new File("images/stream.jpg")); 
 			streamImage2 = ImageIO.read(new File("images/streamFlip2.jpg")); 
+			fishL = ImageIO.read(new File("images/fishLeft.png"));
+			fishR = ImageIO.read(new File("images/fishRight.png"));
 		}catch(Exception e){
 			System.out.println("can't find background images"+e);
 		}
@@ -144,7 +146,7 @@ public class GameView extends JPanel{
 	 */
 	public int toViewCoords(double x){
 		int width = this.getWidth();
-		int height = this.getHeight();
+ 		int height = this.getHeight();
 		int viewSize = (width<height)?width:height;
 		return (int) Math.round(x/gm.size*viewSize);
 	}
@@ -230,10 +232,21 @@ public class GameView extends JPanel{
 		case avatar: c=Color.BLACK; break;
 		}
 		g.setColor(c);
+		/*
 		if (a.species==Species.avatar){
 			g.drawOval(x-theRadius, y-theRadius, 2*theRadius, 2*theRadius);
 		} else
 			g.fillOval(x-theRadius, y-theRadius, 2*theRadius, 2*theRadius);
+	
+		*/
+		int theSize = interpolateSize(100.0,125,a.birthTime,System.nanoTime(),a.colorHerz);
+		int theWidth  = (int) ((theSize * 97)/100);
+		int theHeight = (int) ((theSize * 32)/100);
+		if (a.fromLeft){
+			g.drawImage(fishL,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
+		} else {
+			g.drawImage(fishR,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
+		}
 
 	}
 	
@@ -246,5 +259,12 @@ public class GameView extends JPanel{
 		return new Color(red,green,blue);
 	}
 	
+	private int interpolateSize(double min, double max, long birth, long now, double freq){
+		double t = ((now-birth)/1000000000.0)*freq;
+		double y = 0.5*(Math.sin(Math.PI*2*t)+1);
+		double s = min*y + max*(1-y);
+		int size = (int)Math.round(s);
+		return size;
+}
 
 }

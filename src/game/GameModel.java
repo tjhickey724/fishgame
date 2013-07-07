@@ -160,11 +160,11 @@ public class GameModel {
 		if (t.charAt(0)=='r')
 		{
 			x = width-1;
-			vx= -10;
+			vx= -1;
 			or=1;
 		} else if (t.charAt(0)=='l'){
 			x =1;
-			vx=10;
+			vx=1;
 			or=0;
 		}
 		
