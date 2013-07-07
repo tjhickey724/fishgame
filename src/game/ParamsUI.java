@@ -21,6 +21,7 @@ public class ParamsUI extends JFrame {
 		int[] times;
 		String[] speeds,videotypes,gametypes,soundtypes;
 		JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
+		//JComboBox gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
 		String SubjectID,ExperimenterID,script,type;
 		JTextField expId,subId,scr;
 		JCheckBox ster;
@@ -32,7 +33,7 @@ public class ParamsUI extends JFrame {
 	
 		
 	
-	public ParamsUI(final GameModel gm) {
+	public ParamsUI(final GameModel gm, final DrawDemo gameView) {
 		
 		super("Parameters");
 		this.gm=gm;
@@ -63,7 +64,7 @@ public class ParamsUI extends JFrame {
 		scrip = new JLabel("Script: ");	
 		
 		min = 0;
-		max = 10;
+		max = 100;
 		times = new int[max];
 		for (int i=min; i<max; i++){
 			times[i]=i;
@@ -164,7 +165,14 @@ public class ParamsUI extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				// Finally, show the actual game window!
+				gameView.frame.setVisible(true);
+				GameLoop gl = new GameLoop(gm,gameView.gameboard);
+				Thread t = new Thread(gl);
+				System.out.println("gameloop");
+				t.start();
+				gameView.gameboard.requestFocus();
+			
 			}
 
 			

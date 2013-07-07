@@ -18,13 +18,16 @@ public class RunGame {
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		GameModel gm = new GameModel(100,10);
 		DrawDemo myDemo = new DrawDemo(gm);
-		ParamsUI params= new ParamsUI(gm);
-		myDemo.frame.setVisible(true);
+		ParamsUI params= new ParamsUI(gm,myDemo);
+		//myDemo.frame.setVisible(true);  // require user to set params before showing the demo
 		params.setVisible(true);
+		/*
+		 // move this to the ParamsUI??
 		GameLoop gl = new GameLoop(gm,myDemo.gameboard);
 		Thread t = new Thread(gl);
 		System.out.println("gameloop");
 		t.start();
 		myDemo.gameboard.requestFocus();
+		*/
 	}
 }
