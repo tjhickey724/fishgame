@@ -12,23 +12,25 @@ public class ParamsUI extends JFrame {
 	 * The script textbox could be bigger
 	 */
 	private static final long serialVersionUID = 1L;
-			JLabel header,fish,good,bad,sound,visual,subjectid,experimenterid,soundType,videoType,gameType,mintime,maxtime,scrip;
-		JPanel matrix1,matrix2,matrix3,matrix4;
+		JLabel header,fish,good,bad,sound,visual,subjectid,experimenterid,soundType,videoType,gameType,mintime,maxtime,scrip;
+		JLabel hit,miss,total,ghit,gmiss,bhit,bmiss,gtot,btot,htot,mtot,tot;
+		JPanel matrix1,matrix2,matrix3,matrix4,matrix5,matrix6;
 		JButton button1;
 		JPanel col1,col2,col3,row1,row2,row3;
 		//JTextField gs,bs,gc,bc;
-		int slow,fast,min,max;
+		int slow,fast,min,max,gh,gms,bh,bm,gt,bt,mt,ht,t;
 		int[] times;
 		String[] speeds,videotypes,gametypes,soundtypes;
-		JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
-		//JComboBox gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
+		//JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
+		JComboBox gs,bs,gv,bv,vidtype,gamtype,stype;
 		String SubjectID,ExperimenterID,script,type;
-		JTextField expId,subId,scr;
-		JCheckBox ster;
+		JTextField expId,subId,scr,mintim,maxtim;
+		//JCheckBox ster;
 		JFileChooser fc;
 		JButton save;
 		GameModel gm;
-		SpinnerModel minmodel,maxmodel;
+	//	SpinnerModel minmodel,maxmodel;
+		JScrollPane jsp;
 		
 	
 		
@@ -41,7 +43,7 @@ public class ParamsUI extends JFrame {
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.setLayout(new GridLayout(2,2));
+		this.setLayout(new GridLayout(3,2));
 		
 		fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -49,6 +51,8 @@ public class ParamsUI extends JFrame {
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
 		scr= new JTextField("Script");
+		mintim = new JTextField("20");
+		maxtim = new JTextField("60");
 		
 		header = new JLabel("Settings");
 		fish=new JLabel("Fish Type:");
@@ -61,57 +65,78 @@ public class ParamsUI extends JFrame {
 		gameType=new JLabel("Game Type: ");
 		mintime=new JLabel("Min Time: ");
 		maxtime= new JLabel("Max Time: ");
-		scrip = new JLabel("Script: ");	
+		scrip = new JLabel("ScriptFile: ");	
 		
-		min = 0;
-		max = 100;
-		times = new int[max];
-		for (int i=min; i<max; i++){
-			times[i]=i;
-		}
 		
-		final SpinnerModel minmodel = new SpinnerNumberModel(times[0],times[0],times[times.length-1],1);
-		mintim = new JSpinner(minmodel);
-		final SpinnerModel maxmodel = new SpinnerNumberModel(times[0],times[0],times[times.length-1],1);
-		maxtim = new JSpinner(maxmodel);
+		
+		hit= new JLabel("Hits");
+		miss = new JLabel("Misses:");
+		ghit = new JLabel(gh+"");
+		bhit = new JLabel(bh+"");
+		gmiss = new JLabel(gms+"");
+		bmiss = new JLabel(bm+"");
+		gtot = new JLabel(gt+"");
+		btot = new JLabel(bt+"");
+		htot = new JLabel(ht+"");
+		mtot = new JLabel(mt+"");
+		tot = new JLabel(t+"");
+		total = new JLabel("Total");
+		
+		
+		min = 20;
+		max = 60;
+
+		
+		
 	
 
 		
 		speeds=new String[]{"none","slow","fast"};
 		
-		final SpinnerModel speedmodel0 = new SpinnerListModel(speeds);
+/*		final SpinnerModel speedmodel0 = new SpinnerListModel(speeds);
 		final SpinnerModel speedmodel1 = new SpinnerListModel(speeds);
 		final SpinnerModel speedmodel2 = new SpinnerListModel(speeds);
 		final SpinnerModel speedmodel3 = new SpinnerListModel(speeds);
-		
-		videotypes=new String[]{"Flicker","Throb"};
-		SpinnerModel videoTypeModel = new SpinnerListModel(videotypes);
-		vidtype = new JSpinner(videoTypeModel);
+	*/	
+		videotypes=new String[]{"Throb","Flicker"};
+	
+	//	SpinnerModel videoTypeModel = new SpinnerListModel(videotypes);
+		vidtype = new JComboBox(videotypes);
 		
 		gametypes=new String[]{"Generated","Scripted"};
-		final SpinnerModel gameTypeModel = new SpinnerListModel(gametypes);
-		gamtype = new JSpinner(gameTypeModel);
-		
+	//	final SpinnerModel gameTypeModel = new SpinnerListModel(gametypes);
+		gamtype = new JComboBox(gametypes);
+		gamtype.setSelectedIndex(1);
 		soundtypes=new String[]{"Stereo","Mono"};
-		SpinnerModel soundTypeModel = new SpinnerListModel(soundtypes);
-		stype = new JSpinner(soundTypeModel);
+	//	SpinnerModel soundTypeModel = new SpinnerListModel(soundtypes);
+		stype = new JComboBox(soundtypes);
 		
-		gs=new JSpinner(speedmodel0);
-		bs=new JSpinner(speedmodel1);
-		gv=new JSpinner(speedmodel2);
-		bv=new JSpinner(speedmodel3);
+		gs=new JComboBox(speeds);
+		gs.setSelectedIndex(1);
+		bs=new JComboBox(speeds);
+		bs.setSelectedIndex(2);
+		gv=new JComboBox(speeds);
+		gv.setSelectedIndex(1);
+		bv=new JComboBox(speeds);
+		bv.setSelectedIndex(2);
+		
+		JTextArea textArea = new JTextArea(5, 20);
+		jsp = new JScrollPane(textArea); 
+		textArea.setEditable(true);
 		
 		// the Save button will look at the values of the params interface and change the game model accordingly
 				save= new JButton("Save");
 		save.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				gm.mRate =(Integer) minmodel.getValue();
-				gm.sRate =(Integer) maxmodel.getValue();
+				
+				gm.mRate = (int) Double.parseDouble(mintim.getText());
+				gm.sRate = (int) Double.parseDouble(maxtim.getText());
+			
 				script=scr.getText();
 				SubjectID=subId.getText();
 				ExperimenterID=expId.getText();
-				if (gameTypeModel.getValue().equals("Scripted")){
+				if (gamtype.getSelectedItem().toString().equals("Scripted")){
 					gm.scripted=true;
 					type = "Scripted";
 					gm.typescript=script;
@@ -119,32 +144,32 @@ public class ParamsUI extends JFrame {
 					gm.scripted=false;
 					type = "Random";
 				}
-				if (speedmodel0.getValue().equals("fast")){
+				if (gs.getSelectedItem().toString().equals("fast")){
 					gm.goodaudiohz=fast;
-				} else if (speedmodel0.getValue().equals("slow")){
+				} else if (gs.getSelectedItem().toString().equals("slow")){
 					gm.goodaudiohz=slow;
-				}else if (speedmodel0.getValue().equals("none")){
+				}else if (gs.getSelectedItem().toString().equals("none")){
 					gm.goodaudiohz=0;
 				}
-				if (speedmodel1.getValue().equals("fast")){
+				if (bs.getSelectedItem().toString().equals("fast")){
 					gm.badaudiohz=fast;
-				} else if (speedmodel1.getValue().equals("slow")){
+				} else if (bs.getSelectedItem().toString().equals("slow")){
 					gm.badaudiohz=slow;
-				}else if (speedmodel1.getValue().equals("none")){
+				}else if (bs.getSelectedItem().toString().equals("none")){
 					gm.badaudiohz=0;
 				}
-				if (speedmodel2.getValue().equals("fast")){
+				if (gv.getSelectedItem().toString().equals("fast")){
 					gm.goodvisualhz=fast;
-				} else if (speedmodel2.getValue().equals("slow")){
+				} else if (gv.getSelectedItem().toString().equals("slow")){
 					gm.goodvisualhz=slow;
-				}else if (speedmodel2.getValue().equals("none")){
+				}else if (gv.getSelectedItem().toString().equals("none")){
 					gm.goodvisualhz=0;
 				}
-				if (speedmodel3.getValue().equals("fast")){
+				if (bv.getSelectedItem().toString().equals("fast")){
 					gm.badvisualhz=fast;
-				} else if (speedmodel3.getValue().equals("slow")){
+				} else if (bv.getSelectedItem().toString().equals("slow")){
 					gm.badvisualhz=slow;
-				}else if (speedmodel3.getValue().equals("none")){
+				}else if (bv.getSelectedItem().toString().equals("none")){
 					gm.badvisualhz=0;
 				}
 
@@ -174,9 +199,6 @@ public class ParamsUI extends JFrame {
 				gameView.gameboard.requestFocus();
 			
 			}
-
-			
-
 		});
 		
 		col1 = new JPanel();
@@ -203,6 +225,15 @@ public class ParamsUI extends JFrame {
 		
 		matrix4 = new JPanel();
 		matrix4.setLayout(new GridLayout(3,1));
+		
+		matrix5 = new JPanel();
+		matrix5.setLayout(new GridLayout(4,4));
+		
+		matrix6 = new JPanel();
+		
+		JPanel blank=new JPanel();
+		JPanel blank1=new JPanel();
+
 		
 /*		button1 = new JButton();
 		button1.setText("Push Me");
@@ -256,10 +287,30 @@ public class ParamsUI extends JFrame {
 		matrix4.add(expId);
 		matrix4.add(save);
 		
+		matrix5.add(blank);
+		matrix5.add(hit);
+		matrix5.add(miss);
+		matrix5.add(total);
+		matrix5.add(good);
+		matrix5.add(ghit);
+		matrix5.add(gmiss);
+		matrix5.add(gtot);
+		matrix5.add(bad);
+		matrix5.add(bhit);
+		matrix5.add(bmiss);
+		matrix5.add(btot);
+		matrix5.add(blank1);
+		matrix5.add(htot);
+		matrix5.add(mtot);
+		matrix5.add(tot);
+		
+		matrix6.add(jsp);
+		
 		this.add(matrix1);
 		this.add(matrix2);
 		this.add(matrix3);
 		this.add(matrix4);
-		
+		this.add(matrix5);
+		this.add(matrix6);
 	}
 }
