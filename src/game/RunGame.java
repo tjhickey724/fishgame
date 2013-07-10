@@ -10,7 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 /**
  * This creates the game window, initializes the game model,
- * and starts up the game loop.
+ * and starts up the game loop.  On a Mac you can use GamePadCompanion.app
+ *    https://www.macupdate.com/app/mac/6528/gamepad-companion
+ * to map GamePad buttons to the appropriate keys
  * @author tim
  *
  */
