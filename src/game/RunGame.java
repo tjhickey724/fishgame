@@ -22,11 +22,14 @@ public class RunGame {
 		myDemo.frame.setVisible(true); 
 		params.setVisible(true);
 
+		/*
 		GameLoop gl = new GameLoop(gm,myDemo.gameboard);
 		Thread t = new Thread(gl);
-		System.out.println("gameloop");
 		t.start();
-		myDemo.gameboard.requestFocus();
+		//myDemo.gameboard.requestFocus();
+		 * 
+		 */
+	
 
 	}
 }

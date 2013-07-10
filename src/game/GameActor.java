@@ -60,11 +60,11 @@ public class GameActor {
 			}
 		}
 		
-		public GameActor(double x, double y)throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		public GameActor(double x, double y) { //throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 			this(x,y,true,Species.good);
 		}
 		
-		public GameActor()throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		public GameActor() { //throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 			this(0,0,true,Species.good);
 		}
 

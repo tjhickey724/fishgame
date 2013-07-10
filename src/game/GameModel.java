@@ -54,6 +54,7 @@ public class GameModel {
 	private long startTime=System.nanoTime();
 	private long lastUpdate=startTime;
 	private long nextFishTime=0;
+	private GameActor nextFish=null;
 	private long gameStart = startTime;
 	
 	// mRate is the minimum time between fish, in tenths of a second
@@ -63,13 +64,14 @@ public class GameModel {
 	
 	public int score;
 	// this is a temporary variable, we'll be reading from a file eventually
-	public String typescript = "lb 100 lb 100 rg 100 rb 100 lb 100"; 
+	//public String typescript = "lb 100 lb 100 rg 100 rb 100 lb 100"; 
 	
 	// this is true if we are reading from a script
 	public boolean scripted=false;
+	public String inputScriptFileName;
 	
 	// this is a scanner used to read the fish creation info
-	public Scanner scan = new Scanner(typescript);
+	public Scanner scan; // = new Scanner(typescript);
 	
 	// this is where the log will be written...
 	public BufferedWriter logfile;
@@ -86,10 +88,6 @@ public class GameModel {
 	/** these variables record good/bad hits */
 	public int 
 	  hits,misses,
-      hitGoodLeft, missGoodLeft,
-      hitGoodRight, missGoodRight,
-      hitBadLeft, missBadLeft,
-      hitBadRight, missBadRight,
       noKeyPress,
       pressWithNoFish;
 	
@@ -111,8 +109,8 @@ public class GameModel {
 		//this.avatar.radius=6;
 		
 		this.gameOver = false;
-		this.nextFishTime = System.nanoTime(); // we skip the first fish!!
-		this.nextFishTime = updateNextFishTime(); 
+		//this.nextFishTime = System.nanoTime(); // we skip the first fish!!
+		//this.nextFishTime = updateNextFishTime(); 
 		long now = System.currentTimeMillis();
 		String logname = "log"+now+".txt";
 		this.logfile = new BufferedWriter(new FileWriter(new File(logname)));
@@ -127,7 +125,44 @@ public class GameModel {
 	 * using the mRate and sRate parameters (explain more later ...)
 	 * @return
 	 */
+	
 	private long updateNextFishTime(){
+		if (scripted){
+			return readNextFishTime();
+		} else {
+			return generateNextFishTime();
+		}
+	}
+	
+	private long readNextFishTime() {
+		if (scan==null){
+			try {
+				scan = new Scanner(new File(this.inputScriptFileName));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Error in reading inputScriptFile");
+				this.stop();
+				return 0;
+			}
+		}
+		if (!scan.hasNext()){
+			//this.stop();
+			this.stop();
+			return this.nextFishTime+10000000000000L;
+		}
+		long nextFishTime = scan.nextLong() + this.gameStart;
+		String species = scan.next();
+		String side = scan.next();
+		GameActor a = new GameActor();
+		a.fromLeft = side.equals("left");
+		a.species = (species.equals("good"))?Species.good:Species.bad;
+		this.nextFish = a;
+		return nextFishTime;
+		
+	}
+	
+	private long generateNextFishTime(){
 		long r = Math.abs(rand.nextLong()) % ((sRate-mRate)*1000000000);
 		long m = mRate*100000000L;
 		System.out.println("nft:"+ m+","+r);
@@ -261,6 +296,10 @@ public class GameModel {
 			s = Species.bad;
 		}
 		
+		if (this.scripted) {
+			side = (this.nextFish.fromLeft)?Side.left:Side.right;
+			s = this.nextFish.species;
+		}
 
 		// pick starting location and velocity
 		double y = this.height/2;
@@ -301,8 +340,9 @@ public class GameModel {
 		}
 		this.actors.clear();
 		try{
-			logfile.close();
-			scriptfile.close();
+			if (logfile != null) logfile.close();
+			if (scriptfile != null) scriptfile.close();
+			System.out.println("closing log/script files");
 		}catch (Exception e){
 			System.out.println("Problem closing logfile");
 		}

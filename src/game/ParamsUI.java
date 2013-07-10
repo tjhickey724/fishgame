@@ -51,7 +51,7 @@ public class ParamsUI extends JFrame {
 		
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
-		scr= new JTextField("Script");
+		scr= new JTextField("demoscript.txt");
 		mintim = new JTextField("20");
 		maxtim = new JTextField("60");
 		
@@ -141,7 +141,8 @@ public class ParamsUI extends JFrame {
 				if (gamtype.getSelectedItem().toString().equals("Scripted")){
 					gm.scripted=true;
 					type = "Scripted";
-					gm.typescript=script;
+					gm.inputScriptFileName = script;
+					//gm.typescript=script;
 				} else {
 					gm.scripted=false;
 					type = "Random";
@@ -186,15 +187,21 @@ public class ParamsUI extends JFrame {
 				System.out.println(script);
 				System.out.println(gm.mRate);
 				try {
-					gm.logfile.write("Experimenter: "+ ExperimenterID + "\n" + "Subject: " + SubjectID + "\n" + "Game Type: "+ type + "\n"+"Min Delay: "+ gm.mRate+"\n"+"Max Delay: "+gm.sRate+"\n");
+					gm.logfile.write("Experimenter: "+ ExperimenterID + "\n" + 
+				                     "Subject: " + SubjectID + "\n" + 
+							         "Game Type: "+ type + "\n"+
+				                     "Min Delay: "+ gm.mRate+"\n"+
+							         "Max Delay: "+gm.sRate+"\n");
 					gm.logfile.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				gm.paused= false;
-				gm.gameOver=false;
+				gm.start();
+				GameLoop gl = new GameLoop(gm,gameView.gameboard);
+				Thread t = new Thread(gl);
+				t.start();
+	
 				/*
 				// Finally, show the actual game window!
 				gameView.frame.setVisible(true);

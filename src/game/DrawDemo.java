@@ -45,7 +45,7 @@ public class DrawDemo {
 		
 		// first we create the Frame with a border layout
 		frame = new JFrame("draw demo");
-		frame.setSize(800,800);
+		frame.setSize(500,1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		
