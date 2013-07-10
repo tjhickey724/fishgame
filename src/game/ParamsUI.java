@@ -27,7 +27,8 @@ public class ParamsUI extends JFrame {
 		JTextField expId,subId,scr,mintim,maxtim;
 		//JCheckBox ster;
 		JFileChooser fc;
-		JButton save;
+		JButton start;
+		JButton stop;
 		GameModel gm;
 	//	SpinnerModel minmodel,maxmodel;
 		JScrollPane jsp;
@@ -124,9 +125,10 @@ public class ParamsUI extends JFrame {
 		jsp = new JScrollPane(textArea); 
 		textArea.setEditable(true);
 		
-		// the Save button will look at the values of the params interface and change the game model accordingly
-				save= new JButton("Save");
-		save.addActionListener(new ActionListener(){
+		// the start button will look at the values of the params interface and change the game model accordingly
+		start= new JButton("start");
+
+		start.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				
@@ -190,6 +192,10 @@ public class ParamsUI extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				gm.paused= false;
+				gm.gameOver=false;
+				/*
 				// Finally, show the actual game window!
 				gameView.frame.setVisible(true);
 				GameLoop gl = new GameLoop(gm,gameView.gameboard);
@@ -197,7 +203,17 @@ public class ParamsUI extends JFrame {
 				System.out.println("gameloop");
 				t.start();
 				gameView.gameboard.requestFocus();
+				*/
 			
+			}
+		});
+
+		stop = new JButton("stop");
+		
+		stop.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				gm.stop();
 			}
 		});
 		
@@ -285,7 +301,8 @@ public class ParamsUI extends JFrame {
 		
 		matrix4.add(subId);
 		matrix4.add(expId);
-		matrix4.add(save);
+		matrix4.add(start);
+		matrix4.add(stop);
 		
 		matrix5.add(blank);
 		matrix5.add(hit);

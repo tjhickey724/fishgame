@@ -189,6 +189,12 @@ public class GameView extends JPanel{
 		//System.out.println(y_offset);
 		//g.drawImage(streamImage,0,0,null);
 		//g.drawImage(streamImage2,0,y_offset-3*291,null);
+		if (gm.paused || gm.gameOver){
+			y_offset=0;
+			for(GameActor a:gm.actors){
+				a.ct.stop();
+			}
+		}
 		g.drawImage(streamImage,0,y_offset-height,width,height/2,null);
 		g.drawImage(streamImage2,0,y_offset-height/2,width,height/2,null);
 		g.drawImage(streamImage,0,y_offset,width,height/2,null);

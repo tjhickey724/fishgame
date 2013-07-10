@@ -45,7 +45,7 @@ public class DrawDemo {
 		
 		// first we create the Frame with a border layout
 		frame = new JFrame("draw demo");
-		frame.setSize(1000,800);
+		frame.setSize(800,800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		
@@ -119,7 +119,7 @@ public class DrawDemo {
 		// put the frame components together with a border layout
 		frame.add(header,BorderLayout.NORTH);
 		frame.add(gameboard,BorderLayout.CENTER);
-		frame.add(buttonPanel,BorderLayout.EAST);
+		//frame.add(buttonPanel,BorderLayout.EAST);
 		frame.add(status,BorderLayout.SOUTH);
 		//frame.add(speedSlider,BorderLayout.WEST);
 		//params.add(speedSlider,BorderLayout.WEST);

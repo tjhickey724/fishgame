@@ -279,12 +279,14 @@ public class GameModel {
 	public void start(){
 		paused = false;
 		this.nextFishTime = System.nanoTime();
+		this.gameStart = nextFishTime;
 		this.nextFishTime = updateNextFishTime(); 
 	}
 	
 	public void stop(){
 		paused = true;
 		gameOver=true;
+		this.actors.clear();
 		try{
 			logfile.close();
 			scriptfile.close();
