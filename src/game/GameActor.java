@@ -12,6 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  */
 public class GameActor {
+	    String soundFolder = "fish_3_5_hz_pan50";
 	// size
 		double radius = 10;
 		// position
@@ -36,7 +37,7 @@ public class GameActor {
 		double colorHerz = 4;
 		// Origin: 
 		int origin;
-		AudioClip ct;
+		AudioClip ct,ctL,ctR;
 		//AudioClip bt;
 		Species species; 
 		
@@ -51,9 +52,14 @@ public class GameActor {
 			this.species = spec;
 			try {
 				if (species.equals(Species.good)){
-					this.ct=new AudioClip("sounds/sound8a.wav");
+					this.ct=   new AudioClip(soundFolder+"/fish_slow.wav");
+					this.ctR = new AudioClip(soundFolder+"/fish_slow_R.wav");
+					this.ctL = new AudioClip(soundFolder+"/fish_slow_L.wav");
 				} else if (species.equals(Species.bad)){
-					this.ct=new AudioClip("sounds/sound16a.wav");
+					this.ct=   new AudioClip(soundFolder+"/fish_fast.wav");
+					this.ctR = new AudioClip(soundFolder+"/fish_fast_R.wav");
+					this.ctL = new AudioClip(soundFolder+"/fish_fast_L.wav");
+					this.ct=new AudioClip(soundFolder+"/sound16a.wav");
 				}
 			} catch(Exception e){
 				System.out.println("Audio problems!!:"+e);

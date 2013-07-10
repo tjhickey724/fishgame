@@ -1,0 +1,7 @@
+2179874000 good right
+4866205000 bad right
+8083890000 bad left
+10740388000 bad right
+14062889000 bad right
+17250647000 good right
+20097406000 bad left
