@@ -27,6 +27,9 @@ public class GameModel {
 	public double height;
 	public double size;
 	
+	/** flag whether to create a script while generating */
+	public boolean createScript = true;
+	
 	// currently we only ever have one actor at a time ...
 	public List<GameActor> actors = new ArrayList<GameActor>();
 	
@@ -70,6 +73,7 @@ public class GameModel {
 	
 	// this is where the log will be written...
 	public BufferedWriter logfile;
+	public BufferedWriter scriptfile;
 
     // we're not using this anymore 
 	public String log = "";
@@ -99,7 +103,13 @@ public class GameModel {
 		this.gameOver = false;
 		this.nextFishTime = System.nanoTime(); // we skip the first fish!!
 		this.nextFishTime = updateNextFishTime(); 
-		this.logfile = new BufferedWriter(new FileWriter(new File("log.txt")));
+		long now = System.currentTimeMillis();
+		String logname = "log"+now+".txt";
+		this.logfile = new BufferedWriter(new FileWriter(new File(logname)));
+		String scriptname = "script"+now+".txt";
+		this.scriptfile = new BufferedWriter(new FileWriter(new File(scriptname)));
+		
+		
 	}
 	
 	/**
@@ -127,6 +137,18 @@ public class GameModel {
 		} catch(Exception e){
 			System.out.println("Error writing to log "+e);
 		}
+	}
+	
+	private void writeToScript(GameActor fish){
+		long now = System.nanoTime() - this.gameStart;
+		String side = (fish.fromLeft)?"left":"right";
+		String scriptline = "" + now + " " +
+		  fish.species + " "+ side +"\n";
+        try{
+        	this.scriptfile.write(scriptline);
+        } catch (Exception e) {
+        	System.out.println("Error write to scriptfile "+ e);
+        }
 	}
 	
 	public void writeToLog(GameEvent e){
@@ -228,6 +250,8 @@ public class GameModel {
 		}else {
 			s = Species.bad;
 		}
+		
+
 		// pick starting location and velocity
 		double y = this.height/2;
 		double x = (side==Side.left)? 1 : this.width-1;
@@ -249,6 +273,7 @@ public class GameModel {
 		
 		// add the fish to the list of actors...
 		this.actors.add(a);
+		this.writeToScript(a);
 	}
 	
 	public void start(){
@@ -262,6 +287,7 @@ public class GameModel {
 		gameOver=true;
 		try{
 			logfile.close();
+			scriptfile.close();
 		}catch (Exception e){
 			System.out.println("Problem closing logfile");
 		}
@@ -334,6 +360,7 @@ public class GameModel {
 			if (this.actors.size()>0) {
 				GameActor lastFish = this.actors.get(this.actors.size()-1);
 				lastFish.ct.stop();
+				this.writeToScript(lastFish);
 				this.actors.clear();
 				//System.out.println("missed fish!!");
 				//this.writeToLog("missed fish!");
