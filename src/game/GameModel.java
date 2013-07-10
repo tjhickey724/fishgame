@@ -118,7 +118,7 @@ public class GameModel {
 	 * @return
 	 */
 	private long updateNextFishTime(){
-		long r = Math.abs(rand.nextLong()) % ((sRate-mRate)*100000000);
+		long r = Math.abs(rand.nextLong()) % ((sRate-mRate)*1000000000);
 		long m = mRate*100000000L;
 		System.out.println("nft:"+ m+","+r);
 		return( this.nextFishTime+ m+ r);	
