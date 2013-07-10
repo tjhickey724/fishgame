@@ -124,9 +124,11 @@ public class GameView extends JPanel{
 				if (correctResponse){
 					goodclip.play();
 					gm.score += 2;
+					gm.hits++;
 				}else {
 					badclip.play();
 					gm.score -= 1;
+					gm.misses++;
 				}
 			}
 		};
@@ -208,7 +210,9 @@ public class GameView extends JPanel{
 		}
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.RED);
-		g.drawString("Score:"+gm.score, width/10, height/10);
+		//g.drawString("Score:"+gm.score, width/10, height/10);
+		g.drawString("Right:"+gm.hits+"   Wrong:"+gm.misses + "   Misses:"+gm.noKeyPress, width/10, height/10);
+
 		
 
 	}

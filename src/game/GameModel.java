@@ -66,7 +66,7 @@ public class GameModel {
 	public String typescript = "lb 100 lb 100 rg 100 rb 100 lb 100"; 
 	
 	// this is true if we are reading from a script
-	public boolean scripted=true;
+	public boolean scripted=false;
 	
 	// this is a scanner used to read the fish creation info
 	public Scanner scan = new Scanner(typescript);
@@ -82,6 +82,16 @@ public class GameModel {
 	public int badvisualhz=9;
 	public int badaudiohz=9;
 	public int goodaudiohz=4;
+	
+	/** these variables record good/bad hits */
+	public int 
+	  hits,misses,
+      hitGoodLeft, missGoodLeft,
+      hitGoodRight, missGoodRight,
+      hitBadLeft, missBadLeft,
+      hitBadRight, missBadRight,
+      noKeyPress,
+      pressWithNoFish;
 	
 	// NOT USING ...
 	//PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
@@ -286,6 +296,9 @@ public class GameModel {
 	public void stop(){
 		paused = true;
 		gameOver=true;
+		for(GameActor a:this.actors){
+			a.ct.stop();
+		}
 		this.actors.clear();
 		try{
 			logfile.close();
@@ -352,6 +365,8 @@ public class GameModel {
 			long m = mRate*100000000L;
 			this.nextFishTime = startTime+ m+ r;
 			*/
+
+			
 			System.out.println("now="+now);
 			System.out.println("nft="+this.nextFishTime);
 			long tmpzz = this.nextFishTime;
@@ -360,6 +375,7 @@ public class GameModel {
 			System.out.println("newnft="+this.nextFishTime);
 			System.out.println("interval="+theInterval);
 			if (this.actors.size()>0) {
+				this.noKeyPress++;
 				GameActor lastFish = this.actors.get(this.actors.size()-1);
 				lastFish.ct.stop();
 				this.writeToScript(lastFish);
