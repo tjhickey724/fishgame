@@ -24,7 +24,7 @@ public class ParamsUI extends JFrame {
 		//JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
 		JComboBox gs,bs,gv,bv,vidtype,gamtype,stype;
 		String SubjectID,ExperimenterID,script,type;
-		JTextField expId,subId,scr,mintim,maxtim;
+		JTextField expId,subId,scr,mintim,maxtim,numfish;
 		//JCheckBox ster;
 		JFileChooser fc;
 		JButton start;
@@ -54,6 +54,7 @@ public class ParamsUI extends JFrame {
 		scr= new JTextField("demoscript.txt");
 		mintim = new JTextField("20");
 		maxtim = new JTextField("60");
+		numfish= new JTextField("# of fish generated");
 		
 		header = new JLabel("Settings");
 		fish=new JLabel("Fish Type:");
@@ -312,6 +313,7 @@ public class ParamsUI extends JFrame {
 		matrix4.add(expId);
 		matrix4.add(start);
 		matrix4.add(stop);
+		matrix4.add(numfish);
 		
 		matrix5.add(blank);
 		matrix5.add(hit);
