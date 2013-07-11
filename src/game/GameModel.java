@@ -187,7 +187,7 @@ public class GameModel {
 	private void writeToScript(GameActor fish){
 		long now = System.nanoTime() - this.gameStart;
 		String side = (fish.fromLeft)?"left":"right";
-		String scriptline = "" + now + " " +
+		String scriptline = " " + now + " " +
 		  fish.species + " "+ side +"\n";
         try{
         	this.scriptfile.write(scriptline);
