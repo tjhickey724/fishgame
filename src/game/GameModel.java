@@ -80,10 +80,13 @@ public class GameModel {
     // we're not using this anymore 
 	public String log = "";
 	// we should have goodherz and badherz probably ...
-	public int goodvisualhz=4;
-	public int badvisualhz=9;
+	public int goodvisualhz=6;
+	public int badvisualhz=8;
 	public int badaudiohz=9;
 	public int goodaudiohz=4;
+	// store the min/max visual scaling factors in percent
+	public int visualMin = 100;
+	public int visualMax = 125;
 	
 	/** these variables record good/bad hits */
 	public int 

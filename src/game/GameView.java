@@ -242,11 +242,14 @@ public class GameView extends JPanel{
 		int theRadius = toViewCoords(a.radius);
 		int x = toViewCoords(a.x);
 		int y = toViewCoords(a.y);
+		int visualHz=1;
 		
 		switch (a.species){
 		case good:
+			visualHz = gm.goodvisualhz;
 			c = interpolate(a.color3, a.color4,a.birthTime,System.nanoTime(),a.colorHerz);break;
 		case bad:
+			visualHz = gm.badvisualhz;
 			c = interpolate(a.color3, a.color4,a.birthTime,System.nanoTime(),a.colorHerz);break;
 		
 		case avatar: c=Color.BLACK; break;
@@ -259,7 +262,7 @@ public class GameView extends JPanel{
 			g.fillOval(x-theRadius, y-theRadius, 2*theRadius, 2*theRadius);
 	
 		*/
-		int theSize = interpolateSize(100.0,125,a.birthTime,System.nanoTime(),a.colorHerz);
+		int theSize = interpolateSize(gm.visualMin,gm.visualMax,a.birthTime,System.nanoTime(),visualHz);
 		int theWidth  = (int) ((theSize * 97)/100);
 		int theHeight = (int) ((theSize * 32)/100);
 		if (a.fromLeft){

@@ -33,6 +33,15 @@ public class ParamsUI extends JFrame {
 	//	SpinnerModel minmodel,maxmodel;
 		JScrollPane jsp;
 		
+		JTextField goodVisualHzTF = new JTextField("6");
+		JTextField badVisualHzTF = new JTextField("8");
+		
+		
+		JLabel minSizeLab = new JLabel("Min Size(%)");
+		JTextField minSizeTF = new JTextField("100");
+		JLabel maxSizeLab = new JLabel("Max Size(%)");
+		JTextField maxSizeTF = new JTextField("120");
+		
 	
 		
 	
@@ -137,6 +146,9 @@ public class ParamsUI extends JFrame {
 				
 				gm.mRate = (int) Double.parseDouble(mintim.getText());
 				gm.sRate = (int) Double.parseDouble(maxtim.getText());
+				
+				gm.visualMin = (int) Double.parseDouble(minSizeTF.getText());
+				gm.visualMax = (int) Double.parseDouble(maxSizeTF.getText());
 			
 				script=scr.getText();
 				SubjectID=subId.getText();
@@ -150,6 +162,8 @@ public class ParamsUI extends JFrame {
 					gm.scripted=false;
 					type = "Random";
 				}
+				
+				
 				if (gs.getSelectedItem().toString().equals("fast")){
 					gm.goodaudiohz=fast;
 				} else if (gs.getSelectedItem().toString().equals("slow")){
@@ -164,6 +178,12 @@ public class ParamsUI extends JFrame {
 				}else if (bs.getSelectedItem().toString().equals("none")){
 					gm.badaudiohz=0;
 				}
+				
+				gm.goodvisualhz = (int)Double.parseDouble(goodVisualHzTF.getText());
+				gm.badvisualhz = (int)Double.parseDouble(badVisualHzTF.getText());
+				
+				
+				/*
 				if (gv.getSelectedItem().toString().equals("fast")){
 					gm.goodvisualhz=fast;
 				} else if (gv.getSelectedItem().toString().equals("slow")){
@@ -178,6 +198,7 @@ public class ParamsUI extends JFrame {
 				}else if (bv.getSelectedItem().toString().equals("none")){
 					gm.badvisualhz=0;
 				}
+				*/
 
 			
 				
@@ -247,7 +268,7 @@ public class ParamsUI extends JFrame {
 		matrix2.setLayout(new GridLayout(3,1));
 		
 		matrix3 = new JPanel();
-		matrix3.setLayout(new GridLayout(3,2));
+		matrix3.setLayout(new GridLayout(5,2));
 		
 		matrix4 = new JPanel();
 		matrix4.setLayout(new GridLayout(3,1));
@@ -281,8 +302,15 @@ public class ParamsUI extends JFrame {
 		col2.add(bs);
 		
 		col3.add(visual);
-		col3.add(gv);
-		col3.add(bv);
+		//col3.add(gv);
+		//col3.add(bv);
+		col3.add(this.goodVisualHzTF);
+		col3.add(this.badVisualHzTF);
+		
+		col1.setBackground(Color.cyan);
+		col2.setBackground(Color.cyan);
+		col3.setBackground(Color.cyan);
+		
 		
 		row1.add(soundType);
 		row1.add(stype);
@@ -302,12 +330,20 @@ public class ParamsUI extends JFrame {
 		matrix2.add(row2);
 		matrix2.add(row3);
 		
+		
+
+		
 		matrix3.add(mintime);
 		matrix3.add(mintim);
 		matrix3.add(maxtime);
 		matrix3.add(maxtim);
 		matrix3.add(scrip);
 		matrix3.add(scr);
+		matrix3.add(minSizeLab);
+		matrix3.add(minSizeTF);
+		matrix3.add(maxSizeLab);
+		matrix3.add(maxSizeTF);
+		
 		
 		matrix4.add(subId);
 		matrix4.add(expId);
@@ -333,6 +369,12 @@ public class ParamsUI extends JFrame {
 		matrix5.add(tot);
 		
 		matrix6.add(jsp);
+		matrix1.setBackground(Color.red);
+		matrix2.setBackground(Color.green);
+		matrix3.setBackground(Color.blue);
+		matrix4.setBackground(Color.gray);
+		matrix5.setBackground(Color.pink);
+		matrix6.setBackground(Color.yellow);
 		
 		this.add(matrix1);
 		this.add(matrix2);
