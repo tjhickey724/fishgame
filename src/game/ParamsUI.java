@@ -218,7 +218,7 @@ public class ParamsUI extends JFrame {
 				System.out.println(script);
 				System.out.println(gm.mRate);
 				try {
-					gm.logfile.write("Version: 1.0 (7/11/2013)" + "\n" +
+					gm.logfile.write("Version:                "+"1.0 (7/11/2013)" + "\n" +
 									 "Experimenter:           "+ ExperimenterID + "\n" + 
 				                     "Subject:                " + SubjectID + "\n" + 
 				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"+
