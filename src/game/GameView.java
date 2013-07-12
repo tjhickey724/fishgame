@@ -93,6 +93,14 @@ public class GameView extends JPanel{
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
+				
+				// play good/bad sounds alone by key press for demo purpose
+				if (e.getKeyChar()=='g') {
+					goodclip.play(); return;
+				} else if (e.getKeyChar() == 'b'){
+					badclip.play(); return;
+				}
+				
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.actors.size()==0) {
@@ -130,6 +138,8 @@ public class GameView extends JPanel{
 					gm.score -= 1;
 					gm.misses++;
 				}
+				
+
 			}
 		};
 		this.addKeyListener(kl);

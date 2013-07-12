@@ -12,7 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  */
 public class GameActor {
-	    String soundFolder = "fish_3_5_hz_pan50";
+	    String soundFolder = "fish_6_8_hz_pan0"; //"fish_3_5_hz_pan50";
 	// size
 		double radius = 10;
 		// position
