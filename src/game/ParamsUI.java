@@ -149,6 +149,8 @@ public class ParamsUI extends JFrame {
 				
 				GameActor.GAME_START = System.nanoTime();
 				
+				gm.stereo = (stype.getSelectedItem().toString()=="Stereo");
+				
 				gm.mRate = (int) Double.parseDouble(mintim.getText());
 				gm.sRate = (int) Double.parseDouble(maxtim.getText());
 				
@@ -171,6 +173,7 @@ public class ParamsUI extends JFrame {
 				gm.goodFishSounds = goodSoundTF.getText();
 				gm.badFishSounds = badSoundTF.getText();
 				
+				/*
 				if (gs.getSelectedItem().toString().equals("fast")){
 					gm.goodaudiohz=fast;
 				} else if (gs.getSelectedItem().toString().equals("slow")){
@@ -185,6 +188,7 @@ public class ParamsUI extends JFrame {
 				}else if (bs.getSelectedItem().toString().equals("none")){
 					gm.badaudiohz=0;
 				}
+				*/
 				
 				gm.goodvisualhz = (int)Double.parseDouble(goodVisualHzTF.getText());
 				gm.badvisualhz = (int)Double.parseDouble(badVisualHzTF.getText());

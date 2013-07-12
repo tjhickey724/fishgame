@@ -81,6 +81,7 @@ public class GameModel {
 	public String log = "";
 	// we should have goodherz and badherz probably ...
 
+	public boolean stereo = true;
 	public int badaudiohz=9;
 	public int goodaudiohz=4;
 	public String goodFishSounds = "sounds/fish6hz0p";
@@ -252,7 +253,7 @@ public class GameModel {
 		double vx = (side==Side.left)? 1: -1;
 		
 		// then make an actor with that position
-		GameActor a = new GameActor(x,y,true,s,this.goodFishSounds,this.badFishSounds);
+		GameActor a = new GameActor(x,y,true,s,this.stereo,this.goodFishSounds,this.badFishSounds);
 		// and fill in all the needed fields...
 		// we don't need both fromLeft and origin .... eliminate fromLeft...
 		a.fromLeft=(side==Side.left);
