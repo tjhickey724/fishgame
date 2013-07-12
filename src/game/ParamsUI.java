@@ -218,11 +218,20 @@ public class ParamsUI extends JFrame {
 				System.out.println(script);
 				System.out.println(gm.mRate);
 				try {
-					gm.logfile.write("Experimenter: "+ ExperimenterID + "\n" + 
-				                     "Subject: " + SubjectID + "\n" + 
-							         "Game Type: "+ type + "\n"+
-				                     "Min Delay: "+ gm.mRate+"\n"+
-							         "Max Delay: "+gm.sRate+"\n");
+					gm.logfile.write("Version: 1.0 (7/11/2013)" + "\n" +
+									 "Experimenter:           "+ ExperimenterID + "\n" + 
+				                     "Subject:                " + SubjectID + "\n" + 
+				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"+
+							         "Game Type:              "+ type + "\n"+
+				                     "Script File:            " + gm.inputScriptFileName + "\n"+
+				                     "Good Sounds:            "+ gm.goodFishSounds + "\n"+
+							         "Bad Sounds:             " + gm.badFishSounds +"\n"+
+				                     "Good Visual Hertz:      " +gm.goodvisualhz +"\n"+
+				                     "Bad Visual Hertz:       " +gm.badvisualhz +"\n"+
+				                     "Visual Min Scale:       "+ gm.visualMin + "\n"+ 
+				                     "Visual Max Scale:       "+ gm.visualMin + "\n"+
+				                     "Min Delay:              "+ gm.mRate+"\n"+
+							         "Max Delay:              "+gm.sRate+"\n" + "\nstart\n");
 					gm.logfile.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

@@ -62,7 +62,7 @@ public class GameEvent {
 	 * @param keyPressed
 	 */
 	public GameEvent(char keyPressed) {
-		this.eventType = "keypress";
+		this.eventType = "keypress  ";
 		this.when = System.nanoTime();
 		this.keyPressed = keyPressed;
 		this.responseTime = 0;
@@ -97,7 +97,7 @@ public class GameEvent {
 	 * @param fish
 	 */
 	public GameEvent(char keyPressed, GameActor fish){
-		this.eventType="hitfish";
+		this.eventType="hitfish   ";
 		this.when = System.nanoTime();
 		this.keyPressed = keyPressed;
 		this.fish = fish;
