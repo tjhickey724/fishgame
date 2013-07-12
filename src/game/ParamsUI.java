@@ -12,7 +12,7 @@ public class ParamsUI extends JFrame {
 	 * The script textbox could be bigger
 	 */
 	private static final long serialVersionUID = 1L;
-		JLabel header,fish,good,bad,sound,visual,subjectid,experimenterid,soundType,videoType,gameType,mintime,maxtime,scrip;
+		JLabel header,fish,good,bad,good1,bad1,sound,visual,subjectid,experimenterid,soundType,videoType,gameType,mintime,maxtime,scrip;
 		JLabel hit,miss,total,ghit,gmiss,bhit,bmiss,gtot,btot,htot,mtot,tot;
 		JPanel matrix1,matrix2,matrix3,matrix4,matrix5,matrix6;
 		JButton button1;
@@ -24,7 +24,7 @@ public class ParamsUI extends JFrame {
 		//JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
 		JComboBox gs,bs,gv,bv,vidtype,gamtype,stype;
 		String SubjectID,ExperimenterID,script,type;
-		JTextField expId,subId,scr,mintim,maxtim;
+		JTextField expId,subId,scr,mintim,maxtim,numfish;
 		//JCheckBox ster;
 		JFileChooser fc;
 		JButton start;
@@ -54,11 +54,14 @@ public class ParamsUI extends JFrame {
 		scr= new JTextField("demoscript.txt");
 		mintim = new JTextField("20");
 		maxtim = new JTextField("60");
+		numfish= new JTextField("# of fish generated");
 		
 		header = new JLabel("Settings");
 		fish=new JLabel("Fish Type:");
 		good=new JLabel("Good");
 		bad=new JLabel("Bad");
+		good1=new JLabel("Good");
+		bad1=new JLabel("Bad");
 		sound=new JLabel("Sound");
 		visual=new JLabel("Visual");
 		soundType=new JLabel("Sound Type: ");
@@ -310,16 +313,17 @@ public class ParamsUI extends JFrame {
 		matrix4.add(expId);
 		matrix4.add(start);
 		matrix4.add(stop);
+		matrix4.add(numfish);
 		
 		matrix5.add(blank);
 		matrix5.add(hit);
 		matrix5.add(miss);
 		matrix5.add(total);
-		matrix5.add(good);
+		matrix5.add(good1);
 		matrix5.add(ghit);
 		matrix5.add(gmiss);
 		matrix5.add(gtot);
-		matrix5.add(bad);
+		matrix5.add(bad1);
 		matrix5.add(bhit);
 		matrix5.add(bmiss);
 		matrix5.add(btot);
