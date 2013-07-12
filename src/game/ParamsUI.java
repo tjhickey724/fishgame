@@ -63,7 +63,7 @@ public class ParamsUI extends JFrame {
 		
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
-		scr= new JTextField("demoscript.txt");
+		scr= new JTextField("scripts/demoscript15.txt");
 		mintim = new JTextField("20");
 		maxtim = new JTextField("60");
 		numfish= new JTextField("# of fish generated");

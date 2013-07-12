@@ -158,7 +158,7 @@ public class GameModel {
 			//this.gameOver=true;
 			return this.nextFishTime+10000000000000L;
 		}
-		long nextFishTime = scan.nextLong() + this.gameStart;
+		long nextFishTime = scan.nextLong()*1000000 + this.gameStart;
 		String species = scan.next();
 		String side = scan.next();
 		GameActor a = new GameActor();
@@ -192,7 +192,7 @@ public class GameModel {
 	}
 	
 	private void writeToScript(GameActor fish){
-		long now = System.nanoTime() - this.gameStart;
+		long now = (System.nanoTime() - this.gameStart)/1000000;
 		String side = (fish.fromLeft)?"left":"right";
 		String scriptline = " " + now + " " +
 		  fish.species + " "+ side +"\n";
