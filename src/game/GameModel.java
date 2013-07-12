@@ -80,11 +80,14 @@ public class GameModel {
     // we're not using this anymore 
 	public String log = "";
 	// we should have goodherz and badherz probably ...
-	public int goodvisualhz=6;
-	public int badvisualhz=8;
+
 	public int badaudiohz=9;
 	public int goodaudiohz=4;
+	public String goodFishSounds = "sounds/fish6hz0p";
+	public String badFishSounds = "sounds/fish8hz0p";
 	// store the min/max visual scaling factors in percent
+	public int goodvisualhz=6;
+	public int badvisualhz=8;
 	public int visualMin = 100;
 	public int visualMax = 125;
 	
@@ -249,7 +252,7 @@ public class GameModel {
 		double vx = (side==Side.left)? 1: -1;
 		
 		// then make an actor with that position
-		GameActor a = new GameActor(x,y,true,s);
+		GameActor a = new GameActor(x,y,true,s,this.goodFishSounds,this.badFishSounds);
 		// and fill in all the needed fields...
 		// we don't need both fromLeft and origin .... eliminate fromLeft...
 		a.fromLeft=(side==Side.left);

@@ -42,6 +42,9 @@ public class ParamsUI extends JFrame {
 		JLabel maxSizeLab = new JLabel("Max Size(%)");
 		JTextField maxSizeTF = new JTextField("120");
 		
+		JTextField goodSoundTF = new JTextField("sounds/fish6hz0p");
+		JTextField badSoundTF = new JTextField("sounds/fish8hz0p");
+		
 	
 		
 	
@@ -163,6 +166,8 @@ public class ParamsUI extends JFrame {
 					type = "Random";
 				}
 				
+				gm.goodFishSounds = goodSoundTF.getText();
+				gm.badFishSounds = badSoundTF.getText();
 				
 				if (gs.getSelectedItem().toString().equals("fast")){
 					gm.goodaudiohz=fast;
@@ -298,8 +303,10 @@ public class ParamsUI extends JFrame {
 		col1.add(bad);
 		
 		col2.add(sound);
-		col2.add(gs);
-		col2.add(bs);
+		//col2.add(gs);
+		//col2.add(bs);
+		col2.add(this.goodSoundTF);
+		col2.add(this.badSoundTF);
 		
 		col3.add(visual);
 		//col3.add(gv);
@@ -332,7 +339,7 @@ public class ParamsUI extends JFrame {
 		
 		
 
-		
+		matrix3.setBorder(javax.swing.BorderFactory.createTitledBorder("Gen and Vis") );
 		matrix3.add(mintime);
 		matrix3.add(mintim);
 		matrix3.add(maxtime);
@@ -344,7 +351,7 @@ public class ParamsUI extends JFrame {
 		matrix3.add(maxSizeLab);
 		matrix3.add(maxSizeTF);
 		
-		
+		matrix4.setBorder(javax.swing.BorderFactory.createTitledBorder("Main Control") );
 		matrix4.add(subId);
 		matrix4.add(expId);
 		matrix4.add(start);
@@ -375,12 +382,13 @@ public class ParamsUI extends JFrame {
 		matrix4.setBackground(Color.gray);
 		matrix5.setBackground(Color.pink);
 		matrix6.setBackground(Color.yellow);
+		matrix6.setBorder(javax.swing.BorderFactory.createTitledBorder("jsp") );
 		
 		this.add(matrix1);
 		this.add(matrix2);
 		this.add(matrix3);
 		this.add(matrix4);
-		this.add(matrix5);
-		this.add(matrix6);
+		//this.add(matrix5);
+		//this.add(matrix6);
 	}
 }

@@ -44,6 +44,11 @@ public class GameActor {
 		private java.util.Random rand = new java.util.Random();
 
 		public GameActor(double x, double y, boolean active, Species spec) {
+			this(x,y,active,spec,"sounds/fish6hz0p","sounds/fish8hz0p");
+		}
+		
+		
+		public GameActor(double x, double y, boolean active, Species spec,String goodFishSounds, String badFishSounds) {
 			this.x=x; this.y=y; this.active=active;
 			this.vx = speed*(rand.nextDouble()-0.5);
 			this.vy = speed*(rand.nextDouble()-0.5);
@@ -52,14 +57,13 @@ public class GameActor {
 			this.species = spec;
 			try {
 				if (species.equals(Species.good)){
-					this.ct=   new AudioClip(soundFolder+"/fish_slow.wav");
-					this.ctR = new AudioClip(soundFolder+"/fish_slow_R.wav");
-					this.ctL = new AudioClip(soundFolder+"/fish_slow_L.wav");
+					this.ct=   new AudioClip(goodFishSounds+"/fish.wav");
+					this.ctR = new AudioClip(goodFishSounds+"/fishR.wav");
+					this.ctL = new AudioClip(goodFishSounds+"/fishL.wav");
 				} else if (species.equals(Species.bad)){
-					this.ct=   new AudioClip(soundFolder+"/fish_fast.wav");
-					this.ctR = new AudioClip(soundFolder+"/fish_fast_R.wav");
-					this.ctL = new AudioClip(soundFolder+"/fish_fast_L.wav");
-					this.ct=new AudioClip(soundFolder+"/sound16a.wav");
+					this.ct=   new AudioClip(badFishSounds+"/fish.wav");
+					this.ctR = new AudioClip(badFishSounds+"/fishR.wav");
+					this.ctL = new AudioClip(badFishSounds+"/fishL.wav");
 				}
 			} catch(Exception e){
 				System.out.println("Audio problems!!:"+e);
