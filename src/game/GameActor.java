@@ -12,6 +12,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  */
 public class GameActor {
+	// this is a bit of a hack, I need to refactor later REFACTOR!!
+	public static long GAME_START = System.nanoTime();
+	
 	    String soundFolder = "fish_6_8_hz_pan0"; //"fish_3_5_hz_pan50";
 	// size
 		double radius = 10;
@@ -29,6 +32,7 @@ public class GameActor {
 		boolean fromLeft; // true if fish comes from left
 		long birthTime;
 		long lastUpdate;
+		long gameStart=GameActor.GAME_START;
 		Color 
 			color1=new Color(150,0,0), 
 			color2=new Color(200,0,0),
@@ -47,13 +51,16 @@ public class GameActor {
 			this(x,y,active,spec,"sounds/fish6hz0p","sounds/fish8hz0p");
 		}
 		
+
 		
-		public GameActor(double x, double y, boolean active, Species spec,String goodFishSounds, String badFishSounds) {
+		public GameActor(double x, double y, boolean active, 
+				         Species spec,String goodFishSounds, String badFishSounds) {
 			this.x=x; this.y=y; this.active=active;
 			this.vx = speed*(rand.nextDouble()-0.5);
 			this.vy = speed*(rand.nextDouble()-0.5);
 			this.birthTime = System.nanoTime();
 			this.lastUpdate = this.birthTime;
+			this.gameStart=GameActor.GAME_START;
 			this.species = spec;
 			try {
 				if (species.equals(Species.good)){

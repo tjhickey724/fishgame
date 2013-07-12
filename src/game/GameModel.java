@@ -118,9 +118,9 @@ public class GameModel {
 		//this.nextFishTime = System.nanoTime(); // we skip the first fish!!
 		//this.nextFishTime = updateNextFishTime(); 
 		long now = System.currentTimeMillis();
-		String logname = "log"+now+".txt";
+		String logname = "logs/log"+now+".txt";
 		this.logfile = new BufferedWriter(new FileWriter(new File(logname)));
-		String scriptname = "script"+now+".txt";
+		String scriptname = "scripts/script"+now+".txt";
 		this.scriptfile = new BufferedWriter(new FileWriter(new File(scriptname)));
 		
 		
@@ -154,7 +154,7 @@ public class GameModel {
 		}
 		if (!scan.hasNext()){
 			//this.stop();
-			this.stop();
+			//this.gameOver=true;
 			return this.nextFishTime+10000000000000L;
 		}
 		long nextFishTime = scan.nextLong() + this.gameStart;
@@ -204,9 +204,9 @@ public class GameModel {
 	
 	public void writeToLog(GameEvent e){
 		try{
-			long theTime = (System.nanoTime()-this.gameStart);
-			double theSeconds = (theTime/1000000.0);
-			this.logfile.write(theSeconds+GameEvent.sep+e+"\n");
+			//long theTime = (System.nanoTime()-this.gameStart);
+			//double theSeconds = (theTime/1000000.0);
+			this.logfile.write(GameEvent.sep+e+"\n");
 		} catch(Exception err){
 			System.out.println("Error writing GameEvent to log "+err);
 		}

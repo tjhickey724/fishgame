@@ -147,6 +147,8 @@ public class ParamsUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				
+				GameActor.GAME_START = System.nanoTime();
+				
 				gm.mRate = (int) Double.parseDouble(mintim.getText());
 				gm.sRate = (int) Double.parseDouble(maxtim.getText());
 				

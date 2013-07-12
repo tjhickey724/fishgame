@@ -24,7 +24,7 @@ public class GameEvent {
 	/** response time in milliseconds
 	 *    if key is pressed with no fish or fish is missed, this is 0
 	 */
-	public double responseTime=0;
+	public int responseTime=0;
 	
 	/** the fish itself, possibly null if a key was pressed for no fish **/
 	public GameActor fish=null;
@@ -44,6 +44,11 @@ public class GameEvent {
 	/** when the key was pressed, 0 for no key press **/
 	public long keyPress=0;
 	
+	// converts from System.nanoTime units to milliseconds from game start
+	private int convertNanoToMSfromGS(long t){
+		int ms = (int) Math.round( (t - GameActor.GAME_START)/1000000.0);
+		return ms;
+	}
 	
 	/**
 	 * this is called for other events
@@ -57,7 +62,7 @@ public class GameEvent {
 	 * @param keyPressed
 	 */
 	public GameEvent(char keyPressed) {
-		this.eventType = "nofish";
+		this.eventType = "keypress";
 		this.when = System.nanoTime();
 		this.keyPressed = keyPressed;
 		this.responseTime = 0;
@@ -65,7 +70,7 @@ public class GameEvent {
 		this.species = Species.none;
 		this.side = "none";
 		this.correctResponse = false;
-		this.fishRelease = 0;
+		this.fishRelease = this.when;
 		this.keyPress = this.when;
 	}
 	
@@ -83,7 +88,7 @@ public class GameEvent {
 		this.side = (fish.fromLeft)? "left": "right";
 		this.correctResponse = false;
 		this.fishRelease = fish.birthTime;
-		this.keyPress = 0;
+		this.keyPress = this.when;
 	}
 	
 	/**
@@ -101,8 +106,11 @@ public class GameEvent {
 		this.fishRelease = fish.birthTime;
 		this.correctResponse = hitCorrectKey(keyPressed,fish);
 		this.keyPress = this.when;
-		this.responseTime = (this.when - this.fishRelease)/1000000.0;
+		this.responseTime = 
+				 (int) Math.round((this.when - this.fishRelease)/1000000.0);
 	}
+	
+
 	
 	/**
 	 * returns true if the key press was correct
@@ -128,15 +136,16 @@ public class GameEvent {
 
 	public String toString(){
 		String response = 
-				this.eventType + sep
-				+ this.when + sep
+				  convertNanoToMSfromGS(this.when) + sep
+				+ this.eventType + sep
 				+ this.responseTime + sep
 				+ this.correctResponse + sep
 				+ this.keyPressed + sep
 				+ this.species + sep 
 				+ this.side + sep
-				+ this.fishRelease + sep
-				+ this.keyPress + sep;
+				//+ convertNanoToMSfromGS(this.fishRelease) + sep 
+				+ this.when + sep;
+				//+ convertNanoToMSfromGS(this.keyPress) + sep;
 		return response;			
 	}
 }
