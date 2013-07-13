@@ -13,6 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -26,6 +28,8 @@ public class GenerateWindow extends JFrame {
 	JComboBox vidtype,stype;
 	String[] speeds,videotypes,soundtypes;
 	JButton gdone,gen;
+	JScrollPane jscrollpane;
+	JTextArea jtextarea;
 	
 	
 	JTextField goodVisualHzTF = new JTextField("6");
@@ -42,8 +46,8 @@ public class GenerateWindow extends JFrame {
 	
 
 	public GenerateWindow( final ExperimenterWindow paramsui){
-		super("Generate");
-		setLayout(new GridLayout(3,1));
+		super("Generate Window");
+		setLayout(new GridLayout(4,1));
 		setSize(300,600);
 		
 
@@ -61,6 +65,9 @@ public class GenerateWindow extends JFrame {
 		mintime=new JLabel("Min Time: ");
 		maxtime= new JLabel("Max Time: ");
 		nof=new JLabel("Fish to generate:");
+		
+		jtextarea=new JTextArea(5,20);
+		jscrollpane=new JScrollPane(jtextarea);
 		
 		speeds=new String[]{"none","slow","fast"};
 		videotypes=new String[]{"Throb","Flicker"};
@@ -173,5 +180,6 @@ public class GenerateWindow extends JFrame {
 		add(matrix1);
 		add(matrix3);
 		add(matrix2);
+		add(jscrollpane);
 	}
 }

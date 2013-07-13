@@ -15,7 +15,7 @@ import javax.swing.event.*;
  * @author tim
  *
  */
-public class DrawDemo {
+public class SubjectWindow {
 	private GameModel gm;
 	private javax.swing.Timer  timer;
 	public JFrame frame;
@@ -29,7 +29,7 @@ public class DrawDemo {
 	private ActionListener stepButtonListener;
 	
 
-	public DrawDemo(GameModel gamemodel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public SubjectWindow(GameModel gamemodel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
 		JLabel header;
 		JPanel buttonPanel;
@@ -45,7 +45,7 @@ public class DrawDemo {
 		
 		
 		// first we create the Frame with a border layout
-		frame = new JFrame("Sekuler Lab");
+		frame = new JFrame("Subject Window");
 		frame.setSize(500,1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
@@ -134,7 +134,7 @@ public class DrawDemo {
 	// most of the code after this is unnecessary
 	public static void timerVersion()throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		GameModel gm = new GameModel(100,100);
-		DrawDemo myDemo = new DrawDemo(gm);
+		SubjectWindow myDemo = new SubjectWindow(gm);
 		// now we create the StepButtonListener
 		// and add it as a listener to the timer
 		myDemo.frame.setVisible(true);
