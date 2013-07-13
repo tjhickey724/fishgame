@@ -17,6 +17,8 @@ import javax.swing.JSlider;
  *
  */
 public class RunGame {
+	public static String versionNum = "0.5";
+	
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		GameModel gm = new GameModel(100,10);
 		DrawDemo myDemo = new DrawDemo(gm);

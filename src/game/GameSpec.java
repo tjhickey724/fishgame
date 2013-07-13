@@ -12,6 +12,8 @@ public class GameSpec {
 		left = new FishSpec(),
 		right = new FishSpec();
 	
+	private String sep = GenerateScript.SEP;
+	
 	public String backgroundImage = "images/streamFlip2.jpg";
 	
 	public int 
@@ -20,6 +22,21 @@ public class GameSpec {
 	
 	public GameSpec(){
 		// create default GameSpec
+	}
+	
+	private String scriptLine(String prop, String val){
+		return "0"+sep+prop+sep+val+"\n";
+	}
+	
+	public String toScript(){
+		String s="";
+		s += left.toScript();
+		s += right.toScript();
+		s+= scriptLine("backgroundImage",backgroundImage);
+		s+= scriptLine("minFishRelease",""+minFishRelease);
+		s+= scriptLine("maxFishRelease",""+maxFishRelease);
+		return(s);
+		
 	}
 
 
