@@ -216,12 +216,13 @@ public class GameView extends JPanel{
 	//	drawActor(g,gm.avatar,Color.GREEN);
 		java.util.List<GameActor> gaList = new ArrayList<GameActor>(gm.actors);
 		for(GameActor a:gaList){
-			drawActor(g,a,Color.RED);
+			drawActor(g,a,Color.WHITE);
 		}
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
-		g.setColor(Color.RED);
+		g.setColor(Color.WHITE);
 		//g.drawString("Score:"+gm.score, width/10, height/10);
-		g.drawString("Right:"+gm.hits+"   Wrong:"+gm.misses + "   Misses:"+gm.noKeyPress, width/10, height/10);
+		g.drawString("Right:"+gm.hits+"   Wrong:"+gm.misses + "  Misses:"+gm.noKeyPress, 0, 20);
+		g.drawString(""+gm.hits+"     "+gm.misses + "     "+gm.noKeyPress, 0, 40);
 
 		
 

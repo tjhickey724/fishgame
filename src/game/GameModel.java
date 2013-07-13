@@ -101,9 +101,7 @@ public class GameModel {
 	// NOT USING ...
 	//PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
 	
-	// HMMMM...
-	public int mode = 1;
-	// 0 for random, 1 for scripted
+	public String headtext= "Right: Wrong:";
 	
 	
 	public GameModel(double size, int numActors) throws UnsupportedAudioFileException, IOException, LineUnavailableException {

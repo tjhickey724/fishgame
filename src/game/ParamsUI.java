@@ -192,7 +192,7 @@ public class ParamsUI extends JFrame {
 				gm.visualMin = (int) Double.parseDouble(minSizeTF.getText());
 				gm.visualMax = (int) Double.parseDouble(maxSizeTF.getText());
 			
-				script=scr.getText();
+				gm.inputScriptFileName=scr.getText();
 				SubjectID=subId.getText();
 				ExperimenterID=expId.getText();
 				gm.scripted=true;

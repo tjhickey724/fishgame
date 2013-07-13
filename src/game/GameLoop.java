@@ -24,6 +24,7 @@ public class GameLoop implements Runnable{
 				// update the model
 				try {
 					gm.update();
+					
 				} catch (UnsupportedAudioFileException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

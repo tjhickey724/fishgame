@@ -27,6 +27,7 @@ public class DrawDemo {
 	// this will listen to timer events
 	// and update the game and view every timestep
 	private ActionListener stepButtonListener;
+	public JLabel header;
 
 	public DrawDemo(GameModel gamemodel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
@@ -40,11 +41,11 @@ public class DrawDemo {
 		this.gm=gamemodel;
 		//this window will have the settings we can adjust
 
-		
+
 		
 		
 		// first we create the Frame with a border layout
-		frame = new JFrame("draw demo");
+		frame = new JFrame("Sekuler Lab");
 		frame.setSize(500,1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
@@ -55,7 +56,7 @@ public class DrawDemo {
 		
 		// here is the title of the game and the status bar
 		header = new JLabel();
-		header.setText("Press Q to clear a green fish on the left, P on the right. A for bad fish on the left, L for bad fish on the right.");
+		header.setText(gm.headtext);
 		status = new JLabel("Try to collect all the fish!");
 		status.setForeground (Color.red);
 		
@@ -131,7 +132,7 @@ public class DrawDemo {
 	 * @param args ignored
 	 */
 	
-	
+	// most of the code after this is unnecessary
 	public static void timerVersion()throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		GameModel gm = new GameModel(100,100);
 		DrawDemo myDemo = new DrawDemo(gm);
@@ -155,6 +156,7 @@ public class DrawDemo {
 		public void actionPerformed(ActionEvent e){
 			try {
 				gm.update();
+				
 			} catch (UnsupportedAudioFileException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
