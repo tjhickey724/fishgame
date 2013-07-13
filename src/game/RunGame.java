@@ -20,7 +20,7 @@ public class RunGame {
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		GameModel gm = new GameModel(100,10);
 		DrawDemo myDemo = new DrawDemo(gm);
-		ParamsUI params= new ParamsUI(gm,myDemo);
+		ExperimenterWindow params= new ExperimenterWindow(gm,myDemo);
 		myDemo.frame.setVisible(true); 
 		params.setVisible(true);
 
