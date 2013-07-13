@@ -69,6 +69,7 @@ public class ParamsUI extends JFrame {
 		numactors= new JTextField("20");
 		
 		header = new JLabel("Settings");
+
 		actorspecies=new JLabel("Fish Type:");
 		good=new JLabel("Good");
 		bad=new JLabel("Bad");
@@ -83,6 +84,7 @@ public class ParamsUI extends JFrame {
 		scrip = new JLabel("ScriptFile: ");	
 		nof=new JLabel("Fish to generate:");
 		currentactor=new JLabel("Current Fish #:");
+
 		
 		
 		
@@ -394,5 +396,6 @@ public class ParamsUI extends JFrame {
 		this.add(generate);
 		//this.add(matrix5);
 		//this.add(matrix6);
+		this.pack();
 	}
 }
