@@ -58,8 +58,8 @@ public class ParamsUI extends JFrame {
 		
 		
 		generatescreen=new JFrame("Generate Script");
-		generatescreen.setLayout(new GridLayout(1,3));
-		generatescreen.setSize(500,500);
+		generatescreen.setLayout(new GridLayout(3,1));
+		generatescreen.setSize(300,600);
 		
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
@@ -387,8 +387,8 @@ public class ParamsUI extends JFrame {
 		matrix6.setBorder(javax.swing.BorderFactory.createTitledBorder("jsp") );
 		
 		generatescreen.add(matrix1);
-		generatescreen.add(matrix2);
 		generatescreen.add(matrix3);
+		generatescreen.add(matrix2);
 		scriptedscreen.add(matrix4);
 		this.add(scripted);
 		this.add(generate);
