@@ -9,7 +9,20 @@ import java.io.IOException;
 public class ParamsUI extends JFrame {
 
 			/**
-	 * The script textbox could be bigger
+	 * 
+	 * THIS NEEDS TO BE REFACTORED AS FOLLOWS
+	 * CREATE TWO NEW Classes, 
+	 *    ScriptWindow and GenerateWindow
+	 * which both extend JFrame. The ParamsUI class then calls constructors
+	 * to create these two windows (as you've done here) and hides/shows them
+	 * as appropriate. You'll also need to pass it "this" to the ScriptWindow and GenerateWindow constructors
+	 * so when the user presses done on those, they can call paramsUI.show();
+	 * 
+	 * The advantage of this approach is that it will break one very complex class into three simpler classes.
+	 * Also, the only components which should be instqance variables are those that are read from or written to in a listener
+	 * Otherwise, they should be local variables of the constructor so they don't clutter up the class.
+	 * 
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 		JLabel header,actorspecies,good,bad,good1,bad1,sound,visual,subjectid,experimenterid,soundType,videoType,mintime,maxtime,scrip;
