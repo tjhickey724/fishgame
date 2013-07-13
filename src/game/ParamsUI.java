@@ -12,26 +12,21 @@ public class ParamsUI extends JFrame {
 	 * The script textbox could be bigger
 	 */
 	private static final long serialVersionUID = 1L;
-		JLabel header,fish,good,bad,good1,bad1,sound,visual,subjectid,experimenterid,soundType,videoType,gameType,mintime,maxtime,scrip;
-		JLabel hit,miss,total,ghit,gmiss,bhit,bmiss,gtot,btot,htot,mtot,tot;
+		JLabel header,actorspecies,good,bad,good1,bad1,sound,visual,subjectid,experimenterid,soundType,videoType,mintime,maxtime,scrip;
+		JLabel hit,miss,total,ghit,gmiss,bhit,bmiss,gtot,btot,htot,mtot,tot,nof,currentactor;
 		JPanel matrix1,matrix2,matrix3,matrix4,matrix5,matrix6;
 		JButton button1;
 		JPanel col1,col2,col3,row1,row2,row3;
-		//JTextField gs,bs,gc,bc;
 		int slow,fast,min,max,gh,gms,bh,bm,gt,bt,mt,ht,t;
 		int[] times;
-		String[] speeds,videotypes,gametypes,soundtypes;
-		//JSpinner gs,bs,gv,bv,vidtype,gamtype,stype,mintim,maxtim;
-		JComboBox gs,bs,gv,bv,vidtype,gamtype,stype;
+		String[] speeds,videotypes,soundtypes;
+		JComboBox vidtype,stype;
 		String SubjectID,ExperimenterID,script,type;
-		JTextField expId,subId,scr,mintim,maxtim,numfish;
-		//JCheckBox ster;
-		JFileChooser fc;
-		JButton start;
-		JButton stop;
+		JTextField expId,subId,scr,mintim,maxtim,numactors;
+		JButton start,stop,pause,restart,gen,sdone,gdone,scripted,generate;
 		GameModel gm;
-	//	SpinnerModel minmodel,maxmodel;
 		JScrollPane jsp;
+		JFrame scriptedscreen,generatescreen;
 		
 		JTextField goodVisualHzTF = new JTextField("6");
 		JTextField badVisualHzTF = new JTextField("8");
@@ -56,20 +51,25 @@ public class ParamsUI extends JFrame {
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.setLayout(new GridLayout(3,2));
+		this.setLayout(new GridLayout(2,1));
 		
-		fc = new JFileChooser();
-		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		scriptedscreen=new JFrame("Run from Script");
+		scriptedscreen.setSize(300,250);
+		
+		
+		generatescreen=new JFrame("Generate Script");
+		generatescreen.setLayout(new GridLayout(1,3));
+		generatescreen.setSize(500,500);
 		
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
 		scr= new JTextField("scripts/demoscript15.txt");
 		mintim = new JTextField("20");
 		maxtim = new JTextField("60");
-		numfish= new JTextField("# of fish generated");
+		numactors= new JTextField("20");
 		
 		header = new JLabel("Settings");
-		fish=new JLabel("Fish Type:");
+		actorspecies=new JLabel("Fish Type:");
 		good=new JLabel("Good");
 		bad=new JLabel("Bad");
 		good1=new JLabel("Good");
@@ -78,10 +78,11 @@ public class ParamsUI extends JFrame {
 		visual=new JLabel("Visual");
 		soundType=new JLabel("Sound Type: ");
 		videoType=new JLabel("Video Type: ");
-		gameType=new JLabel("Game Type: ");
 		mintime=new JLabel("Min Time: ");
 		maxtime= new JLabel("Max Time: ");
 		scrip = new JLabel("ScriptFile: ");	
+		nof=new JLabel("Fish to generate:");
+		currentactor=new JLabel("Current Fish #:");
 		
 		
 		
@@ -108,37 +109,71 @@ public class ParamsUI extends JFrame {
 
 		
 		speeds=new String[]{"none","slow","fast"};
-		
-/*		final SpinnerModel speedmodel0 = new SpinnerListModel(speeds);
-		final SpinnerModel speedmodel1 = new SpinnerListModel(speeds);
-		final SpinnerModel speedmodel2 = new SpinnerListModel(speeds);
-		final SpinnerModel speedmodel3 = new SpinnerListModel(speeds);
-	*/	
 		videotypes=new String[]{"Throb","Flicker"};
 	
-	//	SpinnerModel videoTypeModel = new SpinnerListModel(videotypes);
 		vidtype = new JComboBox(videotypes);
-		
-		gametypes=new String[]{"Generated","Scripted"};
-	//	final SpinnerModel gameTypeModel = new SpinnerListModel(gametypes);
-		gamtype = new JComboBox(gametypes);
-		gamtype.setSelectedIndex(1);
+
 		soundtypes=new String[]{"Stereo","Mono"};
-	//	SpinnerModel soundTypeModel = new SpinnerListModel(soundtypes);
 		stype = new JComboBox(soundtypes);
-		
-		gs=new JComboBox(speeds);
-		gs.setSelectedIndex(1);
-		bs=new JComboBox(speeds);
-		bs.setSelectedIndex(2);
-		gv=new JComboBox(speeds);
-		gv.setSelectedIndex(1);
-		bv=new JComboBox(speeds);
-		bv.setSelectedIndex(2);
 		
 		JTextArea textArea = new JTextArea(5, 20);
 		jsp = new JScrollPane(textArea); 
 		textArea.setEditable(true);
+		
+		
+		pause=new JButton("Pause");
+		restart=new JButton("Restart");
+		scripted=new JButton("Run from Script");
+		sdone=new JButton("Done");
+		gdone=new JButton("Done");
+		gen=new JButton("Generate");
+
+
+		
+		scripted.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(false);
+				scriptedscreen.setVisible(true);
+				generatescreen.setVisible(false);
+			}
+		});
+		
+		generate=new JButton("Generate Script");
+		generate.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(false);
+				scriptedscreen.setVisible(false);
+				generatescreen.setVisible(true);
+			}
+		});
+		
+
+		gen.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+
+			}
+		});
+		
+		gdone.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(true);
+				scriptedscreen.setVisible(false);
+				generatescreen.setVisible(false);
+			}
+		});
+		
+		sdone.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(true);
+				scriptedscreen.setVisible(false);
+				generatescreen.setVisible(false);
+			}
+		});
 		
 		// the start button will look at the values of the params interface and change the game model accordingly
 		start= new JButton("start");
@@ -160,65 +195,20 @@ public class ParamsUI extends JFrame {
 				script=scr.getText();
 				SubjectID=subId.getText();
 				ExperimenterID=expId.getText();
-				if (gamtype.getSelectedItem().toString().equals("Scripted")){
-					gm.scripted=true;
-					type = "Scripted";
-					gm.inputScriptFileName = script;
-					//gm.typescript=script;
-				} else {
-					gm.scripted=false;
-					type = "Random";
-				}
-				
+				gm.scripted=true;
 				gm.goodFishSounds = goodSoundTF.getText();
 				gm.badFishSounds = badSoundTF.getText();
 				
-				/*
-				if (gs.getSelectedItem().toString().equals("fast")){
-					gm.goodaudiohz=fast;
-				} else if (gs.getSelectedItem().toString().equals("slow")){
-					gm.goodaudiohz=slow;
-				}else if (gs.getSelectedItem().toString().equals("none")){
-					gm.goodaudiohz=0;
-				}
-				if (bs.getSelectedItem().toString().equals("fast")){
-					gm.badaudiohz=fast;
-				} else if (bs.getSelectedItem().toString().equals("slow")){
-					gm.badaudiohz=slow;
-				}else if (bs.getSelectedItem().toString().equals("none")){
-					gm.badaudiohz=0;
-				}
-				*/
 				
 				gm.goodvisualhz = (int)Double.parseDouble(goodVisualHzTF.getText());
 				gm.badvisualhz = (int)Double.parseDouble(badVisualHzTF.getText());
-				
-				
-				/*
-				if (gv.getSelectedItem().toString().equals("fast")){
-					gm.goodvisualhz=fast;
-				} else if (gv.getSelectedItem().toString().equals("slow")){
-					gm.goodvisualhz=slow;
-				}else if (gv.getSelectedItem().toString().equals("none")){
-					gm.goodvisualhz=0;
-				}
-				if (bv.getSelectedItem().toString().equals("fast")){
-					gm.badvisualhz=fast;
-				} else if (bv.getSelectedItem().toString().equals("slow")){
-					gm.badvisualhz=slow;
-				}else if (bv.getSelectedItem().toString().equals("none")){
-					gm.badvisualhz=0;
-				}
-				*/
-
 			
 				
 				System.out.println(gm.badaudiohz);
 				System.out.println(gm.badvisualhz);
 				System.out.println(gm.goodaudiohz);
 				System.out.println(gm.goodvisualhz);
-				
-	//			slow = min;
+			
 				System.out.println(script);
 				System.out.println(gm.mRate);
 				try {
@@ -268,6 +258,8 @@ public class ParamsUI extends JFrame {
 			}
 		});
 		
+		
+		
 		col1 = new JPanel();
 		col1.setLayout(new GridLayout(3,1));
 		col2 = new JPanel();
@@ -291,7 +283,7 @@ public class ParamsUI extends JFrame {
 		matrix3.setLayout(new GridLayout(5,2));
 		
 		matrix4 = new JPanel();
-		matrix4.setLayout(new GridLayout(3,1));
+		matrix4.setLayout(new GridLayout(5,1));
 		
 		matrix5 = new JPanel();
 		matrix5.setLayout(new GridLayout(4,4));
@@ -301,19 +293,8 @@ public class ParamsUI extends JFrame {
 		JPanel blank=new JPanel();
 		JPanel blank1=new JPanel();
 
-		
-/*		button1 = new JButton();
-		button1.setText("Push Me");
-		button1.addActionListener(
-				new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				System.out.println("Yay I love being pushed");
-			}
-		});
-		
-		*/
-		
-		col1.add(fish);
+
+		col1.add(actorspecies);
 		col1.add(good);
 		col1.add(bad);
 		
@@ -340,8 +321,8 @@ public class ParamsUI extends JFrame {
 		row2.add(videoType);
 		row2.add(vidtype);
 		
-		row3.add(gameType);
-		row3.add(gamtype);
+		row3.add(gen);
+		row3.add(gdone);
 		
 		
 		matrix1.add(col1);
@@ -359,19 +340,25 @@ public class ParamsUI extends JFrame {
 		matrix3.add(mintim);
 		matrix3.add(maxtime);
 		matrix3.add(maxtim);
-		matrix3.add(scrip);
-		matrix3.add(scr);
 		matrix3.add(minSizeLab);
 		matrix3.add(minSizeTF);
 		matrix3.add(maxSizeLab);
 		matrix3.add(maxSizeTF);
+		matrix3.add(nof);
+		matrix3.add(numactors);
 		
 		matrix4.setBorder(javax.swing.BorderFactory.createTitledBorder("Main Control") );
 		matrix4.add(subId);
 		matrix4.add(expId);
+		matrix4.add(scrip);
+		matrix4.add(scr);
+		matrix4.add(currentactor);
 		matrix4.add(start);
+		matrix4.add(restart);
 		matrix4.add(stop);
-		matrix4.add(numfish);
+		matrix4.add(pause);
+		matrix4.add(sdone);
+
 		
 		matrix5.add(blank);
 		matrix5.add(hit);
@@ -399,10 +386,12 @@ public class ParamsUI extends JFrame {
 		matrix6.setBackground(Color.yellow);
 		matrix6.setBorder(javax.swing.BorderFactory.createTitledBorder("jsp") );
 		
-		this.add(matrix1);
-		this.add(matrix2);
-		this.add(matrix3);
-		this.add(matrix4);
+		generatescreen.add(matrix1);
+		generatescreen.add(matrix2);
+		generatescreen.add(matrix3);
+		scriptedscreen.add(matrix4);
+		this.add(scripted);
+		this.add(generate);
 		//this.add(matrix5);
 		//this.add(matrix6);
 	}
