@@ -101,8 +101,8 @@ public class GameModel {
 	// NOT USING ...
 	//PrintWriter writer = new PrintWriter("logOLD.txt", "UTF-8");
 	
-	public String headtext= "Right: Wrong:";
-	
+	//This is the header default text
+
 	
 	public GameModel(double size, int numActors) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		this.width =size;

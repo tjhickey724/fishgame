@@ -27,7 +27,7 @@ public class DrawDemo {
 	// this will listen to timer events
 	// and update the game and view every timestep
 	private ActionListener stepButtonListener;
-	public JLabel header;
+	
 
 	public DrawDemo(GameModel gamemodel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
@@ -55,8 +55,6 @@ public class DrawDemo {
 		
 		
 		// here is the title of the game and the status bar
-		header = new JLabel();
-		header.setText(gm.headtext);
 		status = new JLabel("Try to collect all the fish!");
 		status.setForeground (Color.red);
 		
@@ -118,7 +116,7 @@ public class DrawDemo {
 	
 		
 		// put the frame components together with a border layout
-		frame.add(header,BorderLayout.NORTH);
+		frame.add(gameboard.header,BorderLayout.NORTH);
 		frame.add(gameboard,BorderLayout.CENTER);
 		//frame.add(buttonPanel,BorderLayout.EAST);
 		frame.add(status,BorderLayout.SOUTH);
@@ -127,6 +125,7 @@ public class DrawDemo {
 		//frame.pack();
 
 	}
+	
 
 	/**
 	 * @param args ignored

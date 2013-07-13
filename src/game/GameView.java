@@ -5,6 +5,7 @@ import java.awt.event.*;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.io.*;
@@ -35,6 +36,8 @@ public class GameView extends JPanel{
 	ArrayList<String> keylog = new ArrayList<String>();
 	public boolean gameActive = false;
 	private BufferedImage streamImage, streamImage2,fishL,fishR;
+	public String headtext= "Right: Wrong:";
+	public JLabel header = new JLabel(headtext);
 	
 	public GameView(final GameModel gm) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		super();
@@ -42,6 +45,7 @@ public class GameView extends JPanel{
 		goodclip = new AudioClip("sounds/good.wav");
 		badclip = new AudioClip("sounds/bad.wav");
 		System.out.println("hello");
+
 		this.requestFocus();
 		
 		//here we read in the background image which tiles the scene
@@ -221,8 +225,7 @@ public class GameView extends JPanel{
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
 		//g.drawString("Score:"+gm.score, width/10, height/10);
-		g.drawString("Right:"+gm.hits+"   Wrong:"+gm.misses + "  Misses:"+gm.noKeyPress, 0, 20);
-		g.drawString(""+gm.hits+"     "+gm.misses + "     "+gm.noKeyPress, 0, 40);
+		header.setText("<html><table><tr><td>Right:</td><td>Wrong:</td><td>Misses:</td></tr><tr><td>"+gm.hits+"</td><td>"+gm.misses+"</td><td>"+gm.noKeyPress+"</td></tr></table></html>");
 
 		
 
