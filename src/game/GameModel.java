@@ -182,12 +182,33 @@ public class GameModel {
 	public void writeToLog(String s){
 		try{
 			long theTime = (System.nanoTime()-this.gameStart);
-			double theSeconds = (theTime/1000000.0);
+			long theInterval = theTime - lastLogEventTimeNano;
+			lastLogEventTimeNano = theTime;
+			double theSeconds = (theInterval/1000000.0);
 			this.logfile.write(theSeconds +" "+s+"\n");
 		} catch(Exception e){
 			System.out.println("Error writing to log "+e);
 		}
 	}
+	
+	public void writeToLog(GameEvent e){
+		try{
+			long theTime = (System.nanoTime()-this.gameStart);
+			long theInterval = theTime - lastLogEventTimeNano;
+			lastLogEventTimeNano = theTime;
+			double theSeconds = (theInterval/1000000.0);
+			//long theTime = (System.nanoTime()-this.gameStart);
+			//double theSeconds = (theTime/1000000.0);
+			this.logfile.write(theSeconds+GameEvent.sep+e+"\n");
+		} catch(Exception err){
+			System.out.println("Error writing GameEvent to log "+err);
+		}
+	}
+
+	private long lastLogEventTimeNano = 0;
+	
+	
+	private long lastScriptEventTimeNano = 0;
 	
 	private void writeToScript(GameActor fish){
 		long now = (System.nanoTime() - this.gameStart)/1000000;
@@ -201,15 +222,6 @@ public class GameModel {
         }
 	}
 	
-	public void writeToLog(GameEvent e){
-		try{
-			//long theTime = (System.nanoTime()-this.gameStart);
-			//double theSeconds = (theTime/1000000.0);
-			this.logfile.write(GameEvent.sep+e+"\n");
-		} catch(Exception err){
-			System.out.println("Error writing GameEvent to log "+err);
-		}
-	}
 
 
 	

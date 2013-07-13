@@ -53,6 +53,7 @@ public class ParamsUI extends JFrame {
 		JTextField goodSoundTF = new JTextField("sounds/fish6hz0p");
 		JTextField badSoundTF = new JTextField("sounds/fish8hz0p");
 		
+		GenerateScript gs = new GenerateScript();
 	
 		
 	
@@ -151,6 +152,8 @@ public class ParamsUI extends JFrame {
 				setVisible(false);
 				scriptedscreen.setVisible(true);
 				generatescreen.setVisible(false);
+
+
 			}
 		});
 		
@@ -168,6 +171,14 @@ public class ParamsUI extends JFrame {
 		gen.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
+				
+				int min = (int) Double.parseDouble(mintim.getText());
+				int max = (int) Double.parseDouble(maxtim.getText());
+				GameSpec g = new GameSpec();
+				g.minFishRelease = min;
+				g.maxFishRelease = max;
+				gs.generate(g,100);
+				gs.close();
 
 			}
 		});
