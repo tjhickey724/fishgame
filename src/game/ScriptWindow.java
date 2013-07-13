@@ -23,7 +23,7 @@ public class ScriptWindow extends JFrame {
 	GameModel gm;
 	
 	public ScriptWindow(final ExperimenterWindow paramsui){
-		super("Scripted");
+		super("Script Window");
 		this.gm=paramsui.gm;
 		setSize(300,250);
 		expId= new JTextField("Experimenter");
