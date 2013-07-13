@@ -14,7 +14,7 @@ public class FishSpec {
 	public int throbMinSize = 100;
 	public int throbMaxSize = 125;
 	public int throbRate = 3;
-	private String sep = GenerateScript.SEP;
+	private String sep = ScriptGenerator.SEP;
 	
 	public FishSpec(){
 		// creates a default fish whose fields we set directly.

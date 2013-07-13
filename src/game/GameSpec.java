@@ -12,7 +12,7 @@ public class GameSpec {
 		left = new FishSpec(),
 		right = new FishSpec();
 	
-	private String sep = GenerateScript.SEP;
+	private String sep = ScriptGenerator.SEP;
 	
 	public String backgroundImage = "images/streamFlip2.jpg";
 	
