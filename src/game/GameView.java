@@ -42,7 +42,7 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	private BufferedImage streamImage, streamImage2,fishL,fishR;
+	public BufferedImage streamImage, streamImage2,fishL,fishR;
 	
 	public JLabel header = new JLabel("Right: Wrong:");
 	
@@ -278,24 +278,20 @@ public class GameView extends JPanel{
 		int visualHz=1;
 		
 		switch (a.species){
-		case good:
-			visualHz = gm.goodvisualhz;
-			c = interpolate(a.color3, a.color4,a.birthTime,System.nanoTime(),a.colorHerz);break;
-		case bad:
-			visualHz = gm.badvisualhz;
-			c = interpolate(a.color3, a.color4,a.birthTime,System.nanoTime(),a.colorHerz);break;
-		
-		case avatar: c=Color.BLACK; break;
+			case good:
+				visualHz = gm.gameSpec.good.throbRate; break;
+			case bad:
+				visualHz = gm.badvisualhz;	break;
 		}
-		g.setColor(c);
-		/*
-		if (a.species==Species.avatar){
-			g.drawOval(x-theRadius, y-theRadius, 2*theRadius, 2*theRadius);
-		} else
-			g.fillOval(x-theRadius, y-theRadius, 2*theRadius, 2*theRadius);
-	
-		*/
-		int theSize = interpolateSize(gm.visualMin,gm.visualMax,a.birthTime,System.nanoTime(),visualHz);
+
+
+		int theSize = interpolateSize(
+				gm.gameSpec.minThrobSize,
+				gm.gameSpec.maxThrobSize,
+				a.birthTime,
+				System.nanoTime(),
+				visualHz);
+		
 		int theWidth  = (int) ((theSize * 97)/100);
 		int theHeight = (int) ((theSize * 32)/100);
 		if (a.fromLeft){

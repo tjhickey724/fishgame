@@ -26,7 +26,7 @@ public class GameModel {
 	 * The gameSpec is a set of property/value pairs that describes
 	 * everything about the current game aesthetics and mechanics.
 	 */
-	public GameSpec gameSpec;
+	public GameSpec gameSpec,lastGameSpec;
 	
 	// this class is too complex, we need to clean it up and refactor!!
 	// REFACTOR -- do we need all three of these?

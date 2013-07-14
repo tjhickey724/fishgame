@@ -40,6 +40,10 @@ public class GameSpec {
 	    minFishRelease = 30,
 	    maxFishRelease = 60;
 	
+	public int
+		minThrobSize = 100,
+		maxThrobSize = 125;
+	
 	public GameSpec(){
 		// create default GameSpec
 	}
@@ -59,6 +63,8 @@ public class GameSpec {
 		s+= scriptLine("goodSound",""+goodSound);
 		s+= scriptLine("badSound",""+badSound);
 		s+= scriptLine("stereo",""+stereo);
+		s+= scriptLine("minThrobSize",""+minThrobSize);
+		s+= scriptLine("maxThrobSize",""+maxThrobSize);
 		return(s);
 		
 	}
@@ -81,6 +87,10 @@ public class GameSpec {
 			this.minFishRelease = Integer.parseInt(value);
 		} else if (prop.equals("stereo")){
 			this.stereo = "true".equals(value);
+		} else if (prop.equals("maxThrobSize")){
+			this.maxThrobSize = Integer.parseInt(value);
+		} else if (prop.equals("minThrobSize")){
+			this.minThrobSize = Integer.parseInt(value);
 		} else if (prop.startsWith("good")) {
 			return this.good.update(prop.substring(4), value);
 		} else if (prop.startsWith("bad")) {

@@ -12,8 +12,7 @@ public class FishSpec {
 	public String imageFileLeft = "images/fishLeft.png";
 	public String imageFileRight = "images/fishRight.png";
 
-	public int throbMinSize = 100;
-	public int throbMaxSize = 125;
+
 	public int throbRate = 3;
 	private String sep = ScriptGenerator.SEP;
 	
@@ -31,8 +30,6 @@ public class FishSpec {
 		s += scriptLine(type+"imageFile",imageFile);
 		s+= scriptLine(type+"imageFileLeft",imageFileLeft);
 		s+= scriptLine(type+"imageFileRight",imageFileRight);
-		s+= scriptLine(type+"throbMinSize",""+throbMinSize);
-		s+= scriptLine(type+"throbMaxSize",""+throbMaxSize);
 		s+= scriptLine(type+"throbRate",""+throbRate);
 		return s;		
 	}
@@ -47,10 +44,6 @@ public class FishSpec {
 			this.imageFileLeft = val;
 		} else if (prop.equals("imageFileRight")){
 			this.imageFileRight = val;
-		} else if (prop.equals("throbMinSize")){
-			throbMinSize = Integer.parseInt(val);
-		} else if (prop.equals("throbMaxSize")){
-			throbMaxSize = Integer.parseInt(val);
 		} else if (prop.equals("tbrobRate")) {
 			throbRate = Integer.parseInt(val);
 		} else return false;

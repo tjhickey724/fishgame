@@ -96,6 +96,11 @@ public class GenerateWindow extends JFrame {
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
 				gs.stereo = true;
+				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF.getText());
+				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
+				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
+				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+						
 				
 				System.out.println(gs.toScript());
 				sgen.generate(gs,10);
