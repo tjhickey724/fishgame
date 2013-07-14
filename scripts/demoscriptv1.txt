@@ -1,0 +1,30 @@
+0	version	0.5
+0	goodsoundFile	sounds/fish6hz0p
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobMinSize	100
+0	goodthrobMaxSize	125
+0	goodthrobRate	3
+0	badsoundFile	sounds/fish8hz0p
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobMinSize	100
+0	badthrobMaxSize	125
+0	badthrobRate	4
+0	backgroundImage	images/stream.jpg
+0	minFishRelease	30
+0	maxFishRelease	60
+0	stereo	true
+4881	bad 	right 	1
+3012	bad 	left 	2
+4657	good	left 	3
+3348	bad 	left 	4
+5705	bad 	right	5
+3275	good	left 	6
+5356	bad 	left 	7
+3803	bad 	right	8
+4764	good	left 	9
+4622	bad 	left 	10
+0	gameover	1

@@ -31,47 +31,35 @@ import java.util.ArrayList;
  */
 public class GameView extends JPanel{
 	private static final long serialVersionUID = 1L;
-	public AudioClip goodclip,badclip;
-	private GameModel gm = null;
-	ArrayList<String> keylog = new ArrayList<String>();
-	public boolean gameActive = false;
-	private BufferedImage streamImage, streamImage2,fishL,fishR;
-	public String headtext= "Right: Wrong:";
-	public JLabel header = new JLabel(headtext);
 	
-	public GameView(final GameModel gm) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	private GameModel gm = null;
+	private GameSpec gs;
+
+	
+	public AudioClip goodclip,badclip;
+
+	ArrayList<String> keylog = new ArrayList<String>();
+	
+	public boolean gameActive = false; // shouldn't this be in the model???
+	
+	private BufferedImage streamImage, streamImage2,fishL,fishR;
+	
+	public JLabel header = new JLabel("Right: Wrong:");
+	
+	/**
+	 * create a gameview panel
+	 * and add listeners to implement the user interaction with the model
+	 * @param gm
+	 */
+	public GameView(final GameModel gm) {
 		super();
 		this.gm = gm;
-		goodclip = new AudioClip("sounds/good.wav");
-		badclip = new AudioClip("sounds/bad.wav");
-		System.out.println("hello");
+		this.updateGameState(gm.gameSpec);
 
 		this.requestFocus();
 		
-		//here we read in the background image which tiles the scene
-		try {
-			streamImage = ImageIO.read(new File("images/stream.jpg")); 
-			streamImage2 = ImageIO.read(new File("images/streamFlip2.jpg")); 
-			fishL = ImageIO.read(new File("images/fishLeft.png"));
-			fishR = ImageIO.read(new File("images/fishRight.png"));
-		}catch(Exception e){
-			System.out.println("can't find background images"+e);
-		}
-		
-		KeyListener kl = new KeyListener()
+		KeyAdapter kl = new KeyAdapter()
 		{
-			@Override
-			public void keyPressed(KeyEvent e)
-				{
-				
-			//	feedBackText.append("Key Pressed: " + e.getKeyChar() + "\n");
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e)
-			{
-				//feedBackText.append("Key Released: " + e.getKeyChar() + "\n");
-			}
 			
 			/**
 			 * returns true if the key press was correct
@@ -97,6 +85,8 @@ public class GameView extends JPanel{
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
+				if (gm.gameOver)
+					return;
 				
 				// play good/bad sounds alone by key press for demo purpose
 				if (e.getKeyChar()=='g') {
@@ -129,7 +119,7 @@ public class GameView extends JPanel{
 				String log = e.getKeyChar()+" "+responseTime/1000000.0+" "
 					      +correctResponse+" "+lastFish;
 				System.out.println(log);
-				//gm.writeToLog(log);
+				
 				gm.writeToLog(new GameEvent(e.getKeyChar(),lastFish));
 				
 				// play the appropriate sound and modify the score
@@ -149,8 +139,25 @@ public class GameView extends JPanel{
 		this.addKeyListener(kl);
 	}
 	
-	
+	/*
+	 * this goes through the GameSpec and updates all of the local state,
+	 * e.g. the image and sound files, throb rate, etc. ...
+	 */
+	private void updateGameState(GameSpec gs){
+		goodclip = new AudioClip(gs.goodSound);
+		badclip = new AudioClip(gs.badSound);
 
+		//here we read in the background image which tiles the scene
+		try {
+			streamImage = ImageIO.read(new File(gs.backgroundImage)); 
+			streamImage2 = ImageIO.read(new File(gs.backgroundImageFlipped)); 
+			fishL = ImageIO.read(new File("images/fishLeft.png"));
+			fishR = ImageIO.read(new File("images/fishRight.png"));
+		}catch(Exception e){
+			System.out.println("can't find background images"+e);
+		}
+		
+	}
 	
 	/**
 	 * toViewCoords(x) converts from model coordinates to pixels
@@ -165,6 +172,18 @@ public class GameView extends JPanel{
  		int height = this.getHeight();
 		int viewSize = (width<height)?width:height;
 		return (int) Math.round(x/gm.size*viewSize);
+	}
+	public int toXViewCoords(double x){
+		int width = this.getWidth();
+ 		int height = this.getHeight();
+		int viewSize = (width<height)?width:height;
+		return (int) Math.round(x/gm.size*width);
+	}
+	public int toYViewCoords(double x){
+		int width = this.getWidth();
+ 		int height = this.getHeight();
+		int viewSize = (width<height)?width:height;
+		return (int) Math.round(x/gm.size*height);
 	}
 	
 	/**
@@ -204,17 +223,27 @@ public class GameView extends JPanel{
 				(int) Math.round(framePart*height);
 		//System.out.println(y_offset);
 		//g.drawImage(streamImage,0,0,null);
-		//g.drawImage(streamImage2,0,y_offset-3*291,null);
+		//g.drawImage(streamImage2,0,y_offset-3*291,null); 
 		if (gm.paused || gm.gameOver){
 			y_offset=0;
-			for(GameActor a:gm.actors){
+			if (gm.actors.size()> 0){
+				GameActor a = gm.actors.get(0);
 				a.ct.stop();
 			}
+
 		}
+
 		g.drawImage(streamImage,0,y_offset-height,width,height/2,null);
 		g.drawImage(streamImage2,0,y_offset-height/2,width,height/2,null);
 		g.drawImage(streamImage,0,y_offset,width,height/2,null);
 		g.drawImage(streamImage2,0,y_offset+height/2,width,height/2,null);
+		
+		if (gm.gameOver){
+			g.drawString("GAME OVER",100,100);
+			return;
+		}
+		
+		
 		//g.drawImage(streamImage,0,y_offset+2*291,null);
 		
 	//	drawActor(g,gm.avatar,Color.GREEN);
@@ -244,8 +273,8 @@ public class GameView extends JPanel{
 	private void drawActor(Graphics g, GameActor a,Color c){
 		if (!a.active) return;
 		int theRadius = toViewCoords(a.radius);
-		int x = toViewCoords(a.x);
-		int y = toViewCoords(a.y);
+		int x = toXViewCoords(a.x);
+		int y = toYViewCoords(a.y);
 		int visualHz=1;
 		
 		switch (a.species){

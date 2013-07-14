@@ -28,7 +28,7 @@ public class ScriptWindow extends JFrame {
 		setSize(300,250);
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
-		scr= new JTextField("scripts/demoscript15.txt");
+		scr= new JTextField("scripts/demoscriptv1.txt");
 		currentactor = new JLabel("Current Fish #:");
 		start= new JButton("start");
 		scrip = new JLabel("ScriptFile: ");	
@@ -43,6 +43,7 @@ public class ScriptWindow extends JFrame {
 				paramsui.setVisible(true);
 				setVisible(false);
 				paramsui.gw.setVisible(false);
+				gm.stop();
 			}
 		});
 		
@@ -55,21 +56,13 @@ public class ScriptWindow extends JFrame {
 				gm.inputScriptFileName=scr.getText();
 				String SubjectID=subId.getText();
 				String ExperimenterID=expId.getText();
-				gm.scripted=true;
+
 				try {
 					paramsui.gm.logfile.write("Version:                "+"1.0 (7/11/2013)" + "\n" +
 									 "Experimenter:           "+ ExperimenterID + "\n" + 
 				                     "Subject:                " + SubjectID + "\n" + 
-				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"+
-				                     "Script File:            " + gm.inputScriptFileName + "\n"+
-				                     "Good Sounds:            "+ gm.goodFishSounds + "\n"+
-							         "Bad Sounds:             " + gm.badFishSounds +"\n"+
-				                     "Good Visual Hertz:      " +gm.goodvisualhz +"\n"+
-				                     "Bad Visual Hertz:       " +gm.badvisualhz +"\n"+
-				                     "Visual Min Scale:       "+ gm.visualMin + "\n"+ 
-				                     "Visual Max Scale:       "+ gm.visualMin + "\n"+
-				                     "Min Delay:              "+ gm.mRate+"\n"+
-							         "Max Delay:              "+gm.sRate+"\n" + "\nstart\n");
+				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"
+				                 );
 					gm.logfile.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

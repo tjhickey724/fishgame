@@ -73,6 +73,8 @@ public class GameActor {
 				if (stereo){
 					this.ctR = new AudioClip(fishSounds+"/fishR.wav");
 					this.ctL = new AudioClip(fishSounds+"/fishL.wav");
+					//(fishSounds+"/fishR.wav");
+					//System.out.println(fishSounds+"/fishL.wav");
 				} else {
 					this.ctR = this.ct;
 					this.ctL = this.ct;

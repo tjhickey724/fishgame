@@ -7,7 +7,8 @@ package game;
  *
  */
 public class FishSpec {
-	public String soundFile = "sounds/fish6hz0p/fish.wav";
+	public String soundFile = "sounds/fish6hz0p";
+	public String imageFile = "images/fish1";
 	public String imageFileLeft = "images/fishLeft.png";
 	public String imageFileRight = "images/fishRight.png";
 
@@ -24,16 +25,37 @@ public class FishSpec {
 		return "0"+sep+prop+sep+val+"\n";
 	}
 	
-	public String toScript(){
+	public String toScript(String type){
 		String s ="";
-		s+= scriptLine("soundFile",soundFile);
-		s+= scriptLine("imageFileLeft",imageFileLeft);
-		s+= scriptLine("imageFileRight",imageFileRight);
-		s+= scriptLine("throbMinSize",""+throbMinSize);
-		s+= scriptLine("throbMaxSize",""+throbMaxSize);
-		s+= scriptLine("throbRate",""+throbRate);
-		return s;
-		
+		s+= scriptLine(type+"soundFile",soundFile);
+		s += scriptLine(type+"imageFile",imageFile);
+		s+= scriptLine(type+"imageFileLeft",imageFileLeft);
+		s+= scriptLine(type+"imageFileRight",imageFileRight);
+		s+= scriptLine(type+"throbMinSize",""+throbMinSize);
+		s+= scriptLine(type+"throbMaxSize",""+throbMaxSize);
+		s+= scriptLine(type+"throbRate",""+throbRate);
+		return s;		
+	}
+	
+	public boolean update(String prop, String val){
+
+		if (prop.equals("soundFile")) {
+			this.soundFile = val;
+		} else if (prop.equals("imageFile")){
+			this.imageFile = val;
+		} else if (prop.equals("imageFileLeft")){
+			this.imageFileLeft = val;
+		} else if (prop.equals("imageFileRight")){
+			this.imageFileRight = val;
+		} else if (prop.equals("throbMinSize")){
+			throbMinSize = Integer.parseInt(val);
+		} else if (prop.equals("throbMaxSize")){
+			throbMaxSize = Integer.parseInt(val);
+		} else if (prop.equals("tbrobRate")) {
+			throbRate = Integer.parseInt(val);
+		} else return false;
+
+		return true;
 	}
 
 }

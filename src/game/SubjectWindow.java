@@ -17,21 +17,21 @@ import javax.swing.event.*;
  */
 public class SubjectWindow {
 	private GameModel gm;
-	private javax.swing.Timer  timer;
+
 	public JFrame frame;
 	
 	public GameView gameboard;
 	private JLabel status;
 	private JSlider speedSlider;
-	private int timerDelay = 1000/30;
+
 	// this will listen to timer events
 	// and update the game and view every timestep
 	private ActionListener stepButtonListener;
 	
 
-	public SubjectWindow(GameModel gamemodel) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public SubjectWindow(GameModel gamemodel) { // throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 
-		JLabel header;
+
 		JPanel buttonPanel;
 		JButton stepButton;
 		JButton runButton;
@@ -41,9 +41,6 @@ public class SubjectWindow {
 		this.gm=gamemodel;
 		//this window will have the settings we can adjust
 
-
-		
-		
 		// first we create the Frame with a border layout
 		frame = new JFrame("Subject Window");
 		frame.setSize(500,1000);
@@ -63,7 +60,7 @@ public class SubjectWindow {
 		buttonPanel.setLayout(new GridLayout(2,1));
 		stepButton = new JButton();
 		stepButton.setText("step");
-		stepButtonListener = new StepButtonListener();
+
 		stepButton.addActionListener(stepButtonListener);
 
 		runButton = new JButton();
@@ -81,9 +78,9 @@ public class SubjectWindow {
 		stopButton.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					status.setText("game paused");
-					gm.writeToLog(new GameEvent("stopgame"));
-					gm.stop();
+					status.setText("game over");
+					//gm.writeToLog(new GameEvent("stopgame"));
+					//gm.stop();
 				}
 			});
 		
@@ -96,85 +93,22 @@ public class SubjectWindow {
 						gm.gameOver=false;
 					}
 				});
-		status = new JLabel("Try hit the correct button as a fish appears!");
+		status = new JLabel("");
 		
-		// add the buttons to a buttonPanel
-	//	buttonPanel.add(stepButton);
 		buttonPanel.add(runButton);
 		buttonPanel.add(stopButton);
-	//	buttonPanel.add(resetButton);
+
 		
-		// now create the speedSlider--- is this necessary?
-		speedSlider = new JSlider(JSlider.VERTICAL,1,40,4);
-		speedSlider.addChangeListener(new ChangeListener(){
-			public void stateChanged(ChangeEvent e){
-			   int v = speedSlider.getValue();
-			   //timer.setDelay(1000/v);
-			   gm.goodaudiohz=v;
-			}
-		});
+
 	
 		
 		// put the frame components together with a border layout
 		frame.add(gameboard.header,BorderLayout.NORTH);
 		frame.add(gameboard,BorderLayout.CENTER);
-		//frame.add(buttonPanel,BorderLayout.EAST);
 		frame.add(status,BorderLayout.SOUTH);
-		//frame.add(speedSlider,BorderLayout.WEST);
-		//params.add(speedSlider,BorderLayout.WEST);
-		//frame.pack();
+
 
 	}
-	
 
-	/**
-	 * @param args ignored
-	 */
 	
-	// most of the code after this is unnecessary
-	public static void timerVersion()throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		GameModel gm = new GameModel(100,100);
-		SubjectWindow myDemo = new SubjectWindow(gm);
-		// now we create the StepButtonListener
-		// and add it as a listener to the timer
-		myDemo.frame.setVisible(true);
-		
-		myDemo.timer = new Timer(10,myDemo.stepButtonListener);
-		myDemo.timer.setDelay(50);
-		myDemo.timer.start();
-		
-	}
-	/**
-	 * a StepButtonListener object is called at every time step
-	 * and it updates the model, redisplays the gameboard,
-	 * and updates the status.
-	 * @author tim
-	 *
-	 */
-	public class StepButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e){
-			try {
-				gm.update();
-				
-			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			status.setText("fireflies remaining: "+gm.numActive+
-					" current speed ="+1000/timer.getDelay()+" fps");
-			gameboard.repaint();
-			if (gm.gameOver){
-				if (gm.numActive==0)
-					status.setText("*** YOU WON ***");
-				else
-					status.setText("--- YOU LOST ---");
-			}
-		}
-	}
 }

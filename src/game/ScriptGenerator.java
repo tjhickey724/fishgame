@@ -25,6 +25,7 @@ public class ScriptGenerator {
 	public ScriptGenerator(String scriptname){
 		try {
 			this.scriptFile = new BufferedWriter(new FileWriter(new File(scriptname+".txt")));
+			this.scriptFile.write("0"+sep+"version"+sep+RunGame.versionNum+"\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error Opening Script File");
@@ -44,7 +45,7 @@ public class ScriptGenerator {
 	 */
 	public void generate(GameSpec g, int N) {
 		try {
-			scriptFile.write("0"+sep+"version"+sep+RunGame.versionNum+"\n");
+
 			scriptFile.write(g.toScript());
 
 			int nextInterval = 0;
@@ -84,7 +85,7 @@ public class ScriptGenerator {
 	public static void main(String[] args){
 		GameSpec g = new GameSpec();
 		ScriptGenerator gs = new ScriptGenerator();
-		gs.generate(g,100);
+		gs.generate(g,10);
 		gs.close();
 	}
 

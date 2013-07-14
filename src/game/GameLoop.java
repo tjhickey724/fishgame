@@ -22,19 +22,7 @@ public class GameLoop implements Runnable{
 		public void run(){
 			while(true){
 				// update the model
-				try {
-					gm.update();
-					
-				} catch (UnsupportedAudioFileException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (LineUnavailableException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				gm.update();
 				
 				// repaint the gameboard, safely
 				EventQueue.invokeLater(new Runnable(){

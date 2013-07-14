@@ -22,9 +22,10 @@ import javax.swing.JTextField;
  *
  */
 public class GenerateWindow extends JFrame {
-	JPanel matrix1,matrix2,matrix3,col1,col2,col3,row1,row2,row3;
-	JTextField mintim,maxtim,numactors;
-	JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
+
+	JTextField 
+	    mintim = new JTextField("30"),
+	    maxtim = new JTextField("80");
 	JComboBox vidtype,stype;
 	String[] speeds,videotypes,soundtypes;
 	JButton gdone,gen;
@@ -44,16 +45,21 @@ public class GenerateWindow extends JFrame {
 	JTextField goodSoundTF = new JTextField("sounds/fish6hz0p");
 	JTextField badSoundTF = new JTextField("sounds/fish8hz0p");
 	
+	JTextField numactors = new JTextField("7");
+	
+	ScriptGenerator sgen = new ScriptGenerator();
+	
 
 	public GenerateWindow( final ExperimenterWindow paramsui){
 		super("Generate Window");
 		setLayout(new GridLayout(4,1));
 		setSize(300,600);
 		
+		JPanel matrix1,matrix2,matrix3,col1,col2,col3,row1,row2,row3;
+		JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
 
-		mintim = new JTextField("20");
-		maxtim = new JTextField("60");
-		numactors= new JTextField("20");
+		
+
 		
 		actorspecies=new JLabel("Fish Type:");
 		good=new JLabel("Good");
@@ -84,12 +90,24 @@ public class GenerateWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 
+				GameSpec gs = new GameSpec();
+				gs.minFishRelease = (int) Integer.parseInt(mintim.getText());
+				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
+				gs.good.soundFile = goodSoundTF.getText();
+				gs.bad.soundFile = badSoundTF.getText();
+				gs.stereo = true;
+				
+				System.out.println(gs.toScript());
+				sgen.generate(gs,10);
+				
+
 			}
 		});
 		
 		gdone.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
+				sgen.close();
 				paramsui.setVisible(true);
 				paramsui.sw.setVisible(false);
 				setVisible(false);

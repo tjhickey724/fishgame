@@ -144,8 +144,9 @@ public class GameEvent {
 				+ this.species + sep 
 				+ this.side + sep
 				//+ convertNanoToMSfromGS(this.fishRelease) + sep 
-				+ this.when + sep;
+				//+ this.when + sep
 				//+ convertNanoToMSfromGS(this.keyPress) + sep;
+				;
 		return response;			
 	}
 }
