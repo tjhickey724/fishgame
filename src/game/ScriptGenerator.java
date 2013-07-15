@@ -18,6 +18,7 @@ public class ScriptGenerator {
 	private BufferedWriter scriptFile;
 	private Random rand = new Random();
 	public final static String SEP = "\t";
+	public int fishNum = 0;
 	
 	public ScriptGenerator() {
 		this("scripts/scriptv1_"+System.currentTimeMillis());
@@ -58,9 +59,10 @@ public class ScriptGenerator {
 				long theInterval = m + r;
 				boolean goodFish = rand.nextInt(2) == 1;
 				boolean fromLeft = rand.nextInt(2) == 1;
+				fishNum++;
 				String scriptLine = "" + theInterval + sep
 						+ (goodFish ? "good" : "bad ") + sep
-						+ (fromLeft ? "left " : "right") + sep + (i + 1) + "\n";
+						+ (fromLeft ? "left " : "right") + sep + fishNum + "\n";
 				System.out.print(scriptLine);
 				scriptFile.write(scriptLine);
 

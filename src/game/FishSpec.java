@@ -44,7 +44,7 @@ public class FishSpec {
 			this.imageFileLeft = val;
 		} else if (prop.equals("imageFileRight")){
 			this.imageFileRight = val;
-		} else if (prop.equals("tbrobRate")) {
+		} else if (prop.equals("throbRate")) {
 			throbRate = Integer.parseInt(val);
 		} else return false;
 

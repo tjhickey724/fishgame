@@ -42,8 +42,8 @@ public class GenerateWindow extends JFrame {
 	JLabel maxSizeLab = new JLabel("Max Size(%)");
 	JTextField maxSizeTF = new JTextField("120");
 	
-	JTextField goodSoundTF = new JTextField("sounds/fish6hz0p");
-	JTextField badSoundTF = new JTextField("sounds/fish8hz0p");
+	JTextField goodSoundTF = new JTextField("sounds/fish2hz0p3ms");
+	JTextField badSoundTF = new JTextField("sounds/fish3hz0p3ms");
 	
 	JTextField numactors = new JTextField("7");
 	
@@ -95,15 +95,17 @@ public class GenerateWindow extends JFrame {
 				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
-				gs.stereo = true;
+				gs.stereo = (stype.getSelectedItem().toString().equals("Stereo"));
 				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF.getText());
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
 						
-				
+				int numberOfFish = Integer.parseInt(numactors.getText());
 				System.out.println(gs.toScript());
-				sgen.generate(gs,10);
+				sgen.generate(gs,numberOfFish);
+				jtextarea.append(gs.toScript());
+				jtextarea.append("GENERATE "+numberOfFish+" events\n");
 				
 
 			}

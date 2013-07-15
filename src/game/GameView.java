@@ -281,7 +281,7 @@ public class GameView extends JPanel{
 			case good:
 				visualHz = gm.gameSpec.good.throbRate; break;
 			case bad:
-				visualHz = gm.badvisualhz;	break;
+				visualHz = gm.gameSpec.bad.throbRate;	break;
 		}
 
 

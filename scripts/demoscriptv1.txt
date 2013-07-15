@@ -1,10 +1,10 @@
 0	version	0.5
-0	goodsoundFile	sounds/fish6hz0p
+0	goodsoundFile	sounds/fish6hz0p6ms
 0	goodimageFile	images/fish1
 0	goodimageFileLeft	images/fishLeft.png
 0	goodimageFileRight	images/fishRight.png
 0	goodthrobRate	6
-0	badsoundFile	sounds/fish8hz0p
+0	badsoundFile	sounds/fish8hz0p6ms
 0	badimageFile	images/fish1
 0	badimageFileLeft	images/fishLeft.png
 0	badimageFileRight	images/fishRight.png

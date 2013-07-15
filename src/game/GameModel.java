@@ -2,8 +2,6 @@ package game;
 import java.util.*;
 import java.io.*;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * This is the model for the game. It represents the entire state
