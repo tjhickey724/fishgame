@@ -1,0 +1,172 @@
+0	version	1.0
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish3hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	30
+0	maxFishRelease	80
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	true
+0	minThrobSize	100
+0	maxThrobSize	120
+5539	bad 	left 	1
+4123	good	right	2
+4514	good	left 	3
+5158	good	left 	4
+5314	bad 	right	5
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish3hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	10
+0	maxFishRelease	30
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	true
+0	minThrobSize	100
+0	maxThrobSize	120
+2695	bad 	right	6
+1268	bad 	left 	7
+2657	good	left 	8
+1453	bad 	right	9
+2925	good	left 	10
+1221	bad 	right	11
+2046	bad 	left 	12
+2222	good	left 	13
+2606	bad 	right	14
+1404	bad 	left 	15
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish3hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	5
+0	maxFishRelease	10
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	true
+0	minThrobSize	100
+0	maxThrobSize	120
+552	bad 	right	16
+563	good	left 	17
+660	good	right	18
+738	good	right	19
+504	bad 	left 	20
+883	bad 	right	21
+919	good	right	22
+862	good	left 	23
+953	good	right	24
+799	good	left 	25
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish3hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	5
+0	maxFishRelease	10
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	false
+0	minThrobSize	100
+0	maxThrobSize	120
+663	good	left 	26
+723	bad 	right	27
+861	bad 	right	28
+602	bad 	left 	29
+808	good	right	30
+593	bad 	right	31
+995	bad 	right	32
+503	bad 	left 	33
+974	bad 	left 	34
+984	good	right	35
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish2hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	5
+0	maxFishRelease	10
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	false
+0	minThrobSize	100
+0	maxThrobSize	120
+845	bad 	right	36
+893	bad 	right	37
+833	bad 	left 	38
+850	good	right	39
+541	bad 	right	40
+839	bad 	left 	41
+996	bad 	left 	42
+725	bad 	left 	43
+991	good	right	44
+655	bad 	right	45
+0	goodsoundFile	sounds/fish2hz0p3ms
+0	goodimageFile	images/fish1
+0	goodimageFileLeft	images/fishLeft.png
+0	goodimageFileRight	images/fishRight.png
+0	goodthrobRate	2
+0	badsoundFile	sounds/fish3hz0p3ms
+0	badimageFile	images/fish1
+0	badimageFileLeft	images/fishLeft.png
+0	badimageFileRight	images/fishRight.png
+0	badthrobRate	3
+0	backgroundImage	images/stream.jpg
+0	backgroundImageFlipped	images/streamFlip2.jpg
+0	minFishRelease	30
+0	maxFishRelease	80
+0	goodSound	sounds/good.wav
+0	badSound	sounds/bad.wav
+0	stereo	true
+0	minThrobSize	100
+0	maxThrobSize	120
+5620	good	left 	46
+3533	good	left 	47
+4879	good	right	48
+4381	good	left 	49
+7074	good	left 	50
+5548	good	left 	51
+5666	good	left 	52
+4436	bad 	right	53
+3448	bad 	right	54
+5722	good	right	55
+0	gameover	1
+ 
