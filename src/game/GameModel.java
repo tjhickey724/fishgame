@@ -152,7 +152,7 @@ public class GameModel {
 				this.gameOver=true;
 				return 1000000000000L;
 			}
-			System.out.println("interval="+interval+" prop="+prop+" value="+value);
+			//System.out.println("interval="+interval+" prop="+prop+" value="+value);
 			interval = scan.nextLong();
 			gameSpec.update(prop,value);
 		}
@@ -162,14 +162,14 @@ public class GameModel {
 		String species = scan.next();
 		String side = scan.next();
 		int fishNum = scan.nextInt();
-		System.out.println("update:"+tmpNFT/1000000+" "+ interval+" "+
-		(this.nextFishTime-this.gameStart)/1000000);
+		//System.out.println("update:"+tmpNFT/1000000+" "+ interval+" "+
+		//(this.nextFishTime-this.gameStart)/1000000);
 		
 		// write the launch event to the log
 
 		long now = (System.nanoTime()-this.gameStart)/1000000;
 		String logLine = ""+now+"\tlaunch\t"+species+"\t"+side+"\t"+fishNum;
-		System.out.println(logLine+" "+now+" "+interval);
+		//System.out.println(logLine+" "+now+" "+interval);
 
 		writeToLog(logLine);
 		
@@ -195,6 +195,7 @@ public class GameModel {
 			lastLogEventTimeNano = theTime;
 			int theSeconds = (int) Math.round(theInterval/1000000.0);
 			this.logfile.write(theSeconds +" "+s+"\n");
+			System.out.println("log:"+ theSeconds +" "+s+"\n");
 		} catch(Exception e){
 			System.out.println("Error writing to log "+e);
 		}
@@ -208,6 +209,7 @@ public class GameModel {
 			// this is the time in milliseconds since the last event
 			int msInterval = (int) Math.round((theInterval/1000000.0));
 			this.logfile.write(msInterval+GameEvent.sep+e+"\n");
+			System.out.println("log:"+ msInterval+GameEvent.sep+e+"\n");
 		} catch(Exception err){
 			System.out.println("Error writing GameEvent to log "+err);
 		}
@@ -232,7 +234,7 @@ public class GameModel {
 		
 		Side side = (this.nextFish.fromLeft)?Side.left:Side.right;
 		Species s = this.nextFish.species;
-		System.out.println("spawning "+s+" "+side);
+		//System.out.println("spawning "+s+" "+side);
 		
 		// pick starting location and velocity
 		double y = this.height/2;
@@ -332,8 +334,8 @@ public class GameModel {
 		
 		if (now > this.nextFishTime){
 			// time to launch the next fish!
-			System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
-			   (this.nextFishTime-this.gameStart)/1000000);
+			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
+			//  (this.nextFishTime-this.gameStart)/1000000);
 			
 			this.nextFishTime = this.updateNextFishTime();
 			if (this.gameOver) return;
