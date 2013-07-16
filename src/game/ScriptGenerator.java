@@ -19,19 +19,17 @@ public class ScriptGenerator {
 	private Random rand = new Random();
 	public final static String SEP = "\t";
 	public int fishNum = 0;
+	public String scriptname;
 	
 	public ScriptGenerator() {
-		this("scripts/scriptv1_"+System.currentTimeMillis());
+		this(makeScriptFilename());
 	}
 	public ScriptGenerator(String scriptname){
-		try {
-			this.scriptFile = new BufferedWriter(new FileWriter(new File(scriptname+".txt")));
-			this.scriptFile.write("0"+sep+"version"+sep+RunGame.versionNum+"\n");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error Opening Script File");
-			e.printStackTrace();
-		}
+		this.scriptname = scriptname;
+	}
+	
+	private static String makeScriptFilename(){
+		return "scripts/scriptv1_"+System.currentTimeMillis();
 	}
 	
 	/**
@@ -46,6 +44,19 @@ public class ScriptGenerator {
 	 */
 	public void generate(GameSpec g, int N) {
 		try {
+			if (this.scriptname==null) {
+				this.scriptname = makeScriptFilename();
+			}
+			if (this.scriptFile==null){
+				try {
+					this.scriptFile = new BufferedWriter(new FileWriter(new File(this.scriptname+".txt")));
+					this.scriptFile.write("0"+sep+"version"+sep+RunGame.versionNum+"\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Error Opening Script File");
+					e.printStackTrace();
+				}
+			}
 
 			scriptFile.write(g.toScript());
 
@@ -78,6 +89,8 @@ public class ScriptGenerator {
 		try {
 			scriptFile.write("0\tgameover\t1\n ");
 			scriptFile.close();
+			scriptFile = null;
+			scriptname = null;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Problems closing scriptfile:"+e);
