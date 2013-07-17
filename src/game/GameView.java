@@ -46,6 +46,7 @@ public class GameView extends JPanel{
 	
 	public JLabel header = new JLabel("Right: Wrong:");
 	
+	
 	/**
 	 * create a gameview panel
 	 * and add listeners to implement the user interaction with the model
@@ -254,7 +255,7 @@ public class GameView extends JPanel{
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
 		//g.drawString("Score:"+gm.score, width/10, height/10);
-		header.setText("<html><table><tr><td>Right:</td><td>Wrong:</td><td>Misses:</td></tr><tr><td>"+gm.hits+"</td><td>"+gm.misses+"</td><td>"+gm.noKeyPress+"</td></tr></table></html>");
+		header.setText("<html><table style=\"font-size:24pt;\"><tr><td>Right:</td><td>Wrong:</td><td>Misses:</td></tr><tr><td>"+gm.hits+"</td><td>"+gm.misses+"</td><td>"+gm.noKeyPress+"</td></tr></table></html>");
 
 		
 

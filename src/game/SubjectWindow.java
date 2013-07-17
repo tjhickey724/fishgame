@@ -104,6 +104,7 @@ public class SubjectWindow {
 		
 		// put the frame components together with a border layout
 		frame.add(gameboard.header,BorderLayout.NORTH);
+		gameboard.header.setHorizontalAlignment( SwingConstants.CENTER );
 		frame.add(gameboard,BorderLayout.CENTER);
 		frame.add(status,BorderLayout.SOUTH);
 
