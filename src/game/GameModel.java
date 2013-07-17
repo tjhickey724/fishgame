@@ -217,9 +217,15 @@ public class GameModel {
 
 	private long lastLogEventTimeNano = 0;
 	
-
-
-
+	public void pause(){
+		this.nextFishTime = Long.MAX_VALUE;
+		this.writeToLog("PAUSE");
+	}
+	
+	public void restart() {
+		this.nextFishTime = System.nanoTime() + 2*1000000000L;
+		this.writeToLog("RESTART");
+	}
 	
 	
 	
