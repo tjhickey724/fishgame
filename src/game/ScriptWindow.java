@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -18,9 +19,10 @@ import javax.swing.*;
 public class ScriptWindow extends JFrame {
 	JTextField expId,subId,scr;
 	JPanel scriptpanel;
-	JLabel scrip,currentactor;
-	JButton start,restart,stop,pause,sdone,runscript;
+	JLabel scrip,currentactor,selectedFile;
+	JButton start,restart,stop,pause,sdone,runscript,openButton;
 	GameModel gm;
+    JFileChooser fc;
 	
 	public ScriptWindow(final ExperimenterWindow paramsui){
 		super("Script Window");
@@ -36,6 +38,22 @@ public class ScriptWindow extends JFrame {
 		restart=new JButton("Restart");
 		stop = new JButton("Stop");
 		sdone=new JButton("Done");
+		selectedFile=new JLabel("Script File");
+		
+		
+		fc = new JFileChooser();
+		
+		openButton = new JButton("Open a File...");
+		openButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(ScriptWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File scriptFile = fc.getSelectedFile();
+		                selectedFile.setText(scriptFile.getName());
+		            }}});
 		
 		sdone.addActionListener(new ActionListener(){
 			@Override
@@ -120,6 +138,8 @@ public class ScriptWindow extends JFrame {
 		//scriptpanel.add(stop);
 		scriptpanel.add(pause);
 		scriptpanel.add(sdone);
+		scriptpanel.add(openButton);
+		scriptpanel.add(selectedFile);
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
 	}

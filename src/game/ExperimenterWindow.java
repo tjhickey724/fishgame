@@ -13,6 +13,7 @@ public class ExperimenterWindow extends JFrame {
 		ScriptWindow sw;
 		GenerateWindow gw;
 		SubjectWindow gameView;
+		JPanel buttonPanel;
 	
 	public ExperimenterWindow(final GameModel gm, final SubjectWindow gameView) {
 	
@@ -23,10 +24,12 @@ public class ExperimenterWindow extends JFrame {
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.setLayout(new GridLayout(2,1));
+	
 	
 		sw = new ScriptWindow(this);
 		gw=new GenerateWindow(this);
+		buttonPanel = new JPanel();
+		
 		//Button to view script window
 		scripted=new JButton("Run from Script");
 		scripted.addActionListener(new ActionListener(){
@@ -47,8 +50,11 @@ public class ExperimenterWindow extends JFrame {
 				gw.setVisible(true);
 			}
 		});
-		this.add(scripted);
-		this.add(generate);
+		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Sekuler Lab"));
+		buttonPanel.add(scripted);
+		buttonPanel.add(generate);
+		this.add(buttonPanel);
 		this.pack();
 	}
 
