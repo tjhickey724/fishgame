@@ -32,7 +32,7 @@ public class ScriptWindow extends JFrame {
 		currentactor = new JLabel("Current Fish #:");
 		start= new JButton("start");
 		scrip = new JLabel("ScriptFile: ");	
-		pause=new JButton("Pause");
+		pause=new JButton("pause");
 		restart=new JButton("Restart");
 		stop = new JButton("Stop");
 		sdone=new JButton("Done");
@@ -86,7 +86,14 @@ public class ScriptWindow extends JFrame {
 		pause.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				gm.pause();
+				if (pause.getText().equals("pause")) {
+					gm.pause();
+					pause.setText("restart");
+				} else {
+					gm.restart();
+					pause.setText("pause");
+				}
+				
 			}
 		});
 		
@@ -109,8 +116,8 @@ public class ScriptWindow extends JFrame {
 		scriptpanel.add(scr);
 		scriptpanel.add(currentactor);
 		scriptpanel.add(start);
-		scriptpanel.add(restart);
-		scriptpanel.add(stop);
+		//scriptpanel.add(restart);
+		//scriptpanel.add(stop);
 		scriptpanel.add(pause);
 		scriptpanel.add(sdone);
 		scriptpanel.setBackground(Color.gray);
