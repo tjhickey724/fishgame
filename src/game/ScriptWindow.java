@@ -83,6 +83,20 @@ public class ScriptWindow extends JFrame {
 			}
 		});
 		
+		pause.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				gm.pause();
+			}
+		});
+		
+		restart.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				gm.restart();
+			}
+		});
+		
 		
 		
 		scriptpanel = new JPanel();
