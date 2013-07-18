@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,14 +44,14 @@ public class GenerateWindow extends JFrame {
 	JLabel maxSizeLab = new JLabel("Max Size(%)");
 	JTextField maxSizeTF = new JTextField("120");
 	
-	JTextField goodSoundTF = new JTextField("sounds/fish2hz0p3ms");
-	JTextField badSoundTF = new JTextField("sounds/fish3hz0p3ms");
+	JButton goodSoundTF = new JButton("Open..");
+	JButton badSoundTF = new JButton("Open..");
 	
 	JTextField numactors = new JTextField("7");
 	
 	ScriptGenerator sgen = new ScriptGenerator();
 	
-
+	JFileChooser fc;
 	public GenerateWindow( final ExperimenterWindow paramsui){
 		super("Generate Window");
 		setLayout(new GridLayout(4,1));
@@ -58,7 +60,7 @@ public class GenerateWindow extends JFrame {
 		JPanel matrix1,matrix2,matrix3,col1,col2,col3,row1,row2,row3;
 		JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
 
-		
+		fc=new JFileChooser();
 
 		
 		actorspecies=new JLabel("Fish Type:");
@@ -121,6 +123,27 @@ public class GenerateWindow extends JFrame {
 			}
 		});
 		
+		goodSoundTF.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File goodsoundfile = fc.getSelectedFile();
+		                goodSoundTF.setText(goodsoundfile.getName());
+		            }}});
+		
+		badSoundTF.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File badsoundfile = fc.getSelectedFile();
+		                badSoundTF.setText(badsoundfile.getName());
+		            }}});
 		
 		
 		col1 = new JPanel();
