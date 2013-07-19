@@ -17,7 +17,7 @@ import javax.swing.JSlider;
  *
  */
 public class RunGame {
-	public static String versionNum = "1.0.0";
+	public static String versionNum = "1.0.1 (7/19/2013)";
 	
 	public static void main(String[] args) { 
 		GameSpec gs = new GameSpec();
