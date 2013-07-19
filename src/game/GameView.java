@@ -164,8 +164,8 @@ public class GameView extends JPanel{
 		try {
 			streamImage = ImageIO.read(new File(gs.backgroundImage)); 
 			streamImage2 = ImageIO.read(new File(gs.backgroundImageFlipped)); 
-			fishL = ImageIO.read(new File("images/fish1/fishL.png"));
-			fishR = ImageIO.read(new File("images/fish1/fishR.png"));
+			fishL = ImageIO.read(new File("images/fish/fishL.png"));
+			fishR = ImageIO.read(new File("images/fish/fishR.png"));
 			if (!gs.bgSound.equals(this.lastbgSound)){			
 				if (bgsound != null && bgsound.clip != null) 
 					bgsound.stop();
@@ -320,7 +320,7 @@ public class GameView extends JPanel{
 		
 		double aspectRatio = fishL.getHeight()/(1.0*fishL.getWidth());
  
-		int theWidth  = theSize; //(int) (theSize);
+		int theWidth  = 100; //theSize; //(int) (theSize);
 		int theHeight = theSize*fishL.getHeight()/fishL.getWidth(); //(int) ((theSize * aspectRatio)/100);
 		if (a.fromLeft){
 			g.drawImage(fishL,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
