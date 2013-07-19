@@ -112,6 +112,16 @@ public class GenerateWindow extends JFrame {
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+				String volumeLevel = (vol.getSelectedItem()).toString();
+			    if (volumeLevel.equals("low")) {
+			    	gs.bgSound = "water1.wav";
+			    }else if (volumeLevel.equals("med")){
+			    	gs.bgSound = "water2.wav";
+			    } else {
+			    	gs.bgSound = "water3.wav";
+			    }
+			    gs.bgSound = "sounds/background/" + gs.bgSound;
+				
 
 						
 				int numberOfFish = Integer.parseInt(numactors.getText());
@@ -133,6 +143,8 @@ public class GenerateWindow extends JFrame {
 				setVisible(false);
 			}
 		});
+		
+
 		
 		goodSoundTF.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {

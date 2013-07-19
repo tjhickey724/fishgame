@@ -156,6 +156,7 @@ public class GameModel {
 			interval = scan.nextLong();
 			gameSpec.update(prop,value);
 		}
+		
 		long tmpNFT = this.nextFishTime - this.gameStart;
 		// calculate the next FishTime and the basic characteristics of the nextFish (species and side)
 		this.nextFishTime = interval*1000000 + this.nextFishTime;

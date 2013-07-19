@@ -13,8 +13,11 @@ public class GameSpec {
 		bad = new FishSpec();
 	
 	public boolean changed = true;
+	public boolean requireGameViewUpdate = true;
 	
 	public boolean stereo = true;
+	
+	public String bgSound = "sounds/background/water0.wav";
 	
 	private String sep = ScriptGenerator.SEP;
 	
@@ -65,6 +68,7 @@ public class GameSpec {
 		s+= scriptLine("stereo",""+stereo);
 		s+= scriptLine("minThrobSize",""+minThrobSize);
 		s+= scriptLine("maxThrobSize",""+maxThrobSize);
+		s+= scriptLine("bgSound",""+this.bgSound);
 		return(s);
 		
 	}
@@ -95,6 +99,9 @@ public class GameSpec {
 			return this.good.update(prop.substring(4), value);
 		} else if (prop.startsWith("bad")) {
 			return this.bad.update(prop.substring(3),value);
+		} else if (prop.equals("bgSound")) {
+			this.bgSound = value;
+			this.requireGameViewUpdate = true;
 		} else return false;
 		return true;
 	}

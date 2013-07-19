@@ -33,8 +33,9 @@ public class GameView extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private GameModel gm = null;
-	private GameSpec gs;
-	public AudioClip bgsound = new AudioClip("sounds/background/water6s.wav");
+
+	public AudioClip bgsound;
+	String lastbgSound;
 
 	
 	public AudioClip goodclip,badclip;
@@ -57,7 +58,6 @@ public class GameView extends JPanel{
 		super();
 		this.gm = gm;
 		this.updateGameState(gm.gameSpec);
-		this.bgsound.loop();
 
 		this.requestFocus();
 		
@@ -147,8 +147,18 @@ public class GameView extends JPanel{
 	 * e.g. the image and sound files, throb rate, etc. ...
 	 */
 	private void updateGameState(GameSpec gs){
+		System.out.println("in updateGame("+gs+")");
+		if (gs==null) {
+			System.out.println("gs is null!!!");
+			return;
+		}
+			
+		System.out.println("gs.goodSound = "+gs.goodSound);
 		goodclip = new AudioClip(gs.goodSound);
+		System.out.println("done");
 		badclip = new AudioClip(gs.badSound);
+
+
 
 		//here we read in the background image which tiles the scene
 		try {
@@ -156,6 +166,14 @@ public class GameView extends JPanel{
 			streamImage2 = ImageIO.read(new File(gs.backgroundImageFlipped)); 
 			fishL = ImageIO.read(new File("images/fishLeft.png"));
 			fishR = ImageIO.read(new File("images/fishRight.png"));
+			if (!gs.bgSound.equals(this.lastbgSound)){			
+				if (bgsound != null && bgsound.clip != null) 
+					bgsound.stop();
+
+				bgsound = new AudioClip(gs.bgSound);
+				bgsound.loop();	
+				System.out.println("updating bgSound"+bgsound);
+			}
 		}catch(Exception e){
 			System.out.println("can't find background images"+e);
 		}
@@ -215,6 +233,11 @@ public class GameView extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		if (gm==null) return;
+		if (gm.gameSpec.requireGameViewUpdate) {
+			this.updateGameState(gm.gameSpec);
+			gm.gameSpec.requireGameViewUpdate = false; // DEBUG Threadsafe??
+		}
+		
 		int width = this.getWidth();
 		int height = this.getHeight();
 		g.setColor(Color.BLUE);
