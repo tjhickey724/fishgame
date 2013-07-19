@@ -61,7 +61,11 @@ public class GenerateWindow extends JFrame {
 		JPanel matrix1,matrix2,matrix3,matrix4,col1,col2,col3,row1,row2,row3;
 		JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
 
-		fc=new JFileChooser();
+		String currentDir = System.getProperty("user.dir");
+        System.out.println("Current dir using System:" +currentDir);
+		fc=new JFileChooser(currentDir);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
 
 		
 		actorspecies=new JLabel("Fish Type:");
@@ -138,7 +142,7 @@ public class GenerateWindow extends JFrame {
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
 		                File goodsoundfile = fc.getSelectedFile();
-		                goodSoundTF.setText(goodsoundfile.getName());
+		                goodSoundTF.setText("sounds/"+goodsoundfile.getName());
 		            }}});
 		
 		badSoundTF.addActionListener(new ActionListener(){
@@ -149,7 +153,7 @@ public class GenerateWindow extends JFrame {
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
 		                File badsoundfile = fc.getSelectedFile();
-		                badSoundTF.setText(badsoundfile.getName());
+		                badSoundTF.setText("sounds/"+badsoundfile.getName());
 		            }}});
 		
 		imageSelect.addActionListener(new ActionListener(){
@@ -160,7 +164,7 @@ public class GenerateWindow extends JFrame {
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
 		                File imagefile = fc.getSelectedFile();
-		                imageSelect.setText(imagefile.getName());
+		                imageSelect.setText("images/"+imagefile.getName());
 		            }}});
 		
 		
@@ -246,8 +250,8 @@ public class GenerateWindow extends JFrame {
 		matrix2.setBackground(Color.green);
 		matrix3.setBackground(Color.blue);
 		
-		matrix4.add(imagelabel);
-		matrix4.add(imageSelect);
+		//matrix4.add(imagelabel);
+		//matrix4.add(imageSelect);
 		matrix4.add(volLabel);
 		matrix4.add(vol);
 		
