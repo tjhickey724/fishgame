@@ -320,7 +320,7 @@ public class GameView extends JPanel{
 		
 		double aspectRatio = fishL.getHeight()/(1.0*fishL.getWidth());
  
-		int theWidth  = 100; //theSize; //(int) (theSize);
+		int theWidth  = gm.gameSpec.minThrobSize; //theSize; //(int) (theSize);
 		int theHeight = theSize*fishL.getHeight()/fishL.getWidth(); //(int) ((theSize * aspectRatio)/100);
 		if (a.fromLeft){
 			g.drawImage(fishL,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
