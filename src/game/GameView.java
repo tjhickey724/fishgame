@@ -2,6 +2,7 @@ package game;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -9,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.io.*;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -164,6 +166,12 @@ public class GameView extends JPanel{
 		try {
 			streamImage = ImageIO.read(new File(gs.backgroundImage)); 
 			streamImage2 = ImageIO.read(new File(gs.backgroundImageFlipped)); 
+			AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+			tx.translate(0, -streamImage.getHeight(null));
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			streamImage2 = op.filter(streamImage, null);
+
+
 			fishL = ImageIO.read(new File("images/fish/fishL.png"));
 			fishR = ImageIO.read(new File("images/fish/fishR.png"));
 			if (!gs.bgSound.equals(this.lastbgSound)){			
