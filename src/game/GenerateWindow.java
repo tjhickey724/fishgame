@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,8 +28,8 @@ public class GenerateWindow extends JFrame {
 	JTextField 
 	    mintim = new JTextField("30"),
 	    maxtim = new JTextField("80");
-	JComboBox vidtype,stype;
-	String[] speeds,videotypes,soundtypes;
+	JComboBox vidtype,stype,vol;
+	String[] speeds,videotypes,soundtypes,volumes;
 	JButton gdone,gen;
 	JScrollPane jscrollpane;
 	JTextArea jtextarea;
@@ -42,23 +44,24 @@ public class GenerateWindow extends JFrame {
 	JLabel maxSizeLab = new JLabel("Max Size(%)");
 	JTextField maxSizeTF = new JTextField("120");
 	
-	JTextField goodSoundTF = new JTextField("sounds/fish2hz0p3ms");
-	JTextField badSoundTF = new JTextField("sounds/fish3hz0p3ms");
+	JButton goodSoundTF = new JButton("Open");
+	JButton badSoundTF = new JButton("Open");
+	JButton imageSelect = new JButton("Open");
 	
 	JTextField numactors = new JTextField("7");
 	
 	ScriptGenerator sgen = new ScriptGenerator();
 	
-
+	JFileChooser fc;
 	public GenerateWindow( final ExperimenterWindow paramsui){
 		super("Generate Window");
-		setLayout(new GridLayout(4,1));
+		setLayout(new GridLayout(5,1));
 		setSize(300,600);
 		
-		JPanel matrix1,matrix2,matrix3,col1,col2,col3,row1,row2,row3;
+		JPanel matrix1,matrix2,matrix3,matrix4,col1,col2,col3,row1,row2,row3;
 		JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
 
-		
+		fc=new JFileChooser();
 
 		
 		actorspecies=new JLabel("Fish Type:");
@@ -71,6 +74,8 @@ public class GenerateWindow extends JFrame {
 		mintime=new JLabel("Min Time: ");
 		maxtime= new JLabel("Max Time: ");
 		nof=new JLabel("Fish to generate:");
+		JLabel imagelabel = new JLabel("Select Image:");
+		JLabel volLabel = new JLabel("Volume:");
 		
 		jtextarea=new JTextArea(5,20);
 		jscrollpane=new JScrollPane(jtextarea);
@@ -82,6 +87,9 @@ public class GenerateWindow extends JFrame {
 
 		soundtypes=new String[]{"Stereo","Mono"};
 		stype = new JComboBox(soundtypes);
+		
+		volumes=new String[]{"low","med","hi"};
+		vol = new JComboBox(volumes);
 		
 		gdone=new JButton("Done");
 		gen=new JButton("Generate");
@@ -100,6 +108,7 @@ public class GenerateWindow extends JFrame {
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+
 						
 				int numberOfFish = Integer.parseInt(numactors.getText());
 				System.out.println(gs.toScript());
@@ -121,6 +130,38 @@ public class GenerateWindow extends JFrame {
 			}
 		});
 		
+		goodSoundTF.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File goodsoundfile = fc.getSelectedFile();
+		                goodSoundTF.setText(goodsoundfile.getName());
+		            }}});
+		
+		badSoundTF.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File badsoundfile = fc.getSelectedFile();
+		                badSoundTF.setText(badsoundfile.getName());
+		            }}});
+		
+		imageSelect.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+
+		        //Handle open button action.
+		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+		            if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                File imagefile = fc.getSelectedFile();
+		                imageSelect.setText(imagefile.getName());
+		            }}});
 		
 		
 		col1 = new JPanel();
@@ -144,6 +185,9 @@ public class GenerateWindow extends JFrame {
 		
 		matrix3 = new JPanel();
 		matrix3.setLayout(new GridLayout(5,2));
+		
+		matrix4 = new JPanel();
+		matrix4.setLayout(new GridLayout(2,2));
 		
 		col1.add(actorspecies);
 		col1.add(good);
@@ -202,9 +246,16 @@ public class GenerateWindow extends JFrame {
 		matrix2.setBackground(Color.green);
 		matrix3.setBackground(Color.blue);
 		
+		matrix4.add(imagelabel);
+		matrix4.add(imageSelect);
+		matrix4.add(volLabel);
+		matrix4.add(vol);
+		
+		
 		add(matrix1);
 		add(matrix3);
 		add(matrix2);
+		add(matrix4);
 		add(jscrollpane);
 	}
 }
