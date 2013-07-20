@@ -76,7 +76,7 @@ public class ScriptWindow extends JFrame {
 				String ExperimenterID=expId.getText();
 
 				try {
-					paramsui.gm.logfile.write("Version:                "+"1.0 (7/11/2013)" + "\n" +
+					paramsui.gm.logfile.write("Version:                "+RunGame.versionNum + "\n" +
 									 "Experimenter:           "+ ExperimenterID + "\n" + 
 				                     "Subject:                " + SubjectID + "\n" + 
 				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"
