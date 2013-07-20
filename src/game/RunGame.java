@@ -21,7 +21,7 @@ public class RunGame {
 	 * version must have the form A.B.C where A,B,C are numbers
 	 * It represents the Major/Minor/Bugfix versions of the code.
 	 */
-	public static String versionNum = "1.0.3";
+	public static String versionNum = "1.0.4";
 	
 	public static void main(String[] args) { 
 		GameSpec gs = new GameSpec();
