@@ -17,7 +17,11 @@ import javax.swing.JSlider;
  *
  */
 public class RunGame {
-	public static String versionNum = "1.0.1 (7/19/2013)";
+	/**
+	 * version must have the form A.B.C where A,B,C are numbers
+	 * It represents the Major/Minor/Bugfix versions of the code.
+	 */
+	public static String versionNum = "1.0.1";
 	
 	public static void main(String[] args) { 
 		GameSpec gs = new GameSpec();
