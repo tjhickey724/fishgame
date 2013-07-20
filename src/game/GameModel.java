@@ -82,6 +82,10 @@ public class GameModel {
 	public int visualMin = 100;
 	public int visualMax = 125;
 	
+	
+	/** current fish being processed **/
+	public int fishNum;
+	
 	/** these variables record good/bad hits */
 	public int 
 	  hits,misses,
@@ -162,18 +166,8 @@ public class GameModel {
 		this.nextFishTime = interval*1000000 + this.nextFishTime;
 		String species = scan.next();
 		String side = scan.next();
-		int fishNum = scan.nextInt();
-		//System.out.println("update:"+tmpNFT/1000000+" "+ interval+" "+
-		//(this.nextFishTime-this.gameStart)/1000000);
-		
-		// write the launch event to the log
+		this.fishNum = scan.nextInt();
 
-		long now = (System.nanoTime()-this.gameStart)/1000000;
-		String logLine = ""+now+"\tlaunch\t"+species+"\t"+side+"\t"+fishNum;
-		//System.out.println(logLine+" "+now+" "+interval);
-
-		writeToLog(logLine);
-		
 		//create the next Fish to be launched
 		GameActor a = new GameActor();
 		a.fromLeft = side.equals("left");
@@ -181,6 +175,11 @@ public class GameModel {
 		this.nextFish = a;
 		return nextFishTime;
 		
+	}
+	
+	public void writeToLog(GameActor f){
+		String logLine = "launch\t"+f.species+"\t"+(f.fromLeft?"left":"right") +"\t"+this.fishNum;
+		writeToLog(logLine);
 	}
 	
 	
@@ -195,14 +194,20 @@ public class GameModel {
 			long theInterval = theTime - lastLogEventTimeNano;
 			lastLogEventTimeNano = theTime;
 			int theSeconds = (int) Math.round(theInterval/1000000.0);
-			this.logfile.write(theSeconds +" "+s+"\n");
-			System.out.println("log:"+ theSeconds +" "+s+"\n");
+			String logLine = theSeconds+GameEvent.sep + theTime/1000000 +" "+s+"\n";
+			this.logfile.write(logLine);
+			System.out.println("log:"+ logLine);
 		} catch(Exception e){
 			System.out.println("Error writing to log "+e);
 		}
 	}
 	
+	
 	public void writeToLog(GameEvent e){
+		writeToLog(e.toString());
+	}
+	
+	public void writeToLog2(GameEvent e){
 		try{
 			long theTime = (System.nanoTime()-this.gameStart);
 			long theInterval = theTime - lastLogEventTimeNano;
@@ -210,7 +215,7 @@ public class GameModel {
 			// this is the time in milliseconds since the last event
 			int msInterval = (int) Math.round((theInterval/1000000.0));
 			this.logfile.write(msInterval+GameEvent.sep+e+"\n");
-			System.out.println("log:"+ msInterval+GameEvent.sep+e+"\n");
+			System.out.println("log:"+ msInterval+GameEvent.sep + theTime/1000000 + GameEvent.sep+e+"\n");
 		} catch(Exception err){
 			System.out.println("Error writing GameEvent to log "+err);
 		}
@@ -263,6 +268,7 @@ public class GameModel {
 		
 		// add the fish to the list of actors...
 		this.actors.add(a);
+		writeToLog(a);  // indicate that a was spawned
 	}
 	
 	public void start(){

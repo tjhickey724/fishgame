@@ -136,8 +136,8 @@ public class GameEvent {
 
 	public String toString(){
 		String response = 
-				  convertNanoToMSfromGS(this.when) + sep
-				+ this.eventType + sep
+				 // convertNanoToMSfromGS(this.when) + sep +
+				  this.eventType + sep
 				+ this.responseTime + sep
 				+ this.correctResponse + sep
 				+ this.keyPressed + sep

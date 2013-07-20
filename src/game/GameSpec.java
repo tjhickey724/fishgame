@@ -17,7 +17,7 @@ public class GameSpec {
 	
 	public boolean stereo = true;
 	
-	public String bgSound = "sounds/water/high.wav";
+	public String bgSound = "sounds/water/none.wav";
 	
 	private String sep = ScriptGenerator.SEP;
 	
