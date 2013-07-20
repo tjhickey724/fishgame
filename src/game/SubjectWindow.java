@@ -15,7 +15,7 @@ import javax.swing.event.*;
  * @author tim
  *
  */
-public class SubjectWindow {
+public class SubjectWindow extends JFrame {
 	private GameModel gm;
 
 	public JFrame frame;
@@ -42,7 +42,8 @@ public class SubjectWindow {
 		//this window will have the settings we can adjust
 
 		// first we create the Frame with a border layout
-		frame = new JFrame("Subject Window");
+		frame = this;
+		this.setTitle("Subject Window");
 		frame.setSize(500,1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());

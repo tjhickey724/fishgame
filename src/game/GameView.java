@@ -4,8 +4,7 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
@@ -14,8 +13,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-import javax.swing.*;
-import javax.swing.event.*;
 import java.util.ArrayList;
 
 
@@ -36,7 +33,7 @@ public class GameView extends JPanel{
 	
 	private GameModel gm = null;
 
-	public AudioClip bgsound;
+	public AudioClip bgSound;
 	String lastbgSound;
 
 	
@@ -169,12 +166,13 @@ public class GameView extends JPanel{
 
 			fishL = ImageIO.read(new File("images/fish/fishL.png"));
 			fishR = ImageIO.read(new File("images/fish/fishR.png"));
-			if (!gs.bgSound.equals(this.lastbgSound)){			
-				if (bgsound != null && bgsound.clip != null) 
-					bgsound.stop();
+			if (!gs.bgSound.equals(this.lastbgSound)){	
+				this.lastbgSound = gs.bgSound;
+				if (bgSound != null) 
+					bgSound.stop();
 
-				bgsound = new AudioClip(gs.bgSound);
-				bgsound.loop();	
+				bgSound = new AudioClip(gs.bgSound);
+				bgSound.loop();	
 				
 			}
 		}catch(Exception e){
@@ -254,6 +252,7 @@ public class GameView extends JPanel{
 			y_offset=0;
 			if (gm.getNumFish()> 0){
 				gm.removeLastFish();
+				this.bgSound.stop();
 			}
 
 		}
@@ -269,16 +268,14 @@ public class GameView extends JPanel{
 		}
 		
 		
-		//g.drawImage(streamImage,0,y_offset+2*291,null);
-		
-	//	drawActor(g,gm.avatar,Color.GREEN);
+
 		java.util.List<GameActor> gaList = gm.getActorList();
 		for(GameActor a:gaList){
 			drawActor(g,a,Color.WHITE);
 		}
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
-		//g.drawString("Score:"+gm.score, width/10, height/10);
+		
 		header.setText("<html><table style=\"font-size:24pt;\"><tr><td>Right:</td><td>Wrong:</td><td>Misses:</td></tr><tr><td>"+gm.hits+"</td><td>"+gm.misses+"</td><td>"+gm.noKeyPress+"</td></tr></table></html>");
 
 		

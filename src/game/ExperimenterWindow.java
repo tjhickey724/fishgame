@@ -6,28 +6,25 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
+/**
+ * this creates two buttons 
+ * one to open the "run from script" window
+ * the other to open the "generate script" window
+ * @author tim
+ *
+ */
 public class ExperimenterWindow extends JFrame {
 
 		JButton scripted,generate;
-		GameModel gm;
 		ScriptWindow sw;
 		GenerateWindow gw;
-		SubjectWindow gameView;
 		JPanel buttonPanel;
 	
-	public ExperimenterWindow(final GameModel gm, final SubjectWindow gameView) {
+	public ExperimenterWindow() {
 	
 		super("Experimenter Window");
-		this.gameView=gameView;
-		this.gm=gm;
-		this.setSize(500,500);
-		
+		this.setSize(500,500);		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-	
-	
-		sw = new ScriptWindow(this);
-		gw=new GenerateWindow(this);
 		buttonPanel = new JPanel();
 		
 		//Button to view script window
@@ -35,18 +32,19 @@ public class ExperimenterWindow extends JFrame {
 		scripted.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				setVisible(false);
-				sw.setVisible(true);
-				gw.setVisible(false);
+				//setVisible(false);
+				sw = new ScriptWindow();
+				sw.setVisible(true);				
 			}
 		});
+		
+		
 		//Button to view generate window
 		generate=new JButton("Generate Script");
 		generate.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-				setVisible(false);
-				sw.setVisible(false);
+				gw=new GenerateWindow();
 				gw.setVisible(true);
 			}
 		});

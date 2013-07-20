@@ -10,6 +10,8 @@ import java.io.*;
  * (good and bad) that come from sides (left or right) and have 
  * certain visual and auditory cues. The player tries to identify the
  * fish using the left or right hand pressing the appropriate key.
+ * 
+ * Keypresses are handled in the GameView class which creates this GameModel
  * The system logs each keypress storing info about the press 
  * and the reaction time. If no fish was present it was a miscue
  * and we store the "reaction time" as the time since the last fish appeared
@@ -36,6 +38,7 @@ public class GameModel {
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
 	
+	
 	// we need this when spawning fish ...
 	protected Random rand = new Random();
 	
@@ -56,8 +59,7 @@ public class GameModel {
 	
 	
 	public int score;
-	// this is a temporary variable, we'll be reading from a file eventually
-	//public String typescript = "lb 100 lb 100 rg 100 rb 100 lb 100"; 
+
 	
 	// this is true if we are reading from a script
 	public String inputScriptFileName;

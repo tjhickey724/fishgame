@@ -20,11 +20,19 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
+ * This creates a window that allow the experimenter to create a session script
+ * that will be used to run experiments.
  * @author mike
  *
  */
 public class GenerateWindow extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1635763426843293108L;
+	
+	
 	JTextField 
 	    mintim = new JTextField("30"),
 	    maxtim = new JTextField("80");
@@ -32,9 +40,7 @@ public class GenerateWindow extends JFrame {
 	String[] speeds,videotypes,soundtypes,volumes;
 	JButton gdone,gen;
 	JScrollPane jscrollpane;
-	JTextArea jtextarea;
-	
-	
+	JTextArea jtextarea;	
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
 	
@@ -44,8 +50,8 @@ public class GenerateWindow extends JFrame {
 	JLabel maxSizeLab = new JLabel("Max Size(%)");
 	JTextField maxSizeTF = new JTextField("120");
 	
-	JButton goodSoundTF = new JButton("Open");
-	JButton badSoundTF = new JButton("Open");
+	JButton goodSoundTF = new JButton("sounds/6hz");
+	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
 	
 	JTextField numactors = new JTextField("7");
@@ -53,7 +59,7 @@ public class GenerateWindow extends JFrame {
 	ScriptGenerator sgen = new ScriptGenerator();
 	
 	JFileChooser fc;
-	public GenerateWindow( final ExperimenterWindow paramsui){
+	public GenerateWindow(){
 		super("Generate Window");
 		setLayout(new GridLayout(5,1));
 		setSize(300,600);
@@ -63,11 +69,15 @@ public class GenerateWindow extends JFrame {
 
 		String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" +currentDir);
-		fc=new JFileChooser(currentDir);
+		fc=new JFileChooser(currentDir+"/sounds");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 
-		
+		/*
+		 * all of these initializations should be done as the variables are being
+		 * declared. That makes it clear what the variables are and it simplifies the
+		 * body of the constructor.  REFACTOR....
+		 */
 		actorspecies=new JLabel("Fish Type:");
 		good=new JLabel("Good");
 		bad=new JLabel("Bad");
@@ -101,7 +111,8 @@ public class GenerateWindow extends JFrame {
 		gen.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
-
+				// here we create a GameSpec and use the user input
+				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
 				gs.minFishRelease = (int) Integer.parseInt(mintim.getText());
 				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
@@ -127,6 +138,8 @@ public class GenerateWindow extends JFrame {
 				int numberOfFish = Integer.parseInt(numactors.getText());
 				System.out.println(gs.toScript());
 				sgen.generate(gs,numberOfFish);
+				
+				// here we generate a report for the user, so they know what's happening
 				jtextarea.append(gs.toScript());
 				jtextarea.append("GENERATE "+numberOfFish+" events\n");
 				
@@ -138,8 +151,6 @@ public class GenerateWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				sgen.close();
-				paramsui.setVisible(true);
-				paramsui.sw.setVisible(false);
 				setVisible(false);
 			}
 		});

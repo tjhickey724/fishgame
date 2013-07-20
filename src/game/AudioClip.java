@@ -37,7 +37,7 @@ public class AudioClip {
 				e.printStackTrace();
 			}
 		clip.start();
-		//clip.loop(1000);
+		
 		clip.addLineListener(new LineListener(){
 
 			//checks if clip is finished playing
@@ -67,7 +67,8 @@ public class AudioClip {
 				e.printStackTrace();
 			}
 		//clip.start();
-		clip.loop(1000);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);  
+		// REFACTOR -- do we need this LineListener?
 		clip.addLineListener(new LineListener(){
 
 			//checks if clip is finished playing
@@ -82,9 +83,11 @@ public class AudioClip {
   
 	public void stop() {
 		if (clip != null){
-			clip.stop();
+			if (clip.isRunning())
+				clip.stop();
 		}else System.out.println("Trying to stop a null clip!!");
 	}
+	
 	public void loadClip(String path) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
 		//find audio file
 			File soundFile = new File(path);
