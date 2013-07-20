@@ -20,7 +20,7 @@ public class ScriptWindow extends JFrame {
 	JTextField expId,subId,scr;
 	JPanel scriptpanel;
 	JLabel scrip,currentactor,selectedFile;
-	JButton start,restart,stop,pause,sdone,runscript,openButton;
+	JButton start,restart,pause,sdone,runscript,openButton;
 	GameModel gm;
     JFileChooser fc;
 	
@@ -36,7 +36,7 @@ public class ScriptWindow extends JFrame {
 		scrip = new JLabel("ScriptFile: ");	
 		pause=new JButton("pause");
 		restart=new JButton("Restart");
-		stop = new JButton("Stop");
+		//stop = new JButton("Stop");
 		sdone=new JButton("Done");
 		selectedFile=new JLabel("Script File");
 		
@@ -62,6 +62,7 @@ public class ScriptWindow extends JFrame {
 				setVisible(false);
 				paramsui.gw.setVisible(false);
 				gm.stop();
+				System.exit(0); // this is harsh, but I'll work on it...
 			}
 		});
 		
@@ -93,12 +94,7 @@ public class ScriptWindow extends JFrame {
 			
 			}
 		});
-		stop.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				gm.stop();
-			}
-		});
+
 		
 		pause.addActionListener(new ActionListener(){
 			@Override

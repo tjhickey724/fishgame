@@ -21,6 +21,22 @@ public class GameLoop implements Runnable{
 
 		public void run(){
 			while(true){
+				if (gm.paused){
+					try {
+						Thread.sleep(100L);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					continue;
+				}else if (gm.gameOver){
+					// we need to clean up the old game
+					// this should be a method inside the gm to reset
+					gm.scan.close();
+					gm.scan=null;
+					System.out.println("ending game loop");
+					return;
+				}
 				// update the model
 				gm.update();
 				

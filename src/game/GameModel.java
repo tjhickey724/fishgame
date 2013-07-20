@@ -149,12 +149,18 @@ public class GameModel {
         	this.gameOver = true;
         	return this.nextFishTime + 10*1000000000L;
         }
-		long interval = scan.nextLong();
-		
+		long interval=-1;
+		try {
+		interval= scan.nextLong();
+		} catch(Exception e){
+			System.out.println("error with "+scan+" scanning for the first long on a line"+e);
+			e.printStackTrace();
+		}
 		// process all the 0 interval commands (which set game properties)
 		while (interval == 0){
 			String prop = scan.next();
 			String value = scan.next();
+			scan.nextLine(); // skip over the rest of the line
 			writeToLog("0\t"+prop+"\t"+value);
 			if (prop.equals("gameover")) {
 				this.stop();
@@ -172,6 +178,7 @@ public class GameModel {
 		String species = scan.next();
 		String side = scan.next();
 		this.fishNum = scan.nextInt();
+		scan.nextLine(); // skip over the rest of the line
 
 		//create the next Fish to be launched
 		GameActor a = new GameActor();
@@ -265,7 +272,8 @@ public class GameModel {
 	}
 	
 	public void start(){
-		paused = false;
+		this.paused = false;
+		this.gameOver = false;
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
 		this.nextFishTime = updateNextFishTime(); 
@@ -274,8 +282,9 @@ public class GameModel {
 	}
 	
 	public void stop(){
-		paused = true;
-		gameOver=true;
+		this.paused = true;
+		this.gameOver=true;
+
 		java.util.Iterator<GameActor> iter =this.actors.iterator();
 		while (iter.hasNext()){
 			GameActor a = (GameActor) iter.next();
@@ -284,6 +293,7 @@ public class GameModel {
 		this.actors.clear();
 		try{
 			if (logfile != null) logfile.close();
+			logfile = null;
 			System.out.println("closing log/script files");
 		}catch (Exception e){
 			System.out.println("Problem closing logfile");
