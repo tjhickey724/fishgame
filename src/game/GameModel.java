@@ -34,7 +34,7 @@ public class GameModel {
 	
 	
 	// currently we only ever have one actor at a time ...
-	public List<GameActor> actors = new ArrayList<GameActor>();
+	private List<GameActor> actors = new ArrayList<GameActor>();
 	
 	// we need this when spawning fish ...
 	protected Random rand = new Random();
@@ -76,7 +76,7 @@ public class GameModel {
 	public String goodFishSounds = "sounds/fish6hz0p";
 	public String badFishSounds = "sounds/fish8hz0p";
 	*/
-	// store the min/max visual scaling factors in percent
+	// store the min/max visual scaling factors in percent gs.goodSound
 	public int goodvisualhz=6;
 	public int badvisualhz=8;
 	public int visualMin = 100;
@@ -322,13 +322,38 @@ public class GameModel {
 		}
 	}
 	
-	// here is where we take the fish off the board
-	// when the user presses a key!
-	// we assume there is only one fish in the actors list ..
-	// this is a hack we should clean up or rename...
-	public void removeFish(GameActor a){
-		this.actors.clear();
+	/**
+	 * get the number of fish on the board (currently either 0 or 1)
+	 * @return number of fish on screen
+	 */
+	public int getNumFish(){
+		return this.actors.size();
 	}
+	
+
+	/**
+	 * remove the lastFish from the stream 
+	 * turn off its clip and make it inactive
+	 * @return
+	 */
+	public GameActor removeLastFish(){
+		if (this.actors.size()>0){
+			GameActor lastFish = this.actors.get(0);
+			lastFish.ct.stop();
+			lastFish.active = false;
+			this.actors.clear();
+			return lastFish;
+		}else {
+			System.out.println("trying to get last fish with an empty list!!!");
+			return null;
+		}
+	}
+	
+	public List<GameActor> getActorList(){
+	    return new ArrayList<GameActor>(this.actors);	
+	}
+	
+	
 	/**
 	 * update moves all actors one step 
 	 * update will check if the difference between the lastUpdate 

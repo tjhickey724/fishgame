@@ -102,20 +102,15 @@ public class GameView extends JPanel{
 				
 				// first check to see if they pressed
 				// when there are no fish!!
-				if (gm.actors.size()==0) {
+				if (gm.getNumFish()==0) {
 					String log="KeyPress for no fish!" ;
 					//gm.writeToLog(log);
 					gm.writeToLog(new GameEvent(e.getKeyChar()));
 					badclip.play();
 					return;
 				}
-				//otherwise, get the last fish (should only be one!)
-				GameActor lastFish = gm.actors.get(gm.actors.size()-1);
-				// turn off the fish sound and make fish inactive
-				// and remove it from the model
-				lastFish.ct.stop();
-				lastFish.active = false;
-				gm.removeFish(lastFish);
+				//otherwise, remove the last fish (should only be one!)
+				GameActor lastFish = gm.removeLastFish();
 				
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
@@ -149,15 +144,15 @@ public class GameView extends JPanel{
 	 * e.g. the image and sound files, throb rate, etc. ...
 	 */
 	private void updateGameState(GameSpec gs){
-		System.out.println("in updateGame("+gs+")");
+		
 		if (gs==null) {
 			System.out.println("gs is null!!!");
 			return;
 		}
 			
-		System.out.println("gs.goodSound = "+gs.goodSound);
+		
 		goodclip = new AudioClip(gs.goodSound);
-		System.out.println("done");
+		
 		badclip = new AudioClip(gs.badSound);
 
 
@@ -180,7 +175,7 @@ public class GameView extends JPanel{
 
 				bgsound = new AudioClip(gs.bgSound);
 				bgsound.loop();	
-				System.out.println("updating bgSound"+bgsound);
+				
 			}
 		}catch(Exception e){
 			System.out.println("can't find background images"+e);
@@ -235,8 +230,7 @@ public class GameView extends JPanel{
 	/**
 	 * paintComponent(g) draws the current state of the model
 	 * onto the component. It first repaints it in blue, 
-	 * then draws the avatar,
-	 * then draws each of the other actors, i.e. fireflies and wasps...
+	 * then draws the scene
 	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -255,14 +249,11 @@ public class GameView extends JPanel{
 		double framePart = frames -Math.floor(frames);
 		int y_offset = 
 				(int) Math.round(framePart*height);
-		//System.out.println(y_offset);
-		//g.drawImage(streamImage,0,0,null);
-		//g.drawImage(streamImage2,0,y_offset-3*291,null); 
+
 		if (gm.paused || gm.gameOver){
 			y_offset=0;
-			if (gm.actors.size()> 0){
-				GameActor a = gm.actors.get(0);
-				a.ct.stop();
+			if (gm.getNumFish()> 0){
+				gm.removeLastFish();
 			}
 
 		}
@@ -281,7 +272,7 @@ public class GameView extends JPanel{
 		//g.drawImage(streamImage,0,y_offset+2*291,null);
 		
 	//	drawActor(g,gm.avatar,Color.GREEN);
-		java.util.List<GameActor> gaList = new ArrayList<GameActor>(gm.actors);
+		java.util.List<GameActor> gaList = gm.getActorList();
 		for(GameActor a:gaList){
 			drawActor(g,a,Color.WHITE);
 		}
