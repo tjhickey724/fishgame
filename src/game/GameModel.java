@@ -101,17 +101,22 @@ public class GameModel {
 		
 		this.gameOver = false;
 
-		long now = System.currentTimeMillis();
-		String logname = "logs/log"+now+".txt";
-		
-		// open the logfile
-		try {
-			this.logfile = new BufferedWriter(new FileWriter(new File(logname)));
-		} catch (IOException e) {
-			System.out.println("Problems opening logfile:" + logname+": "+e);
-			e.printStackTrace();
+	}
+	
+	
+	
+	private void getLogFile(){
+		if (this.logfile == null){
+			// open the logfile
+			long now = System.currentTimeMillis();
+			String logname = "logs/log"+now+".txt";
+			try {
+				this.logfile = new BufferedWriter(new FileWriter(new File(logname)));
+			} catch (IOException e) {
+				System.out.println("Problems opening logfile:" + logname+": "+e);
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 	
@@ -195,6 +200,7 @@ public class GameModel {
 			lastLogEventTimeNano = theTime;
 			int theSeconds = (int) Math.round(theInterval/1000000.0);
 			String logLine = theSeconds+GameEvent.sep + theTime/1000000 +" "+s+"\n";
+			getLogFile(); // make sure the logfile is open!
 			this.logfile.write(logLine);
 			System.out.println("log:"+ logLine);
 		} catch(Exception e){
@@ -207,19 +213,6 @@ public class GameModel {
 		writeToLog(e.toString());
 	}
 	
-	public void writeToLog2(GameEvent e){
-		try{
-			long theTime = (System.nanoTime()-this.gameStart);
-			long theInterval = theTime - lastLogEventTimeNano;
-			lastLogEventTimeNano = theTime;
-			// this is the time in milliseconds since the last event
-			int msInterval = (int) Math.round((theInterval/1000000.0));
-			this.logfile.write(msInterval+GameEvent.sep+e+"\n");
-			System.out.println("log:"+ msInterval+GameEvent.sep + theTime/1000000 + GameEvent.sep+e+"\n");
-		} catch(Exception err){
-			System.out.println("Error writing GameEvent to log "+err);
-		}
-	}
 
 	private long lastLogEventTimeNano = 0;
 	

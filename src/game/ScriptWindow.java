@@ -76,11 +76,10 @@ public class ScriptWindow extends JFrame {
 				String ExperimenterID=expId.getText();
 
 				try {
-					paramsui.gm.logfile.write("Version:                "+RunGame.versionNum + "\n" +
-									 "Experimenter:           "+ ExperimenterID + "\n" + 
-				                     "Subject:                " + SubjectID + "\n" + 
-				                     "Date:                   "+ (new java.util.Date()).toString()+"\n"
-				                 );
+					gm.writeToLog("Version:                "+RunGame.versionNum);
+					gm.writeToLog("Experimenter:           "+ ExperimenterID);
+					gm.writeToLog("Subject:                " + SubjectID);
+					gm.writeToLog("Date:                   "+ (new java.util.Date()).toString());
 					gm.logfile.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
