@@ -335,7 +335,7 @@ public class GameView extends JPanel{
 		}
 
 
-		int theSize = interpolateSize(
+		int theSize = gm.interpolateSize(
 				gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize,
 				a.birthTime,
@@ -363,12 +363,6 @@ public class GameView extends JPanel{
 		return new Color(red,green,blue);
 	}
 	
-	private int interpolateSize(double min, double max, long birth, long now, double freq){
-		double t = ((now-birth)/1000000000.0)*freq;
-		double y = 1-0.5*(Math.sin(Math.PI*2*t)+1);
-		double s = min*y + max*(1-y);
-		int size = (int)Math.round(s);
-		return size;
-}
+
 
 }
