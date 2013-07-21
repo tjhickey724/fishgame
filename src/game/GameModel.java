@@ -47,6 +47,10 @@ public class GameModel {
 	// experimenter end the session ...
 	private boolean gameOver = false;
 	
+	
+	
+
+
 	//this checks if the game is over.
 	public boolean isGameOver() {
 		return gameOver;
@@ -94,8 +98,23 @@ public class GameModel {
 	
 	
 	/** current fish being processed **/
-	public int fishNum;
+	private int fishNum;
 	
+		/**
+	 * @return the fishNum
+	 */
+	public int getFishNum() {
+		return fishNum;
+	}
+
+
+	/**
+	 * @param fishNum the fishNum to set
+	 */
+	public void setFishNum(int fishNum) {
+		this.fishNum = fishNum;
+	}
+
 	/** these variables record good/bad hits */
 	public int 
 	  hits,misses,
@@ -187,7 +206,7 @@ public class GameModel {
 		this.nextFishTime = interval*1000000 + this.nextFishTime;
 		String species = scan.next();
 		String side = scan.next();
-		this.fishNum = scan.nextInt();
+		this.setFishNum(scan.nextInt());
 		scan.nextLine(); // skip over the rest of the line
 
 		//create the next Fish to be launched
@@ -200,7 +219,7 @@ public class GameModel {
 	}
 	
 	public void writeToLog(GameActor f){
-		String logLine = "launch\t"+f.species+"\t"+(f.fromLeft?"left":"right") +"\t"+this.fishNum;
+		String logLine = "launch\t"+f.species+"\t"+(f.fromLeft?"left":"right") +"\t"+this.getFishNum();
 		writeToLog(logLine);
 	}
 	

@@ -270,7 +270,7 @@ public class GameView extends JPanel{
 				"<tr><td>"+gm.hits+"</td><td>"
 					+gm.misses+"</td><td>"
 					+gm.noKeyPress+"</td>"+
-					+gm.fishNum+"</td>"+
+					+gm.getFishNum()+"</td>"+
 				"</tr></table></html>");
 
 	}
