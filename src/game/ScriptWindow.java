@@ -95,7 +95,7 @@ public class ScriptWindow extends JFrame {
 				GameActor.GAME_START = System.nanoTime();
 
 				// the GameModel is the object that reads the script
-				gm.inputScriptFileName=scr.getText();
+				gm.setInputScript(scr.getText());
 				
 				// Now we write the header on the log file recording
 				// the relevant information for this session

@@ -62,7 +62,11 @@ public class GameModel {
 
 	
 	// this is true if we are reading from a script
-	public String inputScriptFileName;
+	private String inputScriptFileName;
+	
+	public void setInputScript(String fileName){
+		this.inputScriptFileName = fileName;
+	}
 	
 	// this is a scanner used to read the fish creation info
 	public Scanner scan; // = new Scanner(typescript);
