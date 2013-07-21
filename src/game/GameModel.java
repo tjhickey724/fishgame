@@ -134,12 +134,61 @@ public class GameModel {
 	}
 
 	/** these variables record good/bad hits */
-	public int 
+	private int 
 	  hits,misses,
-      noKeyPress,
-      pressWithNoFish;
+      noKeyPress;
+	
+    public int pressWithNoFish;
+    
+	/**
+	 * @return the hits
+	 */
+	public int getHits() {
+		return hits;
+	}
+
+
+	/**
+	 * @param hits the hits to set
+	 */
+	public void setHits(int hits) {
+		this.hits = hits;
+	}
+
 
 	
+	/**
+	 * @return the misses
+	 */
+	public int getMisses() {
+		return misses;
+	}
+
+
+	/**
+	 * @param misses the misses to set
+	 */
+	public void setMisses(int misses) {
+		this.misses = misses;
+	}
+
+
+	/**
+	 * @return the noKeyPress
+	 */
+	public int getNoKeyPress() {
+		return noKeyPress;
+	}
+
+
+	/**
+	 * @param noKeyPress the noKeyPress to set
+	 */
+	public void setNoKeyPress(int noKeyPress) {
+		this.noKeyPress = noKeyPress;
+	}
+
+
 	public GameModel(double size, int numActors, GameSpec gameSpec) { 
 		this.width =size;
 		this.height = size;
@@ -429,7 +478,7 @@ public class GameModel {
 			
 			if (this.actors.size()>0) {
 				// this is the case where we didn't press a key to kill or eat the fish
-				this.noKeyPress++;
+				this.setNoKeyPress(this.getNoKeyPress() + 1);
 				GameActor lastFish = this.actors.get(this.actors.size()-1);
 				lastFish.ct.stop();
 
@@ -455,6 +504,8 @@ public class GameModel {
 		}
 
 	}
+
+
 
 }
 

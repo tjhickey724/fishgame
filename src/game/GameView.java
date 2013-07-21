@@ -123,11 +123,11 @@ public class GameView extends JPanel{
 				if (correctResponse){
 					goodclip.play();
 					gm.score += 2;
-					gm.hits++;
+					gm.setHits(gm.getHits() + 1);
 				}else {
 					badclip.play();
 					gm.score -= 1;
-					gm.misses++;
+					gm.setMisses(gm.getMisses() + 1);
 				}
 				
 
@@ -267,9 +267,9 @@ public class GameView extends JPanel{
 					"<td>Misses:</td>"+
 					"<td>Total:</td>"+
 				"</tr>"+
-				"<tr><td>"+gm.hits+"</td><td>"
-					+gm.misses+"</td><td>"
-					+gm.noKeyPress+"</td>"+
+				"<tr><td>"+gm.getHits()+"</td><td>"
+					+gm.getMisses()+"</td><td>"
+					+gm.getNoKeyPress()+"</td>"+
 					+gm.getFishNum()+"</td>"+
 				"</tr></table></html>");
 
