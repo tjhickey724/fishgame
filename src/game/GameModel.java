@@ -74,15 +74,7 @@ public class GameModel {
 
 	public boolean stereo = true;
 
-	/*
-	public String goodFishSounds = "sounds/fish6hz0p";
-	public String badFishSounds = "sounds/fish8hz0p";
-	*/
-	// store the min/max visual scaling factors in percent gs.goodSound
-	public int goodvisualhz=6;
-	public int badvisualhz=8;
-	public int visualMin = 100;
-	public int visualMax = 125;
+
 	
 	
 	/** current fish being processed **/
@@ -122,7 +114,7 @@ public class GameModel {
 	}
 
 	
-	private long lastEventTime = System.nanoTime();
+	//private long lastEventTime = System.nanoTime();
 	
 	
 	/**
@@ -174,7 +166,7 @@ public class GameModel {
 			gameSpec.update(prop,value);
 		}
 		
-		long tmpNFT = this.nextFishTime - this.gameStart;
+
 		// calculate the next FishTime and the basic characteristics of the nextFish (species and side)
 		this.nextFishTime = interval*1000000 + this.nextFishTime;
 		String species = scan.next();
@@ -253,8 +245,6 @@ public class GameModel {
 		// pick starting location and velocity
 		double y = this.height/2;
 		double x = (side==Side.left)? 1 : this.width-1;
-		double vy=0;
-		double vx = (side==Side.left)? 1: -1;
 		
 		// then make an actor with that position
 		GameActor a = new GameActor(x,y,true,s,gameSpec.stereo,gameSpec.good.soundFile,gameSpec.bad.soundFile);
@@ -399,7 +389,7 @@ public class GameModel {
 			
 			// we now spawn the next fish
 			spawnFish();
-			this.lastEventTime = System.nanoTime();
+			//this.lastEventTime = System.nanoTime();
 	
 		}
 		

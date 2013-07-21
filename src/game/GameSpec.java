@@ -22,8 +22,7 @@ public class GameSpec {
 	private String sep = ScriptGenerator.SEP;
 	
 	public String 
-	   backgroundImage = "images/stream.jpg",
-	   backgroundImageFlipped = "images/streamFlip2.jpg";
+	   backgroundImage = "images/stream.jpg";
 	
 	
 	public String goodSound = "sounds/good.wav";
@@ -57,18 +56,19 @@ public class GameSpec {
 	
 	public String toScript(){
 		String s="";
-		s += good.toScript("good");
-		s += bad.toScript("bad");
-		s+= scriptLine("backgroundImage",backgroundImage);
-		s+= scriptLine("backgroundImageFlipped",backgroundImageFlipped);
+
+
 		s+= scriptLine("minFishRelease",""+minFishRelease);
 		s+= scriptLine("maxFishRelease",""+maxFishRelease);
-		s+= scriptLine("goodSound",""+goodSound);
-		s+= scriptLine("badSound",""+badSound);
 		s+= scriptLine("stereo",""+stereo);
 		s+= scriptLine("minThrobSize",""+minThrobSize);
 		s+= scriptLine("maxThrobSize",""+maxThrobSize);
 		s+= scriptLine("bgSound",""+this.bgSound);
+		s += good.toScript("good");
+		s += bad.toScript("bad");
+		s+= scriptLine("backgroundImage",backgroundImage);
+		s+= scriptLine("goodSound",""+goodSound);
+		s+= scriptLine("badSound",""+badSound);
 		return(s);
 		
 	}
@@ -85,6 +85,7 @@ public class GameSpec {
 		this.changed=true;
 		if (prop.equals("backgroundImage")){
 		    this.backgroundImage = value;
+			this.requireGameViewUpdate = true;
 	    }else if (prop.equals("maxFishRelease")) {
 			this.maxFishRelease = Integer.parseInt(value);
 		}else if (prop.equals("minFishRelease")) {

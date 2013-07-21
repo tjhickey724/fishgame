@@ -22,7 +22,7 @@ import javax.swing.*;
 public class ScriptWindow extends JFrame {
 	JTextField expId,subId,scr;
 	JPanel scriptpanel;
-	JLabel scrip,currentactor,selectedFile;
+	JLabel scrip,selectedFile;
 	JButton start,restart,pause,sdone,runscript,openButton;
 	GameModel gm;
 	GameSpec gs;
@@ -51,7 +51,6 @@ public class ScriptWindow extends JFrame {
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
 		scr= new JTextField("scripts/demoscriptv1.txt");
-		currentactor = new JLabel("Current Fish #:");
 		start= new JButton("start");
 		scrip = new JLabel("ScriptFile: ");	
 		pause=new JButton("pause");
@@ -127,13 +126,13 @@ public class ScriptWindow extends JFrame {
 			}
 		});
 
-		// this pauses or restarts the game so the subject can take a break if needed
+		// this pauses or resumes the game so the subject can take a break if needed
 		pause.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				if (pause.getText().equals("pause")) {
 					gm.pause();
-					pause.setText("restart");
+					pause.setText("resume");
 				} else {
 					gm.restart();
 					pause.setText("pause");
@@ -154,7 +153,6 @@ public class ScriptWindow extends JFrame {
 		scriptpanel.add(expId);
 		scriptpanel.add(scrip);
 		scriptpanel.add(scr);
-		scriptpanel.add(currentactor);
 		scriptpanel.add(start);
 		//scriptpanel.add(restart);
 		//scriptpanel.add(stop);

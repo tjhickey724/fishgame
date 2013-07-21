@@ -9,8 +9,6 @@ package game;
 public class FishSpec {
 	public String soundFile = "sounds/fish6hz0p";
 	public String imageFile = "images/fish1";
-	public String imageFileLeft = "images/fishLeft.png";
-	public String imageFileRight = "images/fishRight.png";
 
 
 	public int throbRate = 3;
@@ -28,8 +26,6 @@ public class FishSpec {
 		String s ="";
 		s+= scriptLine(type+"soundFile",soundFile);
 		s += scriptLine(type+"imageFile",imageFile);
-		s+= scriptLine(type+"imageFileLeft",imageFileLeft);
-		s+= scriptLine(type+"imageFileRight",imageFileRight);
 		s+= scriptLine(type+"throbRate",""+throbRate);
 		return s;		
 	}
@@ -40,10 +36,6 @@ public class FishSpec {
 			this.soundFile = val;
 		} else if (prop.equals("imageFile")){
 			this.imageFile = val;
-		} else if (prop.equals("imageFileLeft")){
-			this.imageFileLeft = val;
-		} else if (prop.equals("imageFileRight")){
-			this.imageFileRight = val;
 		} else if (prop.equals("throbRate")) {
 			throbRate = Integer.parseInt(val);
 		} else return false;

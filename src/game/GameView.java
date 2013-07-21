@@ -157,7 +157,7 @@ public class GameView extends JPanel{
 		//here we read in the background image which tiles the scene
 		try {
 			streamImage = ImageIO.read(new File(gs.backgroundImage)); 
-			streamImage2 = ImageIO.read(new File(gs.backgroundImageFlipped)); 
+			
 			AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 			tx.translate(0, -streamImage.getHeight(null));
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -232,12 +232,57 @@ public class GameView extends JPanel{
 	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		if (gm==null) return;
+		if (gm==null) return;  // this shouldn't ever happen!
+		
 		if (gm.gameSpec.requireGameViewUpdate) {
+			// if the gameSpec changes, need to update gameState
 			this.updateGameState(gm.gameSpec);
 			gm.gameSpec.requireGameViewUpdate = false; // DEBUG Threadsafe??
 		}
+			
+		if (gm.gameOver){
+			g.setFont(new Font("Helvetica",Font.BOLD,50));
+			g.drawString("GAME OVER",100,100);
+			return;
+		}
 		
+		drawBackground(g);
+		
+		drawFish(g); 
+
+		updateScore(g);
+		
+
+		
+
+	}
+	
+	private void updateScore(Graphics g){
+		g.setFont(new Font("Helvetica",Font.BOLD,20));
+		g.setColor(Color.WHITE);
+		
+		header.setText("<html><table style=\"font-size:24pt;\">"+
+				"<tr><td>Right:</td>"+
+					"<td>Wrong:</td>"+
+					"<td>Misses:</td>"+
+					"<td>Total:</td>"+
+				"</tr>"+
+				"<tr><td>"+gm.hits+"</td><td>"
+					+gm.misses+"</td><td>"
+					+gm.noKeyPress+"</td>"+
+					+gm.fishNum+"</td>"+
+				"</tr></table></html>");
+
+	}
+	
+	private void drawFish(Graphics g){
+		java.util.List<GameActor> gaList = gm.getActorList();
+		for(GameActor a:gaList){
+			drawActor(g,a,Color.WHITE);
+		}
+	}
+	
+	private void drawBackground(Graphics g){
 		int width = this.getWidth();
 		int height = this.getHeight();
 		g.setColor(Color.BLUE);
@@ -257,29 +302,12 @@ public class GameView extends JPanel{
 
 		}
 
-		g.drawImage(streamImage,0,y_offset-height,width,height/2,null);
-		g.drawImage(streamImage2,0,y_offset-height/2,width,height/2,null);
-		g.drawImage(streamImage,0,y_offset,width,height/2,null);
-		g.drawImage(streamImage2,0,y_offset+height/2,width,height/2,null);
+		// draw image on screen tiled
+		g.drawImage(streamImage,0,y_offset-height,width,height/2+2,null);
+		g.drawImage(streamImage2,0,y_offset-height/2,width,height/2+2,null);
+		g.drawImage(streamImage,0,y_offset,width,height/2+2,null);
+		g.drawImage(streamImage2,0,y_offset+height/2,width,height/2+2,null);
 		
-		if (gm.gameOver){
-			g.drawString("GAME OVER",100,100);
-			return;
-		}
-		
-		
-
-		java.util.List<GameActor> gaList = gm.getActorList();
-		for(GameActor a:gaList){
-			drawActor(g,a,Color.WHITE);
-		}
-		g.setFont(new Font("Helvetica",Font.BOLD,20));
-		g.setColor(Color.WHITE);
-		
-		header.setText("<html><table style=\"font-size:24pt;\"><tr><td>Right:</td><td>Wrong:</td><td>Misses:</td></tr><tr><td>"+gm.hits+"</td><td>"+gm.misses+"</td><td>"+gm.noKeyPress+"</td></tr></table></html>");
-
-		
-
 	}
 	
 	/**
