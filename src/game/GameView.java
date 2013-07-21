@@ -293,7 +293,7 @@ public class GameView extends JPanel{
 		int y_offset = 
 				(int) Math.round(framePart*height);
 
-		if (gm.paused || gm.isGameOver()){
+		if (gm.isPaused() || gm.isGameOver()){
 			y_offset=0;
 			if (gm.getNumFish()> 0){
 				gm.removeLastFish();

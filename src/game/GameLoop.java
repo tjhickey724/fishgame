@@ -21,7 +21,7 @@ public class GameLoop implements Runnable{
 
 		public void run(){
 			while(true){
-				if (gm.paused){
+				if (gm.isPaused()){
 					try {
 						Thread.sleep(100L);
 					} catch (InterruptedException e) {

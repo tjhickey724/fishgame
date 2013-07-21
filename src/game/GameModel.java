@@ -51,6 +51,8 @@ public class GameModel {
 	
 
 
+
+
 	//this checks if the game is over.
 	public boolean isGameOver() {
 		return gameOver;
@@ -64,7 +66,23 @@ public class GameModel {
 
 	
 	// do we really want to pause ... and does this really pause??
-	public boolean paused = true;
+	private boolean paused = true;
+	
+	/**
+	 * @return the paused
+	 */
+	public boolean isPaused() {
+		return paused;
+	}
+
+
+	/**
+	 * @param paused the paused to set
+	 */
+	public void setPaused(boolean paused) {
+		this.paused = paused;
+	}
+
 	
 	
 	// we should be more clear about these ...
@@ -299,7 +317,7 @@ public class GameModel {
 	}
 	
 	public void start(){
-		this.paused = false;
+		this.setPaused(false);
 		this.setGameOver(false);
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
@@ -309,7 +327,7 @@ public class GameModel {
 	}
 	
 	public void stop(){
-		this.paused = true;
+		this.setPaused(true);
 		this.setGameOver(true);
 
 		java.util.Iterator<GameActor> iter =this.actors.iterator();
@@ -388,7 +406,7 @@ public class GameModel {
 	 * from 1 to 4, and spawn a fish if so.
 	 */
 	public void update() { //throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		if (paused || isGameOver()) return;
+		if (isPaused() || isGameOver()) return;
 		
 		// here is where we decide whether to spawn a fish
 		// I'm changing this to not use an input script ...
