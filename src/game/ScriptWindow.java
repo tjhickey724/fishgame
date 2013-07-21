@@ -20,14 +20,13 @@ import javax.swing.*;
  *
  */
 public class ScriptWindow extends JFrame {
-	JTextField expId,subId,scr;
 	JPanel scriptpanel;
-	JLabel scrip,selectedFile;
-	JButton start,restart,pause,sdone,runscript,openButton;
 	GameModel gm;
 	GameSpec gs;
 	SubjectWindow sw;
 	ScriptWindow thisSW;
+	JButton openButton, pause;
+	JTextField scr,subId,expId;
 	
     JFileChooser fc;
 	
@@ -51,18 +50,17 @@ public class ScriptWindow extends JFrame {
 		expId= new JTextField("Experimenter");
 		subId = new JTextField("Subject");
 		scr= new JTextField("scripts/demoscriptv1.txt");
-		start= new JButton("start");
-		scrip = new JLabel("ScriptFile: ");	
+		JButton start= new JButton("start");
+		
 		pause=new JButton("pause");
-		restart=new JButton("Restart");
+		JButton restart=new JButton("Restart");
 		//stop = new JButton("Stop");
-		sdone=new JButton("Done");
-		selectedFile=new JLabel("Script File");
+		JButton sdone=new JButton("Done");
 		
 		
 		fc = new JFileChooser();
 		
-		openButton = new JButton("Open a File...");
+		openButton = new JButton("Open");
 		openButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 
@@ -71,7 +69,7 @@ public class ScriptWindow extends JFrame {
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
 		                File scriptFile = fc.getSelectedFile();
-		                selectedFile.setText(scriptFile.getName());
+		                openButton.setText(scriptFile.getName());
 		            }}});
 	
 		
@@ -146,12 +144,12 @@ public class ScriptWindow extends JFrame {
 		// we could also have moved all the labels and other info into here
 		// and not given them names at all! 
 		scriptpanel = new JPanel();
-		scriptpanel.setLayout(new GridLayout(5,1));
+		scriptpanel.setLayout(new GridLayout(4,1));
 		
 		scriptpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Main Control") );
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
-		scriptpanel.add(scrip);
+		scriptpanel.add(new JLabel("ScriptFile: "));
 		scriptpanel.add(scr);
 		scriptpanel.add(start);
 		//scriptpanel.add(restart);
@@ -159,7 +157,7 @@ public class ScriptWindow extends JFrame {
 		scriptpanel.add(pause);
 		scriptpanel.add(sdone);
 		//scriptpanel.add(openButton);
-		//scriptpanel.add(selectedFile);
+		//scriptpanel.add(new JLabel("Script File"));
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
 	}

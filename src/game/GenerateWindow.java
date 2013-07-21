@@ -36,18 +36,14 @@ public class GenerateWindow extends JFrame {
 	JTextField 
 	    mintim = new JTextField("30"),
 	    maxtim = new JTextField("80");
-	JComboBox vidtype,stype,vol;
-	String[] speeds,videotypes,soundtypes,volumes;
-	JButton gdone,gen;
-	JScrollPane jscrollpane;
-	JTextArea jtextarea;	
+	JComboBox soundtype,vol;
+	JTextArea jtextarea=new JTextArea(5,20);	
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
 	
 	
-	JLabel minSizeLab = new JLabel("Min Size(%)");
 	JTextField minSizeTF = new JTextField("100");
-	JLabel maxSizeLab = new JLabel("Max Size(%)");
+	
 	JTextField maxSizeTF = new JTextField("120");
 	
 	JButton goodSoundTF = new JButton("sounds/6hz");
@@ -61,11 +57,10 @@ public class GenerateWindow extends JFrame {
 	JFileChooser fc;
 	public GenerateWindow(){
 		super("Generate Window");
-		setLayout(new GridLayout(5,1));
+		setLayout(new GridLayout(4,1));
 		setSize(300,600);
 		
-		JPanel matrix1,matrix2,matrix3,matrix4,col1,col2,col3,row1,row2,row3;
-		JLabel actorspecies,good,bad,sound,visual,soundType,videoType,mintime,maxtime,nof;
+		JPanel matrix1,matrix2,matrix3;
 
 		String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" +currentDir);
@@ -78,35 +73,25 @@ public class GenerateWindow extends JFrame {
 		 * declared. That makes it clear what the variables are and it simplifies the
 		 * body of the constructor.  REFACTOR....
 		 */
-		actorspecies=new JLabel("Fish Type:");
-		good=new JLabel("Good");
-		bad=new JLabel("Bad");
-		sound=new JLabel("Sound");
-		visual=new JLabel("Visual");
-		soundType=new JLabel("Sound Type: ");
-		videoType=new JLabel("Video Type: ");
-		mintime=new JLabel("Min Time: ");
-		maxtime= new JLabel("Max Time: ");
-		nof=new JLabel("Fish to generate:");
-		JLabel imagelabel = new JLabel("Select Image:");
+
+		
 		JLabel volLabel = new JLabel("Volume:");
 		
-		jtextarea=new JTextArea(5,20);
-		jscrollpane=new JScrollPane(jtextarea);
 		
-		speeds=new String[]{"none","slow","fast"};
-		videotypes=new String[]{"Throb","Flicker"};
+		JScrollPane jscrollpane=new JScrollPane(jtextarea);
+		
+		String[] videotypes=new String[]{"Throb","Flicker"};
 	
-		vidtype = new JComboBox(videotypes);
+		JComboBox videotype = new JComboBox(videotypes);
 
-		soundtypes=new String[]{"Stereo","Mono"};
-		stype = new JComboBox(soundtypes);
+		String[] soundtypes=new String[]{"Stereo","Mono"};
+		soundtype = new JComboBox(soundtypes);
 		
-		volumes=new String[]{"low","med","hi"};
+		String[] volumes=new String[]{"low","med","hi"};
 		vol = new JComboBox(volumes);
 		
-		gdone=new JButton("Done");
-		gen=new JButton("Generate");
+		JButton gdone=new JButton("Done");
+		JButton gen=new JButton("Generate");
 		
 		gen.addActionListener(new ActionListener(){
 			@Override
@@ -118,7 +103,7 @@ public class GenerateWindow extends JFrame {
 				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
-				gs.stereo = (stype.getSelectedItem().toString().equals("Stereo"));
+				gs.stereo = (soundtype.getSelectedItem().toString().equals("Stereo"));
 				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF.getText());
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
@@ -191,98 +176,72 @@ public class GenerateWindow extends JFrame {
 		            }}});
 		
 		
-		col1 = new JPanel();
-		col1.setLayout(new GridLayout(3,1));
-		col2 = new JPanel();
-		col2.setLayout(new GridLayout(3,1));
-		col3 = new JPanel();
-		col3.setLayout(new GridLayout(3,1));
-		
-		row1 = new JPanel();
-		row1.setLayout(new GridLayout(1,3));
-		row2 = new JPanel();
-		row2.setLayout(new GridLayout(1,3));
-		row3 = new JPanel();
-		row3.setLayout(new GridLayout(1,3));
-		
 		matrix1 = new JPanel();
-		matrix1.setLayout(new GridLayout(1,3));
+		matrix1.setLayout(new GridLayout(3,3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(3,1));
+		matrix2.setLayout(new GridLayout(4,2));
 		
 		matrix3 = new JPanel();
 		matrix3.setLayout(new GridLayout(5,2));
+
 		
-		matrix4 = new JPanel();
-		matrix4.setLayout(new GridLayout(2,2));
+		matrix1.add(new JLabel("Fish Type:"));
+		matrix1.add(new JLabel("Sound"));
+		matrix1.add(new JLabel("Visual"));
 		
-		col1.add(actorspecies);
-		col1.add(good);
-		col1.add(bad);
+		matrix1.add(new JLabel("Good"));
+		matrix1.add(this.goodSoundTF);
+		matrix1.add(this.goodVisualHzTF);
 		
-		col2.add(sound);
+		matrix1.add(new JLabel("Bad"));
+		matrix1.add(this.badSoundTF);
+		matrix1.add(this.badVisualHzTF);
 		//col2.add(gs);
 		//col2.add(bs);
-		col2.add(this.goodSoundTF);
-		col2.add(this.badSoundTF);
 		
-		col3.add(visual);
+	
+		
+		
 		//col3.add(gv);
 		//col3.add(bv);
-		col3.add(this.goodVisualHzTF);
-		col3.add(this.badVisualHzTF);
-		
-		col1.setBackground(Color.cyan);
-		col2.setBackground(Color.cyan);
-		col3.setBackground(Color.cyan);
 		
 		
-		row1.add(soundType);
-		row1.add(stype);
-		
-		row2.add(videoType);
-		row2.add(vidtype);
-		
-		row3.add(gen);
-		row3.add(gdone);
 		
 		
+		
+		
+		matrix2.add(new JLabel("Sound Type: "));
+		matrix2.add(soundtype);
+		
+		matrix2.add(new JLabel("Video Type: "));
+		matrix2.add(videotype);
+		matrix2.add(volLabel);
+		matrix2.add(vol);
+		matrix2.add(gen);
+		matrix2.add(gdone);
 
-		matrix1.add(col1);
-		matrix1.add(col2);
-		matrix1.add(col3);
-		
-		matrix2.add(row1);
-		matrix2.add(row2);
-		matrix2.add(row3);
 		
 		
 
 		matrix3.setBorder(javax.swing.BorderFactory.createTitledBorder("Gen and Vis") );
-		matrix3.add(mintime);
+		matrix3.add(new JLabel("Min Time: "));
 		matrix3.add(mintim);
-		matrix3.add(maxtime);
+		matrix3.add(new JLabel("Max Time: "));
 		matrix3.add(maxtim);
-		matrix3.add(minSizeLab);
+		matrix3.add(new JLabel("Min Size(%)"));
 		matrix3.add(minSizeTF);
-		matrix3.add(maxSizeLab);
+		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
-		matrix3.add(nof);
+		matrix3.add(new JLabel("Fish to generate:"));
 		matrix3.add(numactors);
-		matrix1.setBackground(Color.red);
 		matrix2.setBackground(Color.green);
-		matrix3.setBackground(Color.blue);
-		
-		//matrix4.add(imagelabel);
-		//matrix4.add(imageSelect);
-		matrix4.add(volLabel);
-		matrix4.add(vol);
-		
+		matrix3.setBackground(Color.pink);
+		matrix1.setBackground(Color.cyan);
+
 		
 		add(matrix1);
 		add(matrix3);
 		add(matrix2);
-		add(matrix4);
 		add(jscrollpane);
 	}
 }
