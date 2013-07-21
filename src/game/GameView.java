@@ -354,15 +354,6 @@ public class GameView extends JPanel{
 
 	}
 	
-	private Color interpolate(Color c1, Color c2, long birth, long now, double freq){
-		double t = ((now-birth)/1000000000.0)*freq;
-		double y = 0.5*(Math.sin(Math.PI*2*t)+1);
-		float red = (float) (c1.getRed()/255.0*y + c2.getRed()/255.0*(1-y));
-		float green = (float) (c1.getGreen()/255.0*y + c2.getGreen()/255.0*(1-y));
-		float blue = (float) (c1.getBlue()/255.0*y + c2.getBlue()/255.0*(1-y));
-		return new Color(red,green,blue);
-	}
-	
 
 
 }
