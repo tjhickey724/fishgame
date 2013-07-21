@@ -512,6 +512,10 @@ public class GameModel {
 		int size = (int)Math.round(s);
 		return size;
 }
+	
+	public int getVisualHZ(FishSpec fs){
+		return fs.throbRate;
+	}
 
 
 
