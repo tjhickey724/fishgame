@@ -29,7 +29,7 @@ public class GameLoop implements Runnable{
 						e.printStackTrace();
 					}
 					continue;
-				}else if (gm.gameOver){
+				}else if (gm.isGameOver()){
 					// we need to clean up the old game
 					// this should be a method inside the gm to reset
 					gm.scan.close();

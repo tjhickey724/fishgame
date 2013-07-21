@@ -87,7 +87,7 @@ public class GameView extends JPanel{
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
-				if (gm.gameOver)
+				if (gm.isGameOver())
 					return;
 				
 				// play good/bad sounds alone by key press for demo purpose
@@ -240,7 +240,7 @@ public class GameView extends JPanel{
 			gm.gameSpec.requireGameViewUpdate = false; // DEBUG Threadsafe??
 		}
 			
-		if (gm.gameOver){
+		if (gm.isGameOver()){
 			g.setFont(new Font("Helvetica",Font.BOLD,50));
 			g.drawString("GAME OVER",100,100);
 			return;
@@ -293,7 +293,7 @@ public class GameView extends JPanel{
 		int y_offset = 
 				(int) Math.round(framePart*height);
 
-		if (gm.paused || gm.gameOver){
+		if (gm.paused || gm.isGameOver()){
 			y_offset=0;
 			if (gm.getNumFish()> 0){
 				gm.removeLastFish();

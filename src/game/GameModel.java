@@ -45,7 +45,19 @@ public class GameModel {
     // this is set to true when the session is over ...
 	// we need to add a timer to end the session, or have the 
 	// experimenter end the session ...
-	public boolean gameOver = false;
+	private boolean gameOver = false;
+	
+	//this checks if the game is over.
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+
+	// this sets gameOver to true or false
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
 	
 	// do we really want to pause ... and does this really pause??
 	public boolean paused = true;
@@ -97,7 +109,7 @@ public class GameModel {
 		this.size=size;
 		this.gameSpec = gameSpec;
 		
-		this.gameOver = false;
+		this.setGameOver(false);
 
 	}
 	
@@ -144,7 +156,7 @@ public class GameModel {
 			}
 		}
         if (! scan.hasNext()){
-        	this.gameOver = true;
+        	this.setGameOver(true);
         	return this.nextFishTime + 10*1000000000L;
         }
 		long interval=-1;
@@ -162,7 +174,7 @@ public class GameModel {
 			writeToLog("0\t"+prop+"\t"+value);
 			if (prop.equals("gameover")) {
 				this.stop();
-				this.gameOver=true;
+				this.setGameOver(true);
 				return 1000000000000L;
 			}
 			//System.out.println("interval="+interval+" prop="+prop+" value="+value);
@@ -240,7 +252,7 @@ public class GameModel {
 	 * and resets the time for the next fish to be spawned...
 	 */
 	public void spawnFish(){
-		if (this.gameOver) return;	
+		if (this.isGameOver()) return;	
 		
 		Side side = (this.nextFish.fromLeft)?Side.left:Side.right;
 		Species s = this.nextFish.species;
@@ -269,7 +281,7 @@ public class GameModel {
 	
 	public void start(){
 		this.paused = false;
-		this.gameOver = false;
+		this.setGameOver(false);
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
 		this.nextFishTime = updateNextFishTime(); 
@@ -279,7 +291,7 @@ public class GameModel {
 	
 	public void stop(){
 		this.paused = true;
-		this.gameOver=true;
+		this.setGameOver(true);
 
 		java.util.Iterator<GameActor> iter =this.actors.iterator();
 		while (iter.hasNext()){
@@ -357,7 +369,7 @@ public class GameModel {
 	 * from 1 to 4, and spawn a fish if so.
 	 */
 	public void update() { //throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		if (paused || gameOver) return;
+		if (paused || isGameOver()) return;
 		
 		// here is where we decide whether to spawn a fish
 		// I'm changing this to not use an input script ...
@@ -375,7 +387,7 @@ public class GameModel {
 			//  (this.nextFishTime-this.gameStart)/1000000);
 			
 			this.nextFishTime = this.updateNextFishTime();
-			if (this.gameOver) return;
+			if (this.isGameOver()) return;
 			
 			
 			if (this.actors.size()>0) {
