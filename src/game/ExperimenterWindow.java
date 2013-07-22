@@ -48,10 +48,10 @@ public class ExperimenterWindow extends JFrame {
 				gw.setVisible(true);
 			}
 		});
-		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.setLayout(new BorderLayout());
 		buttonPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Sekuler Lab"));
-		buttonPanel.add(scripted);
-		buttonPanel.add(generate);
+		buttonPanel.add(scripted, BorderLayout.NORTH);
+		buttonPanel.add(generate, BorderLayout.SOUTH);
 		this.add(buttonPanel);
 		this.pack();
 	}
