@@ -379,10 +379,21 @@ public class GameModel {
 		this.setPaused(true);
 		this.setGameOver(true);
 
+		/*
 		java.util.Iterator<GameActor> iter =this.actors.iterator();
 		while (iter.hasNext()){
 			GameActor a = (GameActor) iter.next();
 			a.ct.stop();
+		}
+		*/
+		try {
+			if (actors.size()>0){
+			GameActor a = actors.get(0);
+			a.ct.stop();
+			}
+			
+		} catch(Exception e){
+			System.out.println("Error while stopping: "+e);
 		}
 		this.actors.clear();
 		try{
@@ -494,7 +505,7 @@ public class GameModel {
 			//this.lastEventTime = System.nanoTime();
 	
 		}
-		
+		/*
 		// Finally, we update all of the fish (should only be one now!)
 		java.util.Iterator<GameActor> iter =this.actors.iterator();
 		while (iter.hasNext()){
@@ -502,6 +513,18 @@ public class GameModel {
 			a.update();
 			keepOnBoard(a);
 		}
+		*/
+		// update the only fish!
+		try{
+			if (actors.size()>0){
+			GameActor a = (GameActor) actors.get(0);
+			a.update();
+			keepOnBoard(a);
+			}
+		} catch(Exception e){
+			System.out.println("Exception on update: "+e);
+		}
+		
 
 	}
 	
