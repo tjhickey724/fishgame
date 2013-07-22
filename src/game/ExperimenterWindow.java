@@ -49,9 +49,9 @@ public class ExperimenterWindow extends JFrame {
 			}
 		});
 		buttonPanel.setLayout(new BorderLayout());
-		buttonPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Sekuler Lab"));
-		buttonPanel.add(scripted, BorderLayout.NORTH);
-		buttonPanel.add(generate, BorderLayout.SOUTH);
+		buttonPanel.add(new JLabel("Sekuler Lab"), BorderLayout.NORTH);
+		buttonPanel.add(scripted, BorderLayout.EAST);
+		buttonPanel.add(generate, BorderLayout.WEST);
 		this.add(buttonPanel);
 		this.pack();
 	}
