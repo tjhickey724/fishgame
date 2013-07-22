@@ -25,10 +25,16 @@ public class ScriptWindow extends JFrame {
 	GameSpec gs;
 	SubjectWindow sw;
 	ScriptWindow thisSW;
-	JButton openButton, pause;
-	JTextField scr,subId,expId;
+	JButton pause=new JButton("pause"),
+			openButton = new JButton("Open Script"),
+			sdone=new JButton("Done"),
+			start= new JButton("start");
 	
-    JFileChooser fc;
+	JTextField expId= new JTextField("Experimenter"),
+		subId = new JTextField("Subject"),
+		scr= new JTextField("scripts/demoscriptv1.txt");
+	
+    JFileChooser fc = new JFileChooser(new File(".").getAbsolutePath());
 	
 	public ScriptWindow(){
 		super("Script Window");
@@ -47,20 +53,6 @@ public class ScriptWindow extends JFrame {
 		 * add the label or other non-readable/writeable widget into the layout below.
 		 */
 		
-		expId= new JTextField("Experimenter");
-		subId = new JTextField("Subject");
-		scr= new JTextField("scripts/demoscriptv1.txt");
-		JButton start= new JButton("start");
-		
-		pause=new JButton("pause");
-		JButton restart=new JButton("Restart");
-		//stop = new JButton("Stop");
-		JButton sdone=new JButton("Done");
-		
-		
-		fc = new JFileChooser();
-		
-		openButton = new JButton("Open");
 		openButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 
@@ -138,26 +130,19 @@ public class ScriptWindow extends JFrame {
 				
 			}
 		});
-		
 
 		// Finally we do the layout of the components
-		// we could also have moved all the labels and other info into here
-		// and not given them names at all! 
 		scriptpanel = new JPanel();
-		scriptpanel.setLayout(new GridLayout(4,1));
-		
+		scriptpanel.setLayout(new GridLayout(3,1));
 		scriptpanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Main Control") );
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
-		scriptpanel.add(new JLabel("ScriptFile: "));
-		scriptpanel.add(scr);
+		//scriptpanel.add(new JLabel("ScriptFile: "));
+		scriptpanel.add(openButton);
 		scriptpanel.add(start);
-		//scriptpanel.add(restart);
-		//scriptpanel.add(stop);
 		scriptpanel.add(pause);
 		scriptpanel.add(sdone);
-		//scriptpanel.add(openButton);
-		//scriptpanel.add(new JLabel("Script File"));
+		
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
 	}
