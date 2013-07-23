@@ -35,6 +35,9 @@ public class GameModel {
 	public double size;
 	
 	
+	public int health=10;
+	public int wealth=0;
+	
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
 	
