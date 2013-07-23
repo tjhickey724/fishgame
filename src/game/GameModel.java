@@ -90,11 +90,7 @@ public class GameModel {
 	private long nextFishTime=0;
 	private GameActor nextFish=null;
 	private long gameStart = startTime;
-	
-	
-	public int score;
 
-	
 	// this is true if we are reading from a script
 	private String inputScriptFileName;
 	

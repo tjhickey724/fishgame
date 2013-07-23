@@ -122,11 +122,9 @@ public class GameView extends JPanel{
 				// play the appropriate sound and modify the score
 				if (correctResponse){
 					goodclip.play();
-					gm.score += 2;
 					gm.setHits(gm.getHits() + 1);
 				}else {
 					badclip.play();
-					gm.score -= 1;
 					gm.setMisses(gm.getMisses() + 1);
 				}
 				
