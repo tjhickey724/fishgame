@@ -43,7 +43,7 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fishL,fishR;
+	public BufferedImage streamImage, streamImage2,fishL,fishR,boat;
 	
 	public JLabel header = new JLabel("Right: Wrong:");
 	
@@ -161,7 +161,7 @@ public class GameView extends JPanel{
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
 
-
+			boat = ImageIO.read(new File("images/boat.png"));
 			fishL = ImageIO.read(new File("images/fish/fishL.png"));
 			fishR = ImageIO.read(new File("images/fish/fishR.png"));
 			if (!gs.bgSound.equals(this.lastbgSound)){	
@@ -247,6 +247,8 @@ public class GameView extends JPanel{
 		drawBackground(g);
 		
 		drawFish(g); 
+		
+		drawAvatar(g);
 
 		updateScore(g);
 		
@@ -255,6 +257,12 @@ public class GameView extends JPanel{
 
 	}
 	
+	//method to draw the boat avatar
+	private void drawAvatar(Graphics g) {
+		// This draws the boat in the middle
+		g.drawImage(boat,toXViewCoords(50),toYViewCoords(85),44,128,null);
+	}
+
 	private void updateScore(Graphics g){
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
