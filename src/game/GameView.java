@@ -37,7 +37,7 @@ public class GameView extends JPanel{
 	String lastbgSound;
 
 	
-	public AudioClip goodclip,badclip;
+	public AudioClip goodclip, badclip, chaching, eww, awe, woo;
 
 	ArrayList<String> keylog = new ArrayList<String>();
 	
@@ -121,11 +121,23 @@ public class GameView extends JPanel{
 				
 				// play the appropriate sound and modify the score
 				if (correctResponse){
-					goodclip.play();
-					gm.setHits(gm.getHits() + 1);
+					if (lastFish.species == Species.good) {
+						chaching.play();
+						gm.setHits(gm.getHits() + 1);
+					}
+					else {
+						woo.play();
+						gm.setHits(gm.getHits() + 1);
+					}
 				}else {
-					badclip.play();
-					gm.setMisses(gm.getMisses() + 1);
+					if (lastFish.species == Species.bad) {
+						eww.play();
+						gm.setMisses(gm.getMisses() + 1);
+					}
+					else {
+						awe.play();
+						gm.setMisses(gm.getMisses() + 1);
+					}
 				}
 				
 
@@ -149,8 +161,11 @@ public class GameView extends JPanel{
 		goodclip = new AudioClip(gs.goodSound);
 		
 		badclip = new AudioClip(gs.badSound);
-
-
+		
+		awe = new AudioClip(gs.awe);
+		woo = new AudioClip(gs.woo);
+		chaching = new AudioClip(gs.chaching);
+		eww = new AudioClip(gs.eww);
 
 		//here we read in the background image which tiles the scene
 		try {
