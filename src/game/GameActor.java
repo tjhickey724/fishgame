@@ -58,7 +58,8 @@ public class GameActor {
 				         boolean stereo,
 				         String goodFishSounds, String badFishSounds) {
 			this.x=x; this.y=y; this.active=active;
-			this.vx = speed*(rand.nextDouble()-0.5);
+			// fish starts off moving forward always
+			this.vx = speed*(rand.nextDouble());
 			this.vy = speed*(rand.nextDouble()-0.5);
 			this.birthTime = System.nanoTime();
 			this.lastUpdate = this.birthTime;

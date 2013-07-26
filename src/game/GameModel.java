@@ -346,7 +346,7 @@ public class GameModel {
 		
 		// pick starting location and velocity
 		double y = this.height/2;
-		double x = (side==Side.left)? 1 : this.width-1;
+		double x = (side==Side.left)? 10 : this.width-10;
 		
 		// then make an actor with that position
 		GameActor a = new GameActor(x,y,true,s,gameSpec.stereo,gameSpec.good.soundFile,gameSpec.bad.soundFile);
@@ -354,6 +354,9 @@ public class GameModel {
 		// we don't need both fromLeft and origin .... eliminate fromLeft...
 		a.fromLeft=(side==Side.left);
 		a.origin=(side==Side.left)?0:1;  // we'll convert origin to Side later
+		
+		// make sure it is moving inward if it comes from the right
+		if (!a.fromLeft)  a.vy = -a.vy; 
 		//a.radius=4;
 		// start playing the music for the fish
 		if (a.fromLeft) a.ct = a.ctL; else a.ct = a.ctR;
@@ -477,6 +480,18 @@ public class GameModel {
 		// so we can randomly generate one script and then use it many times...
 		
 		long now=System.nanoTime();
+		long millisecond = 1000*1000L;
+		int delay = 0;
+		
+		if ((this.actors.size()>0) && (now > this.nextFishTime - delay*millisecond)) {
+			// this is the case where we didn't press a key to kill or eat the fish
+			this.setNoKeyPress(this.getNoKeyPress() + 1);
+			GameActor lastFish = this.actors.get(this.actors.size()-1);
+			lastFish.ct.stop();
+
+			this.actors.clear();		
+			this.writeToLog(new GameEvent(lastFish));
+		}
 		
 		if (now > this.nextFishTime){
 			// time to launch the next fish!
@@ -486,19 +501,6 @@ public class GameModel {
 			this.nextFishTime = this.updateNextFishTime();
 			if (this.isGameOver()) return;
 			
-			
-			if (this.actors.size()>0) {
-				// this is the case where we didn't press a key to kill or eat the fish
-				this.setNoKeyPress(this.getNoKeyPress() + 1);
-				GameActor lastFish = this.actors.get(this.actors.size()-1);
-				lastFish.ct.stop();
-
-				this.actors.clear();
-
-				
-				this.writeToLog(new GameEvent(lastFish));
-
-			}
 			
 			// we now spawn the next fish
 			spawnFish();
