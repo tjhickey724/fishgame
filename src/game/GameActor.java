@@ -27,7 +27,7 @@ public class GameActor {
 		// still on board?
 		boolean active;
 		// speed
-		double speed=10;
+		double speed=40;
 		// species
 		boolean fromLeft; // true if fish comes from left
 		long birthTime;
