@@ -265,7 +265,7 @@ public class GameModel {
 			}
 			//System.out.println("interval="+interval+" prop="+prop+" value="+value);
 			interval = scan.nextLong();
-			gameSpec.update(prop,value);
+			gameSpec.update(prop,value); 
 		}
 		
 
