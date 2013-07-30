@@ -296,6 +296,8 @@ public class GameView extends JPanel{
 					+gm.getMisses()+"</td><td>"
 					+gm.getNoKeyPress()+"</td>"+
 					+gm.getFishNum()+"</td>"+
+				"</tr>" +
+				"<tr><td><td>Health: </td><td>" + gm.health + "</td><td>Wealth: " + gm.wealth + "<td>" +
 				"</tr></table></html>");
 
 	}
