@@ -124,19 +124,23 @@ public class GameView extends JPanel{
 					if (lastFish.species == Species.good) {
 						chaching.play();
 						gm.setHits(gm.getHits() + 1);
+						gm.health++;
 					}
 					else {
 						woo.play();
 						gm.setHits(gm.getHits() + 1);
+						gm.wealth++;
 					}
 				}else {
 					if (lastFish.species == Species.bad) {
 						eww.play();
 						gm.setMisses(gm.getMisses() + 1);
+						gm.health--;
 					}
 					else {
 						awe.play();
 						gm.setMisses(gm.getMisses() + 1);
+						gm.wealth--;
 					}
 				}
 				
