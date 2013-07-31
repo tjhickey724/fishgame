@@ -27,6 +27,10 @@ public class GameSpec {
 	
 	public String goodSound = "sounds/good.wav";
 	public String badSound = "sounds/bad.wav";
+	public String chaching = "sounds/chaching.wav";
+	public String awe = "sounds/awe.wav";
+	public String eww = "sounds/eww.wav";
+	public String woo = "sounds/woo.wav";
 	// we can expand to more sounds later ...
 	/*
 	public String eatGood = goodSound;
@@ -86,6 +90,9 @@ public class GameSpec {
 		this.changed=true;
 		if (prop.equals("backgroundImage")){
 		    this.backgroundImage = value;
+			this.requireGameViewUpdate = true;
+	    }else if (prop.equals("bgSound")){
+		    this.bgSound = value;
 			this.requireGameViewUpdate = true;
 	    }else if (prop.equals("maxFishRelease")) {
 			this.maxFishRelease = Integer.parseInt(value);

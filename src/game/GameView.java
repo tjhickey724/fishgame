@@ -37,7 +37,7 @@ public class GameView extends JPanel{
 	String lastbgSound;
 
 	
-	public AudioClip goodclip,badclip;
+	public AudioClip goodclip, badclip, chaching, eww, awe, woo;
 
 	ArrayList<String> keylog = new ArrayList<String>();
 	
@@ -85,6 +85,37 @@ public class GameView extends JPanel{
 						return c=='k';
 			}
 			
+			/**
+			 * returns true if the key press was for correct species
+			 * @param c
+			 * @param lastFish
+			 * @return
+			 */
+			private boolean hitCorrectSpecies(char c,GameActor lastFish){
+				Species s = lastFish.species;
+				boolean onLeft = lastFish.origin==0;
+				if (s==Species.good) 
+					return ((c=='q')||(c=='p'));
+				else 
+					return ((c=='a')||(c=='l'));
+			}
+			
+			/**
+			 * returns true if the key press was on the correct side
+			 * @param c
+			 * @param lastFish
+			 * @return
+			 */
+			private boolean hitCorrectSide(char c,GameActor lastFish){
+				Species s = lastFish.species;
+				boolean onLeft = lastFish.origin==0;
+				if (onLeft) {
+					return ((c=='q')||(c=='a'));
+				}else {
+					return ((c=='p')||(c=='l'));
+				}
+			}
+			
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
@@ -122,6 +153,8 @@ public class GameView extends JPanel{
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
 				boolean correctResponse = hitCorrectKey(e.getKeyChar(),lastFish);
+				boolean correctSide = hitCorrectSide(e.getKeyChar(),lastFish);
+				boolean correctSpecies = hitCorrectSpecies(e.getKeyChar(),lastFish);
 				String log = e.getKeyChar()+" "+responseTime/1000000.0+" "
 					      +correctResponse+" "+lastFish;
 				System.out.println(log);
@@ -130,11 +163,31 @@ public class GameView extends JPanel{
 				
 				// play the appropriate sound and modify the score
 				if (correctResponse){
-					goodclip.play();
-					gm.setHits(gm.getHits() + 1);
-				}else {
+					if (lastFish.species == Species.good) {
+						goodclip.play();  // eating a good fish increases your helath
+						gm.setHits(gm.getHits() + 1);
+						gm.health++;
+					}
+					else {
+						chaching.play();  // killing a bad fish increases your wealth
+						gm.setHits(gm.getHits() + 1);
+						gm.wealth++;
+					}
+				}else if (correctSide){ // but wrong species
+					if (lastFish.species == Species.bad) {
+						eww.play();  // you ate a bad fish, that's unhealthy
+						gm.setMisses(gm.getMisses() + 1);
+						gm.health--;
+					}
+					else {
+						badclip.play();  // you killed a good fish, you pay a fine!
+						gm.setMisses(gm.getMisses() + 1);
+						gm.wealth--;
+					}
+				}else if (correctSpecies){  // but wrong side
 					badclip.play();
-					gm.setMisses(gm.getMisses() + 1);
+				}else {// hit totally wrong key
+					badclip.play();
 				}
 				
 
@@ -158,8 +211,11 @@ public class GameView extends JPanel{
 		goodclip = new AudioClip(gs.goodSound);
 		
 		badclip = new AudioClip(gs.badSound);
-
-
+		
+		awe = new AudioClip(gs.awe);
+		woo = new AudioClip(gs.woo);
+		chaching = new AudioClip(gs.chaching);
+		eww = new AudioClip(gs.eww);
 
 		//here we read in the background image which tiles the scene
 		try {
@@ -286,6 +342,8 @@ public class GameView extends JPanel{
 					+gm.getMisses()+"</td><td>"
 					+gm.getNoKeyPress()+"</td>"+
 					+gm.getFishNum()+"</td>"+
+				"</tr>" +
+				"<tr><td><td>Health: </td><td>" + gm.health + "</td><td>Wealth: " + gm.wealth + "<td>" +
 				"</tr></table></html>");
 
 	}

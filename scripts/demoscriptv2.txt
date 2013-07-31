@@ -4,7 +4,7 @@
 0	stereo	true
 0	minThrobSize	100
 0	maxThrobSize	200
-0	bgSound	sounds/background/water3.wav
+0	bgSound	sounds/background/water0.wav
 0	goodsoundFile	sounds/6hz
 0	goodimageFile	images/fish1
 0	goodthrobRate	6

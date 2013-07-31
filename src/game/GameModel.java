@@ -7,7 +7,7 @@ import java.io.*;
  * This is the model for the game. It represents the entire state
  * of the game at the present moment. 
  * In this version, the player is presented with two kinds of fish
- * (good and bad) that come from sides (left or right) and have 
+ * (good and bad) that come from sides (left or right) and have good.wav
  * certain visual and auditory cues. The player tries to identify the
  * fish using the left or right hand pressing the appropriate key.
  * 
