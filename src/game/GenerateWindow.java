@@ -43,7 +43,7 @@ public class GenerateWindow extends JFrame {
 	
 	
 	JTextField minSizeTF = new JTextField("100");
-	
+	JTextField backgroundSpeed = new JTextField("0.1");
 	JTextField maxSizeTF = new JTextField("120");
 	
 	JButton goodSoundTF = new JButton("sounds/6hz");
@@ -75,7 +75,6 @@ public class GenerateWindow extends JFrame {
 		 */
 
 		
-		JLabel volLabel = new JLabel("Volume:");
 		
 		
 		JScrollPane jscrollpane=new JScrollPane(jtextarea);
@@ -108,6 +107,7 @@ public class GenerateWindow extends JFrame {
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+				gs.backgroundSpeed = (double) Double.parseDouble(backgroundSpeed.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -182,7 +182,7 @@ public class GenerateWindow extends JFrame {
 		matrix2.setLayout(new GridLayout(4,2));
 		
 		matrix3 = new JPanel();
-		matrix3.setLayout(new GridLayout(5,2));
+		matrix3.setLayout(new GridLayout(6,2));
 
 		
 		matrix1.add(new JLabel("Fish Type:"));
@@ -210,20 +210,12 @@ public class GenerateWindow extends JFrame {
 		
 		
 		
-		matrix2.add(new JLabel("Sound Type: "));
-		matrix2.add(soundtype);
-		
-		matrix2.add(new JLabel("Video Type: "));
-		matrix2.add(videotype);
-		matrix2.add(volLabel);
-		matrix2.add(vol);
-		matrix2.add(gen);
-		matrix2.add(gdone);
+
 
 		
 		
 
-		matrix3.setBorder(javax.swing.BorderFactory.createTitledBorder("Gen and Vis") );
+		
 		matrix3.add(new JLabel("Min Time: "));
 		matrix3.add(mintim);
 		matrix3.add(new JLabel("Max Time: "));
@@ -234,9 +226,22 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(maxSizeTF);
 		matrix3.add(new JLabel("Fish to generate:"));
 		matrix3.add(numactors);
-		matrix2.setBackground(Color.green);
+		matrix3.add(new JLabel("Background speed:"));
+		matrix3.add(backgroundSpeed);
+				
+		matrix2.add(new JLabel("Sound Type: "));
+		matrix2.add(soundtype);
+		
+		matrix2.add(new JLabel("Video Type: "));
+		matrix2.add(videotype);
+		matrix2.add(new JLabel("Volume:"));
+		matrix2.add(vol);
+		matrix2.add(gen);
+		matrix2.add(gdone);
+		
+		matrix2.setBackground(Color.pink);
 		matrix3.setBackground(Color.pink);
-		matrix1.setBackground(Color.cyan);
+		matrix1.setBackground(Color.pink);
 
 		
 		add(matrix1);

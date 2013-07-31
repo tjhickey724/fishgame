@@ -26,7 +26,7 @@ public class ScriptWindow extends JFrame {
 	SubjectWindow sw;
 	ScriptWindow thisSW;
 	JButton pause=new JButton("pause"),
-			openButton = new JButton("Open Script"),
+			openButton = new JButton("demoscriptv1.txt"),
 			sdone=new JButton("Done"),
 			start= new JButton("start");
 	
@@ -34,7 +34,7 @@ public class ScriptWindow extends JFrame {
 		subId = new JTextField("Subject"),
 		scr= new JTextField("scripts/demoscriptv1.txt");
 	
-    JFileChooser fc = new JFileChooser(new File(".").getAbsolutePath());
+    JFileChooser fc = new JFileChooser(System.getProperty("user.dir")+"/scripts");
 	
 	public ScriptWindow(){
 		super("Script Window");

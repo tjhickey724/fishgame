@@ -361,7 +361,7 @@ public class GameView extends JPanel{
 		g.setColor(new Color(50,50,50,150));
 		g.fillRect(0,0,width,height);
 		double seconds = System.nanoTime()/1000000000.0;
-		double frames = seconds*0.1;
+		double frames = seconds*gm.gameSpec.backgroundSpeed;
 		double framePart = frames -Math.floor(frames);
 		int y_offset = 
 				(int) Math.round(framePart*height);

@@ -41,16 +41,13 @@ public class GameSpec {
 	public String missBad = badSound;
 	public String pushKey = badSound;
 	*/
-	public int leftEdge = 10;
-	public int rightEdge = 90;
-	public int 
+	public int leftEdge = 10,
+		rightEdge = 90,
 	    minFishRelease = 30,
-	    maxFishRelease = 60;
-	
-	public int
+	    maxFishRelease = 60,
 		minThrobSize = 100,
 		maxThrobSize = 125;
-	
+	public double backgroundSpeed=0.1;
 	public GameSpec(){
 		// create default GameSpec
 	}
@@ -74,6 +71,7 @@ public class GameSpec {
 		s+= scriptLine("backgroundImage",backgroundImage);
 		s+= scriptLine("goodSound",""+goodSound);
 		s+= scriptLine("badSound",""+badSound);
+		s+= scriptLine("backgroundSpeed",""+backgroundSpeed);
 		return(s);
 		
 	}
@@ -111,6 +109,8 @@ public class GameSpec {
 		} else if (prop.equals("bgSound")) {
 			this.bgSound = value;
 			this.requireGameViewUpdate = true;
+		}else if (prop.equals("backgroundSpeed")){
+			this.backgroundSpeed = Double.parseDouble(value);
 		} else return false;
 		return true;
 	}
