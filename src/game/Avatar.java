@@ -15,7 +15,8 @@ public class Avatar extends GameActor {
 	 * @param active
 	 * @param spec
 	 */
-	
+	static int leftEdge=0;
+	static int rightEdge=100;
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -59,6 +60,9 @@ public class Avatar extends GameActor {
 		double dt = (now -this.lastUpdate)/1000000000.0;
 		this.lastUpdate = now;
 		current(dt);
+		if (!inMiddle()){
+			
+			}
 /*		if (species.toString().equals("good")){
 			try {
 				this.ct=new AudioClip("src/sound8.wav");
@@ -113,6 +117,11 @@ public class Avatar extends GameActor {
 		vx /= tmpSpeed;
 		vy /= tmpSpeed;
 		x += vx*speed*dt;
+	}
+
+	//this method checks if the avatar is in themiddle of the screen.
+	public boolean inMiddle(){
+		return (x<rightEdge && x>leftEdge);
 	}
 
 }

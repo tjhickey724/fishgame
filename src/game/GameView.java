@@ -300,7 +300,7 @@ public class GameView extends JPanel{
 	private void drawBackground(Graphics g){
 		int width = this.getWidth();
 		int height = this.getHeight();
-		g.setColor(Color.BLUE);
+		g.setColor(new Color(50,50,50,150));
 		g.fillRect(0,0,width,height);
 		double seconds = System.nanoTime()/1000000000.0;
 		double frames = seconds*0.1;
@@ -323,6 +323,7 @@ public class GameView extends JPanel{
 		g.drawImage(streamImage,0,y_offset,width,height/2+2,null);
 		g.drawImage(streamImage2,0,y_offset+height/2,width,height/2+2,null);
 		
+		g.fillRect(toViewCoords(gm.gameSpec.leftEdge), 0, toViewCoords(gm.gameSpec.rightEdge-gm.gameSpec.leftEdge), height);
 	}
 	
 	/**

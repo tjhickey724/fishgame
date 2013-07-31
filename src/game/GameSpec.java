@@ -37,7 +37,8 @@ public class GameSpec {
 	public String missBad = badSound;
 	public String pushKey = badSound;
 	*/
-	
+	public int leftEdge = 10;
+	public int rightEdge = 90;
 	public int 
 	    minFishRelease = 30,
 	    maxFishRelease = 60;
