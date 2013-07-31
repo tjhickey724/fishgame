@@ -89,14 +89,13 @@ public class Avatar extends GameActor {
 	} */
 	} 
 
-	private void current(double dt) {
+/*	private void current(double dt) {
 			int currentSpeed =1;
 			//if x is in the middle region
-		if (x<70){
-				x+=currentSpeed;
+			x+=currentSpeed;
+		if (x<50){
+				x=currentSpeed;
 			} else {
-				currentSpeed=-currentSpeed;
-			}
 		if (x>30){
 			x+=currentSpeed;
 		}else{
@@ -105,6 +104,15 @@ public class Avatar extends GameActor {
 			
 		// y += vy*speed*dt;
 		
-	} 
+	} */
+	public void current(double dt){
+		double turnspeed = 0.1;
+		vx += rand.nextDouble()*turnspeed -turnspeed/2;
+		vy += rand.nextDouble()*turnspeed -turnspeed/2;
+		double tmpSpeed = Math.sqrt(vx*vx+vy*vy);
+		vx /= tmpSpeed;
+		vy /= tmpSpeed;
+		x += vx*speed*dt;
+	}
 
 }

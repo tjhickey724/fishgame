@@ -72,37 +72,40 @@ public class GameView extends JPanel{
 			private boolean hitCorrectKey(char c,GameActor lastFish){
 				Species s = lastFish.species;
 				boolean onLeft = lastFish.origin==0;
+		
 				if (s==Species.good) 
 					if (onLeft)
-					   return c =='q';
+					   return c =='w';
 					else
-						return c=='p';
+						return c=='o';
 				else
 					if (onLeft)
-						return c=='a';
+						return c=='s';
 					else
-						return c=='l';
+						return c=='k';
 			}
 			
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
+				char c;
 				if (gm.isGameOver())
 					return;
+				if (e.getKeyChar() == 'p'){
+					gm.Avatar.x+=1;
+					return;
+				} else if (e.getKeyChar() == 'q'){
+					gm.Avatar.x-=1;
+					return;
+				}
 				
 				// play good/bad sounds alone by key press for demo purpose
-				if (e.getKeyChar()=='g') {
+				if (e.getKeyChar() =='g') {
 					goodclip.play(); return;
 				} else if (e.getKeyChar() == 'b'){
 					badclip.play(); return;
 				}
-				if (e.getKeyChar() == '6'){
-					gm.Avatar.x+=1;
-					
-				}
-				if (e.getKeyChar() == '4'){
-					gm.Avatar.x-=1;
-				}
+				
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.getNumFish()==0) {
