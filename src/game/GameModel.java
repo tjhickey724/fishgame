@@ -42,6 +42,7 @@ public class GameModel {
 	private List<GameActor> actors = new ArrayList<GameActor>();
 	public GameActor Avatar = new Avatar(50,80);
 	
+	
 	// we need this when spawning fish ...
 	protected Random rand = new Random();
 	
@@ -193,7 +194,8 @@ public class GameModel {
 		this.height = size;
 		this.size=size;
 		this.gameSpec = gameSpec;
-		
+		game.Avatar.rightEdge = gameSpec.rightEdge;
+		game.Avatar.leftEdge = gameSpec.leftEdge;
 		this.setGameOver(false);
 
 	}
