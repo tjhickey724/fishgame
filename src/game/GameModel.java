@@ -40,7 +40,7 @@ public class GameModel {
 	
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
-	
+	public GameActor Avatar = new Avatar(50,80);
 	
 	// we need this when spawning fish ...
 	protected Random rand = new Random();

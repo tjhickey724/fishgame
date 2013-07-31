@@ -45,7 +45,7 @@ public class GameActor {
 		//AudioClip bt;
 		Species species; 
 		
-		private java.util.Random rand = new java.util.Random();
+		protected java.util.Random rand = new java.util.Random();
 
 		public GameActor(double x, double y, boolean active, Species spec) {
 			this(x,y,active,spec,true,"sounds/fish6hz0p","sounds/fish8hz0p");

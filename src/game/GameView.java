@@ -96,7 +96,13 @@ public class GameView extends JPanel{
 				} else if (e.getKeyChar() == 'b'){
 					badclip.play(); return;
 				}
-				
+				if (e.getKeyChar() == '6'){
+					gm.Avatar.x+=1;
+					
+				}
+				if (e.getKeyChar() == '4'){
+					gm.Avatar.x-=1;
+				}
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.getNumFish()==0) {
@@ -260,7 +266,7 @@ public class GameView extends JPanel{
 	//method to draw the boat avatar
 	private void drawAvatar(Graphics g) {
 		// This draws the boat in the middle
-		g.drawImage(boat,toXViewCoords(50),toYViewCoords(85),44,128,null);
+		g.drawImage(boat,toXViewCoords(gm.Avatar.x),toYViewCoords(gm.Avatar.y),44,128,null);
 	}
 
 	private void updateScore(Graphics g){
