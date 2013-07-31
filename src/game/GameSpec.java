@@ -90,6 +90,9 @@ public class GameSpec {
 		if (prop.equals("backgroundImage")){
 		    this.backgroundImage = value;
 			this.requireGameViewUpdate = true;
+	    }else if (prop.equals("bgSound")){
+		    this.bgSound = value;
+			this.requireGameViewUpdate = true;
 	    }else if (prop.equals("maxFishRelease")) {
 			this.maxFishRelease = Integer.parseInt(value);
 		}else if (prop.equals("minFishRelease")) {

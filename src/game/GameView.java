@@ -84,6 +84,37 @@ public class GameView extends JPanel{
 						return c=='l';
 			}
 			
+			/**
+			 * returns true if the key press was for correct species
+			 * @param c
+			 * @param lastFish
+			 * @return
+			 */
+			private boolean hitCorrectSpecies(char c,GameActor lastFish){
+				Species s = lastFish.species;
+				boolean onLeft = lastFish.origin==0;
+				if (s==Species.good) 
+					return ((c=='q')||(c=='p'));
+				else 
+					return ((c=='a')||(c=='l'));
+			}
+			
+			/**
+			 * returns true if the key press was on the correct side
+			 * @param c
+			 * @param lastFish
+			 * @return
+			 */
+			private boolean hitCorrectSide(char c,GameActor lastFish){
+				Species s = lastFish.species;
+				boolean onLeft = lastFish.origin==0;
+				if (onLeft) {
+					return ((c=='q')||(c=='a'));
+				}else {
+					return ((c=='p')||(c=='l'));
+				}
+			}
+			
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
@@ -113,6 +144,8 @@ public class GameView extends JPanel{
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
 				boolean correctResponse = hitCorrectKey(e.getKeyChar(),lastFish);
+				boolean correctSide = hitCorrectSide(e.getKeyChar(),lastFish);
+				boolean correctSpecies = hitCorrectSpecies(e.getKeyChar(),lastFish);
 				String log = e.getKeyChar()+" "+responseTime/1000000.0+" "
 					      +correctResponse+" "+lastFish;
 				System.out.println(log);
@@ -122,26 +155,30 @@ public class GameView extends JPanel{
 				// play the appropriate sound and modify the score
 				if (correctResponse){
 					if (lastFish.species == Species.good) {
-						chaching.play();
+						goodclip.play();  // eating a good fish increases your helath
 						gm.setHits(gm.getHits() + 1);
 						gm.health++;
 					}
 					else {
-						woo.play();
+						chaching.play();  // killing a bad fish increases your wealth
 						gm.setHits(gm.getHits() + 1);
 						gm.wealth++;
 					}
-				}else {
+				}else if (correctSide){ // but wrong species
 					if (lastFish.species == Species.bad) {
-						eww.play();
+						eww.play();  // you ate a bad fish, that's unhealthy
 						gm.setMisses(gm.getMisses() + 1);
 						gm.health--;
 					}
 					else {
-						awe.play();
+						badclip.play();  // you killed a good fish, you pay a fine!
 						gm.setMisses(gm.getMisses() + 1);
 						gm.wealth--;
 					}
+				}else if (correctSpecies){  // but wrong side
+					badclip.play();
+				}else {// hit totally wrong key
+					badclip.play();
 				}
 				
 
