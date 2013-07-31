@@ -381,7 +381,7 @@ public class GameView extends JPanel{
 		g.drawImage(streamImage,0,y_offset,width,height/2+2,null);
 		g.drawImage(streamImage2,0,y_offset+height/2,width,height/2+2,null);
 		
-		g.fillRect(toViewCoords(gm.gameSpec.leftEdge), 0, toViewCoords(gm.gameSpec.rightEdge-gm.gameSpec.leftEdge), height);
+		g.fillRect(toViewCoords(50-gm.gameSpec.channelWidth/2), 0, toViewCoords(gm.gameSpec.channelWidth), height);
 	}
 	
 	/**

@@ -194,8 +194,7 @@ public class GameModel {
 		this.height = size;
 		this.size=size;
 		this.gameSpec = gameSpec;
-		game.Avatar.rightEdge = gameSpec.rightEdge;
-		game.Avatar.leftEdge = gameSpec.leftEdge;
+		
 		this.setGameOver(false);
 
 	}
@@ -373,6 +372,7 @@ public class GameModel {
 		this.gameStart = nextFishTime;
 		this.nextFishTime = updateNextFishTime(); 
 		spawnFish();
+		game.Avatar.channelWidth = gameSpec.channelWidth;
 		
 	}
 	

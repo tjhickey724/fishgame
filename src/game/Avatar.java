@@ -15,8 +15,10 @@ public class Avatar extends GameActor {
 	 * @param active
 	 * @param spec
 	 */
-	static int leftEdge=0;
-	static int rightEdge=100;
+
+	public static int channelWidth;
+	static int leftEdge;
+	static int rightEdge;
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -61,7 +63,7 @@ public class Avatar extends GameActor {
 		this.lastUpdate = now;
 		current(dt);
 		if (!inMiddle()){
-			
+			System.out.println(x +" "+ leftEdge +" "+ channelWidth);
 			}
 /*		if (species.toString().equals("good")){
 			try {
@@ -111,16 +113,22 @@ public class Avatar extends GameActor {
 	} */
 	public void current(double dt){
 		double turnspeed = 0.1;
+		if (x>100){
+			x=99;
+		}
+		if (x<0){
+			x=1;
+		}
 		vx += rand.nextDouble()*turnspeed -turnspeed/2;
-		vy += rand.nextDouble()*turnspeed -turnspeed/2;
-		double tmpSpeed = Math.sqrt(vx*vx+vy*vy);
-		vx /= tmpSpeed;
-		vy /= tmpSpeed;
+
 		x += vx*speed*dt;
+		
 	}
 
 	//this method checks if the avatar is in themiddle of the screen.
 	public boolean inMiddle(){
+		leftEdge = 50-channelWidth/2;
+		rightEdge = 50+channelWidth/2;
 		return (x<rightEdge && x>leftEdge);
 	}
 

@@ -44,6 +44,7 @@ public class GenerateWindow extends JFrame {
 	
 	JTextField minSizeTF = new JTextField("100");
 	JTextField backgroundSpeed = new JTextField("0.1");
+	JTextField cWidth = new JTextField("80");
 	JTextField maxSizeTF = new JTextField("120");
 	
 	JButton goodSoundTF = new JButton("sounds/6hz");
@@ -57,10 +58,10 @@ public class GenerateWindow extends JFrame {
 	JFileChooser fc;
 	public GenerateWindow(){
 		super("Generate Window");
-		setLayout(new GridLayout(4,1));
+		setLayout(new GridLayout(5,1));
 		setSize(300,600);
 		
-		JPanel matrix1,matrix2,matrix3;
+		JPanel matrix1,matrix2,matrix3,matrix4;
 
 		String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" +currentDir);
@@ -108,6 +109,7 @@ public class GenerateWindow extends JFrame {
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
 				gs.backgroundSpeed = (double) Double.parseDouble(backgroundSpeed.getText());
+				gs.channelWidth = (int) Integer.parseInt(cWidth.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -182,8 +184,10 @@ public class GenerateWindow extends JFrame {
 		matrix2.setLayout(new GridLayout(4,2));
 		
 		matrix3 = new JPanel();
-		matrix3.setLayout(new GridLayout(6,2));
-
+		matrix3.setLayout(new GridLayout(5,2));
+		
+		matrix4 = new JPanel();
+		matrix4.setLayout(new GridLayout(3,2));
 		
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -226,8 +230,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(maxSizeTF);
 		matrix3.add(new JLabel("Fish to generate:"));
 		matrix3.add(numactors);
-		matrix3.add(new JLabel("Background speed:"));
-		matrix3.add(backgroundSpeed);
+
 				
 		matrix2.add(new JLabel("Sound Type: "));
 		matrix2.add(soundtype);
@@ -239,13 +242,21 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(gen);
 		matrix2.add(gdone);
 		
+		
+		matrix4.add(new JLabel("Background speed:"));
+		matrix4.add(backgroundSpeed);
+		matrix4.add(new JLabel("Channel Width:"));
+		matrix4.add(cWidth);
+		
 		matrix2.setBackground(Color.pink);
 		matrix3.setBackground(Color.pink);
 		matrix1.setBackground(Color.pink);
+		matrix4.setBackground(Color.pink);
 
 		
 		add(matrix1);
 		add(matrix3);
+		add(matrix4);
 		add(matrix2);
 		add(jscrollpane);
 	}
