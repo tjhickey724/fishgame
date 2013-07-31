@@ -113,11 +113,13 @@ public class Avatar extends GameActor {
 	} */
 	public void current(double dt){
 		double turnspeed = 0.1;
-		if (x>100){
-			x=99;
+		if (x>rightEdge){
+			x=rightEdge;
+			vx=0;
 		}
-		if (x<0){
-			x=1;
+		if (x<leftEdge){
+			x=leftEdge;
+			vx=0;
 		}
 		vx += rand.nextDouble()*turnspeed -turnspeed/2;
 
