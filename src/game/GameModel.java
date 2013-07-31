@@ -518,6 +518,7 @@ public class GameModel {
 			if (actors.size()>0){
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
+			Avatar.update();
 			keepOnBoard(a);
 			}
 		} catch(Exception e){
