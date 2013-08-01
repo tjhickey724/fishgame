@@ -49,7 +49,10 @@ public class AudioClip {
 			}
 		});
 	}
-	
+	//delay play of sound for science
+	public void playDelay() {
+		
+	}
 	public void loop() {
 	// play the sound clip 
 		try {

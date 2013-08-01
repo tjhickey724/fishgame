@@ -122,14 +122,8 @@ public class GameEvent {
 		Species s = lastFish.species;
 		boolean onLeft = lastFish.origin==0;
 		if (s==Species.good) 
-			if (onLeft)
-			   return c =='q';
-			else
 				return c=='p';
 		else
-			if (onLeft)
-				return c=='a';
-			else
 				return c=='l';
 	}
 	

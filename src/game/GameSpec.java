@@ -22,7 +22,7 @@ public class GameSpec {
 	private String sep = ScriptGenerator.SEP;
 	
 	public String 
-	   backgroundImage = "images/stream.jpg";
+	   backgroundImage = "images/streamB.jpg";
 	
 	
 	public String goodSound = "sounds/good.wav";
