@@ -118,7 +118,7 @@ public class GameView extends JPanel {
 						gm.setHits(gm.getHits() + 1);
 						gm.health++;
 					} else {
-						woo.play();
+						goodclip.play();
 						gm.setHits(gm.getHits() + 1);
 						gm.wealth++;
 					}
