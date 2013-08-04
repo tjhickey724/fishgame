@@ -49,13 +49,16 @@ public class GenerateWindow extends JFrame {
 	
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
-	JButton imageSelect = new JButton("Open");
+	JButton imageSelect = new JButton("images/stream.jpg");
 	
 	JTextField numactors = new JTextField("7");
 	
 	ScriptGenerator sgen = new ScriptGenerator();
 	
-	JFileChooser fc;
+	//filechooser for sounds
+	JFileChooser soundfc;
+	//filechooser for images
+	JFileChooser imagefc;
 	public GenerateWindow(){
 		super("Generate Window");
 		setLayout(new GridLayout(5,1));
@@ -65,8 +68,9 @@ public class GenerateWindow extends JFrame {
 
 		String currentDir = System.getProperty("user.dir");
         System.out.println("Current dir using System:" +currentDir);
-		fc=new JFileChooser(currentDir+"/sounds");
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		soundfc=new JFileChooser(currentDir+"/sounds");
+		imagefc = new JFileChooser (currentDir+"/images");
+		soundfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 
 		/*
@@ -110,6 +114,7 @@ public class GenerateWindow extends JFrame {
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
 				gs.backgroundSpeed = (double) Double.parseDouble(backgroundSpeed.getText());
 				gs.channelWidth = (int) Integer.parseInt(cWidth.getText());
+				gs.backgroundImage = imageSelect.getText();
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -148,10 +153,10 @@ public class GenerateWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+		            int returnVal = soundfc.showOpenDialog(GenerateWindow.this);
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File goodsoundfile = fc.getSelectedFile();
+		                File goodsoundfile = soundfc.getSelectedFile();
 		                goodSoundTF.setText("sounds/"+goodsoundfile.getName());
 		            }}});
 		
@@ -159,10 +164,10 @@ public class GenerateWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+		            int returnVal = soundfc.showOpenDialog(GenerateWindow.this);
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File badsoundfile = fc.getSelectedFile();
+		                File badsoundfile = soundfc.getSelectedFile();
 		                badSoundTF.setText("sounds/"+badsoundfile.getName());
 		            }}});
 		
@@ -170,10 +175,10 @@ public class GenerateWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+		            int returnVal = imagefc.showOpenDialog(GenerateWindow.this);
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File imagefile = fc.getSelectedFile();
+		                File imagefile = imagefc.getSelectedFile();
 		                imageSelect.setText("images/"+imagefile.getName());
 		            }}});
 		
@@ -230,6 +235,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(maxSizeTF);
 		matrix3.add(new JLabel("Fish to generate:"));
 		matrix3.add(numactors);
+		
 
 				
 		matrix2.add(new JLabel("Sound Type: "));
@@ -247,6 +253,8 @@ public class GenerateWindow extends JFrame {
 		matrix4.add(backgroundSpeed);
 		matrix4.add(new JLabel("Channel Width:"));
 		matrix4.add(cWidth);
+		matrix4.add(new JLabel("Background:"));
+		matrix4.add(imageSelect);
 		
 		matrix2.setBackground(Color.pink);
 		matrix3.setBackground(Color.pink);
