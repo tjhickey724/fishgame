@@ -19,6 +19,14 @@ public class Avatar extends GameActor {
 	public static int channelWidth;
 	static int leftEdge;
 	static int rightEdge;
+	public static double moveSpeed=1;
+	public static double currentSpeed=0.1;
+	public static char leftMoveKey = 'p';
+	public static char rightMoveKey = 'q';
+	public static String currentType = "random";
+	// this is the direction the current will be pushing the boat
+	public static Side currentDirection = Side.right;
+	public static boolean currentActive = false;
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -61,9 +69,12 @@ public class Avatar extends GameActor {
 		long now = System.nanoTime();
 		double dt = (now -this.lastUpdate)/1000000000.0;
 		this.lastUpdate = now;
-		current(dt);
 		if (!inMiddle()){
-			System.out.println(x +" "+ leftEdge +" "+ channelWidth);
+			setCurrentActive(false);
+		}
+		
+		if (currentActive){
+			current(now);
 			}
 /*		if (species.toString().equals("good")){
 			try {
@@ -111,23 +122,53 @@ public class Avatar extends GameActor {
 		// y += vy*speed*dt;
 		
 	} */
-	public void current(double dt){
-		double turnspeed = 0.1;
-		if (x>rightEdge){
-			x=rightEdge;
-			vx=0;
+	
+	// pushes boat left
+	public void leftCurrent(){
+		vx=currentSpeed;
+		x-=vx;
 		}
-		if (x<leftEdge){
-			x=leftEdge;
-			vx=0;
+	// pushes the boat right
+	public void rightCurrent(){
+		vx=currentSpeed;
+		x+=vx;
 		}
-		vx += rand.nextDouble()*turnspeed -turnspeed/2;
-
-		x += vx*speed*dt;
+	
+	public static void setCurrentActive(boolean boo, Side s){
+		currentActive = boo;
+		currentDirection = s;
 		
 	}
+	
+	public static void setCurrentActive(boolean boo){
+		currentActive = boo;
+		
+	}
+	
+	public static void getCurrentActive(boolean boo){
+		currentActive = boo;
+	}
+	
+	
+	public void current(long now){
+		long currentStart = now;
+		if (currentDirection == Side.right){
+			rightCurrent();
+		} else {
+			leftCurrent();
+		}
 
-	//this method checks if the avatar is in themiddle of the screen.
+		}
+	
+	public void moveLeft(){
+		x+=moveSpeed;
+	}
+	
+	public void moveRight(){
+		x-=moveSpeed;
+	}
+
+	//this method checks if the avatar is inside the darker middle portion of the screen
 	public boolean inMiddle(){
 		leftEdge = 50-channelWidth/2;
 		rightEdge = 50+channelWidth/2;

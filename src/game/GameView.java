@@ -95,9 +95,9 @@ public class GameView extends JPanel{
 				Species s = lastFish.species;
 				boolean onLeft = lastFish.origin==0;
 				if (s==Species.good) 
-					return ((c=='q')||(c=='p'));
+					return ((c=='w')||(c=='o'));
 				else 
-					return ((c=='a')||(c=='l'));
+					return ((c=='s')||(c=='k'));
 			}
 			
 			/**
@@ -110,9 +110,9 @@ public class GameView extends JPanel{
 				Species s = lastFish.species;
 				boolean onLeft = lastFish.origin==0;
 				if (onLeft) {
-					return ((c=='q')||(c=='a'));
+					return ((c=='w')||(c=='s'));
 				}else {
-					return ((c=='p')||(c=='l'));
+					return ((c=='o')||(c=='k'));
 				}
 			}
 			
@@ -122,11 +122,18 @@ public class GameView extends JPanel{
 				char c;
 				if (gm.isGameOver())
 					return;
-				if (e.getKeyChar() == 'p'){
-					gm.Avatar.x+=1;
+				if (e.getKeyChar() == 't'){
+					if (Math.round(Math.random()) == 1){
+						game.Avatar.setCurrentActive(true, Side.left);
+					}else{
+						game.Avatar.setCurrentActive(true, Side.right);
+					}
+				}
+				if (e.getKeyChar() == game.Avatar.leftMoveKey){
+					gm.Avatar.moveLeft();
 					return;
-				} else if (e.getKeyChar() == 'q'){
-					gm.Avatar.x-=1;
+				} else if (e.getKeyChar() == game.Avatar.rightMoveKey){
+					gm.Avatar.moveRight();
 					return;
 				}
 				

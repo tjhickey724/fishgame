@@ -40,7 +40,7 @@ public class GameModel {
 	
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
-	public GameActor Avatar = new Avatar(50,80);
+	public Avatar Avatar = new Avatar(50,80);
 	
 	
 	// we need this when spawning fish ...
@@ -517,10 +517,11 @@ public class GameModel {
 		*/
 		// update the only fish!
 		try{
+			Avatar.update();
 			if (actors.size()>0){
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
-			Avatar.update();
+			
 			keepOnBoard(a);
 			}
 		} catch(Exception e){
