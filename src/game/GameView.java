@@ -74,15 +74,9 @@ public class GameView extends JPanel{
 				boolean onLeft = lastFish.origin==0;
 		
 				if (s==Species.good) 
-					if (onLeft)
-					   return c =='w';
+					return c == 'p';
 					else
-						return c=='o';
-				else
-					if (onLeft)
-						return c=='s';
-					else
-						return c=='k';
+					return c == 'l';
 			}
 			
 			/**
@@ -122,10 +116,10 @@ public class GameView extends JPanel{
 				char c;
 				if (gm.isGameOver())
 					return;
-				if (e.getKeyChar() == 'p'){
+				if (e.getKeyChar() == 's'){
 					gm.Avatar.x+=1;
 					return;
-				} else if (e.getKeyChar() == 'q'){
+				} else if (e.getKeyChar() == 'a'){
 					gm.Avatar.x-=1;
 					return;
 				}
@@ -152,11 +146,10 @@ public class GameView extends JPanel{
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
-				boolean correctResponse = hitCorrectKey(e.getKeyChar(),lastFish);
-				boolean correctSide = hitCorrectSide(e.getKeyChar(),lastFish);
-				boolean correctSpecies = hitCorrectSpecies(e.getKeyChar(),lastFish);
-				String log = e.getKeyChar()+" "+responseTime/1000000.0+" "
-					      +correctResponse+" "+lastFish;
+				boolean correctResponse = hitCorrectKey(e.getKeyChar(),
+						lastFish);
+				String log = e.getKeyChar() + " " + responseTime / 1000000.0
+						+ " " + correctResponse + " " + lastFish;
 				System.out.println(log);
 				
 				gm.writeToLog(new GameEvent(e.getKeyChar(),lastFish));
@@ -164,30 +157,24 @@ public class GameView extends JPanel{
 				// play the appropriate sound and modify the score
 				if (correctResponse){
 					if (lastFish.species == Species.good) {
-						goodclip.play();  // eating a good fish increases your helath
+						chaching.play();
 						gm.setHits(gm.getHits() + 1);
 						gm.health++;
-					}
-					else {
-						chaching.play();  // killing a bad fish increases your wealth
+					} else {
+						goodclip.play();
 						gm.setHits(gm.getHits() + 1);
 						gm.wealth++;
 					}
-				}else if (correctSide){ // but wrong species
+				} else {
 					if (lastFish.species == Species.bad) {
-						eww.play();  // you ate a bad fish, that's unhealthy
+						eww.play();
 						gm.setMisses(gm.getMisses() + 1);
 						gm.health--;
-					}
-					else {
-						badclip.play();  // you killed a good fish, you pay a fine!
+					} else {
+						awe.play();
 						gm.setMisses(gm.getMisses() + 1);
 						gm.wealth--;
 					}
-				}else if (correctSpecies){  // but wrong side
-					badclip.play();
-				}else {// hit totally wrong key
-					badclip.play();
 				}
 				
 
@@ -223,7 +210,8 @@ public class GameView extends JPanel{
 			
 			AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
 			tx.translate(0, -streamImage.getHeight(null));
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			AffineTransformOp op = new AffineTransformOp(tx,
+					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
 
 			boat = ImageIO.read(new File("images/boat.png"));
@@ -245,11 +233,12 @@ public class GameView extends JPanel{
 	}
 	
 	/**
-	 * toViewCoords(x) converts from model coordinates to pixels
-	 * on the screen so that objects can be drawn to scale, i.e.
-	 * as the screen is resized the objects change
-	 * size proportionately.  
-	 * @param x the unit in model coordinates 
+	 * toViewCoords(x) converts from model coordinates to pixels on the screen
+	 * so that objects can be drawn to scale, i.e. as the screen is resized the
+	 * objects change size proportionately.
+	 * 
+	 * @param x
+	 *            the unit in model coordinates
 	 * @return the corresponding value in pixel based on window-size
 	 */
 	public int toViewCoords(double x){
@@ -295,7 +284,8 @@ public class GameView extends JPanel{
 	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		if (gm==null) return;  // this shouldn't ever happen!
+		if (gm == null)
+			return; // this shouldn't ever happen!
 		
 		if (gm.gameSpec.requireGameViewUpdate) {
 			// if the gameSpec changes, need to update gameState
@@ -332,19 +322,14 @@ public class GameView extends JPanel{
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
 		
-		header.setText("<html><table style=\"font-size:24pt;\">"+
-				"<tr><td>Right:</td>"+
-					"<td>Wrong:</td>"+
-					"<td>Misses:</td>"+
-					"<td>Total:</td>"+
-				"</tr>"+
-				"<tr><td>"+gm.getHits()+"</td><td>"
-					+gm.getMisses()+"</td><td>"
-					+gm.getNoKeyPress()+"</td>"+
-					+gm.getFishNum()+"</td>"+
-				"</tr>" +
-				"<tr><td><td>Health: </td><td>" + gm.health + "</td><td>Wealth: " + gm.wealth + "<td>" +
-				"</tr></table></html>");
+		header.setText("<html><table style=\"font-size:24pt;\">"
+				+ "<tr><td>Right:</td>" + "<td>Wrong:</td>"
+				+ "<td>Misses:</td>" + "<td>Total:</td>" + "</tr>" + "<tr><td>"
+				+ gm.getHits() + "</td><td>" + gm.getMisses() + "</td><td>"
+				+ gm.getNoKeyPress() + "</td>" + +gm.getFishNum() + "</td>"
+				+ "</tr>" + "<tr><td><td>Health: </td><td>" + gm.health
+				+ "</td><td>Wealth: " + gm.wealth + "<td>"
+				+ "</tr></table></html>");
 
 	}
 	
