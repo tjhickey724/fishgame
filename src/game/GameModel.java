@@ -40,7 +40,7 @@ public class GameModel {
 	
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
-	public GameActor Avatar = new Avatar(50,80);
+	public Avatar Avatar = new Avatar(50,50);
 	
 	
 	// we need this when spawning fish ...
@@ -91,7 +91,7 @@ public class GameModel {
 	
 	// we should be more clear about these ...
 	private long startTime=System.nanoTime();
-	private long nextFishTime=0;
+	private long nextEventTime=0;
 	private GameActor nextFish=null;
 	private long gameStart = startTime;
 
@@ -229,7 +229,7 @@ public class GameModel {
 	 * when its time to launch the next fish!
 	 * @return
 	 */
-	private long updateNextFishTime() {
+	private long updateNextEventTime() {
 		//initialize the scanner if its the first time we're reading a line
 		if (scan==null){
 			try {
@@ -243,7 +243,7 @@ public class GameModel {
 		}
         if (! scan.hasNext()){
         	this.setGameOver(true);
-        	return this.nextFishTime + 10*1000000000L;
+        	return this.nextEventTime + 10*1000000000L;
         }
 		long interval=-1;
 		try {
@@ -270,7 +270,7 @@ public class GameModel {
 		
 
 		// calculate the next FishTime and the basic characteristics of the nextFish (species and side)
-		this.nextFishTime = interval*1000000 + this.nextFishTime;
+		this.nextEventTime = interval*1000000 + this.nextEventTime;
 		String species = scan.next();
 		String side = scan.next();
 		this.setFishNum(scan.nextInt());
@@ -281,7 +281,7 @@ public class GameModel {
 		a.fromLeft = side.equals("left");
 		a.species = (species.equals("good"))?Species.good:Species.bad;
 		this.nextFish = a;
-		return nextFishTime;
+		return nextEventTime;
 		
 	}
 	
@@ -320,12 +320,12 @@ public class GameModel {
 	private long lastLogEventTimeNano = 0;
 	
 	public void pause(){
-		this.nextFishTime = Long.MAX_VALUE;
+		this.nextEventTime = Long.MAX_VALUE;
 		this.writeToLog("PAUSE");
 	}
 	
 	public void restart() {
-		this.nextFishTime = System.nanoTime() + 2*1000000000L;
+		this.nextEventTime = System.nanoTime() + 2*1000000000L;
 		this.writeToLog("RESTART");
 	}
 	
@@ -358,6 +358,7 @@ public class GameModel {
 		// start playing the music for the fish
 		if (a.fromLeft) a.ct = a.ctL; else a.ct = a.ctR;
 		a.ct.loop();
+		a.vx = (side==Side.left)?1:-1;
 
 		
 		// add the fish to the list of actors...
@@ -368,9 +369,9 @@ public class GameModel {
 	public void start(){
 		this.setPaused(false);
 		this.setGameOver(false);
-		this.nextFishTime = System.nanoTime();
-		this.gameStart = nextFishTime;
-		this.nextFishTime = updateNextFishTime(); 
+		this.nextEventTime = System.nanoTime();
+		this.gameStart = nextEventTime;
+		this.nextEventTime = updateNextEventTime(); 
 		spawnFish();
 		game.Avatar.channelWidth = gameSpec.channelWidth;
 		
@@ -479,12 +480,12 @@ public class GameModel {
 		
 		long now=System.nanoTime();
 		
-		if (now > this.nextFishTime){
+		if (now > this.nextEventTime){
 			// time to launch the next fish!
 			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
 			//  (this.nextFishTime-this.gameStart)/1000000);
 			
-			this.nextFishTime = this.updateNextFishTime();
+			this.nextEventTime = this.updateNextEventTime();
 			if (this.isGameOver()) return;
 			
 			
@@ -517,11 +518,17 @@ public class GameModel {
 		*/
 		// update the only fish!
 		try{
+			Avatar.update();
 			if (actors.size()>0){
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
-			Avatar.update();
 			keepOnBoard(a);
+			if (!a.active){
+				a.ct.stop();
+				this.setNoKeyPress(this.getNoKeyPress() + 1);
+				this.writeToLog(new GameEvent(a));
+				this.actors.clear();
+			}
 			}
 		} catch(Exception e){
 			System.out.println("Exception on update: "+e);
