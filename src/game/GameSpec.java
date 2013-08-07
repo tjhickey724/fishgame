@@ -48,6 +48,8 @@ public class GameSpec {
 		minThrobSize = 100,
 		maxThrobSize = 125;
 	public double backgroundSpeed=0.1;
+	public double curSpeed = 0.1;
+	public double timeOnScreen = 20;
 	public GameSpec(){
 		// create default GameSpec
 	}
@@ -73,6 +75,8 @@ public class GameSpec {
 		s+= scriptLine("badSound",""+badSound);
 		s+= scriptLine("backgroundSpeed",""+backgroundSpeed);
 		s+= scriptLine("channelWidth", ""+channelWidth);
+		s+= scriptLine("currentSpeed", ""+curSpeed);
+		s+= scriptLine("timeOnScreen", ""+timeOnScreen);
 		return(s);
 		
 	}
@@ -111,6 +115,10 @@ public class GameSpec {
 			this.backgroundSpeed = Double.parseDouble(value);
 		}else if (prop.equals("channelWidth")){
 			this.channelWidth = Integer.parseInt(value);
+		} else if (prop.equals("currentSpeed")){
+			this.curSpeed = Double.parseDouble(value);
+		}else if (prop.equals("timeOnScreen")){
+			this.timeOnScreen = Double.parseDouble(value);
 		} else return false;
 		return true;
 	}

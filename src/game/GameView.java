@@ -74,40 +74,9 @@ public class GameView extends JPanel{
 				boolean onLeft = lastFish.origin==0;
 		
 				if (s==Species.good) 
-					return c == 'p';
+					return c == lastFish.bResponseKey;
 					else
-					return c == 'l';
-			}
-			
-			/**
-			 * returns true if the key press was for correct species
-			 * @param c
-			 * @param lastFish
-			 * @return
-			 */
-			private boolean hitCorrectSpecies(char c,GameActor lastFish){
-				Species s = lastFish.species;
-				boolean onLeft = lastFish.origin==0;
-				if (s==Species.good) 
-					return ((c=='w')||(c=='o'));
-				else 
-					return ((c=='s')||(c=='k'));
-			}
-			
-			/**
-			 * returns true if the key press was on the correct side
-			 * @param c
-			 * @param lastFish
-			 * @return
-			 */
-			private boolean hitCorrectSide(char c,GameActor lastFish){
-				Species s = lastFish.species;
-				boolean onLeft = lastFish.origin==0;
-				if (onLeft) {
-					return ((c=='w')||(c=='s'));
-				}else {
-					return ((c=='o')||(c=='k'));
-				}
+					return c == lastFish.bResponseKey;
 			}
 			
 			@Override
@@ -117,11 +86,8 @@ public class GameView extends JPanel{
 				if (gm.isGameOver())
 					return;
 				if (e.getKeyChar() == 't'){
-					if (Math.round(Math.random()) == 1){
-						game.Avatar.setCurrentActive(true, Side.left);
-					}else{
-						game.Avatar.setCurrentActive(true, Side.right);
-					}
+					Avatar.setCurrentActive(true);
+					
 				}
 				if (e.getKeyChar() == game.Avatar.leftMoveKey){
 					gm.Avatar.moveLeft();

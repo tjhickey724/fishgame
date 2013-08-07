@@ -92,6 +92,7 @@ public class GameModel {
 	// we should be more clear about these ...
 	private long startTime=System.nanoTime();
 	private long nextEventTime=0;
+	private long lastEventTime=0;
 	private GameActor nextFish=null;
 	private long gameStart = startTime;
 
@@ -230,6 +231,7 @@ public class GameModel {
 	 * @return
 	 */
 	private long updateNextEventTime() {
+		this.lastEventTime=this.nextEventTime;
 		//initialize the scanner if its the first time we're reading a line
 		if (scan==null){
 			try {
@@ -374,6 +376,8 @@ public class GameModel {
 		this.nextEventTime = updateNextEventTime(); 
 		spawnFish();
 		game.Avatar.channelWidth = gameSpec.channelWidth;
+		game.Avatar.currentSpeed = gameSpec.curSpeed;
+		game.GameActor.timeOnScreen = gameSpec.timeOnScreen;
 		
 	}
 	
@@ -479,7 +483,12 @@ public class GameModel {
 		// so we can randomly generate one script and then use it many times...
 		
 		long now=System.nanoTime();
-		
+		if (actors.size()<1 && now>this.lastEventTime+gameSpec.minFishRelease*500000000 && now<this.nextEventTime-gameSpec.minFishRelease*500000000 && !this.Avatar.currentActive){
+			System.out.println(this.nextEventTime+ ", " + gameSpec.minFishRelease+", "+ now);
+			Avatar.setCurrentActive(true);
+			this.lastEventTime=this.nextEventTime;
+			
+		} 
 		if (now > this.nextEventTime){
 			// time to launch the next fish!
 			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+

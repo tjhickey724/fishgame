@@ -38,20 +38,19 @@ public class GenerateWindow extends JFrame {
 	    maxtim = new JTextField("80");
 	JComboBox soundtype,vol;
 	JTextArea jtextarea=new JTextArea(5,20);	
-	JTextField goodVisualHzTF = new JTextField("6");
-	JTextField badVisualHzTF = new JTextField("8");
-	
-	
-	JTextField minSizeTF = new JTextField("100");
-	JTextField backgroundSpeed = new JTextField("0.1");
-	JTextField cWidth = new JTextField("80");
-	JTextField maxSizeTF = new JTextField("120");
+	JTextField goodVisualHzTF = new JTextField("6"),
+			badVisualHzTF = new JTextField("8"),
+			minSizeTF = new JTextField("100"),
+			backgroundSpeed = new JTextField("0.1"),
+			cWidth = new JTextField("80"),
+			maxSizeTF = new JTextField("120"),
+			numactors = new JTextField("7"),
+			curSpeed = new JTextField("0.1"),
+			tos = new JTextField("10");
 	
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("images/stream.jpg");
-	
-	JTextField numactors = new JTextField("7");
 	
 	ScriptGenerator sgen = new ScriptGenerator();
 	
@@ -115,6 +114,8 @@ public class GenerateWindow extends JFrame {
 				gs.backgroundSpeed = (double) Double.parseDouble(backgroundSpeed.getText());
 				gs.channelWidth = (int) Integer.parseInt(cWidth.getText());
 				gs.backgroundImage = imageSelect.getText();
+				gs.curSpeed = (double) Double.parseDouble(curSpeed.getText());
+				gs.timeOnScreen = (double) Double.parseDouble(tos.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -192,7 +193,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.setLayout(new GridLayout(5,2));
 		
 		matrix4 = new JPanel();
-		matrix4.setLayout(new GridLayout(3,2));
+		matrix4.setLayout(new GridLayout(5,2));
 		
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -248,11 +249,14 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(gen);
 		matrix2.add(gdone);
 		
-		
+		matrix4.add(new JLabel("Fish Duration:"));
+		matrix4.add(tos);
 		matrix4.add(new JLabel("Background speed:"));
 		matrix4.add(backgroundSpeed);
 		matrix4.add(new JLabel("Channel Width:"));
 		matrix4.add(cWidth);
+		matrix4.add(new JLabel("Current Speed:"));
+		matrix4.add(curSpeed);
 		matrix4.add(new JLabel("Background:"));
 		matrix4.add(imageSelect);
 		

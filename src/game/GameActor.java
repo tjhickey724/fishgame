@@ -27,11 +27,11 @@ public class GameActor {
 		// still on board?
 		boolean active;
 		// speed of the actor
-		double speed=30;
+		double speed=40;
 		// species
 		boolean fromLeft; // true if fish comes from left
 		//this is the time it stays on screen, in tenths of a second
-		public double timeOnScreen=10;
+		public static double timeOnScreen=20;
 		long birthTime;
 		long lastUpdate;
 		long gameStart=GameActor.GAME_START;
@@ -47,6 +47,8 @@ public class GameActor {
 		//AudioClip bt;
 		Species species; 
 		
+		public char gResponseKey = 'p';
+		public char bResponseKey = 'l';
 		protected java.util.Random rand = new java.util.Random();
 
 		public GameActor(double x, double y, boolean active, Species spec) {

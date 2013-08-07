@@ -87,10 +87,12 @@ public class ScriptGenerator {
 	
 	public void close(){
 		try {
+			if (scriptFile != null){
 			scriptFile.write("0\tgameover\t1\n ");
 			scriptFile.close();
 			scriptFile = null;
 			scriptname = null;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Problems closing scriptfile:"+e);

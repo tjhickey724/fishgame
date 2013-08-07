@@ -74,7 +74,7 @@ public class Avatar extends GameActor {
 		}
 		
 		if (currentActive){
-			current(now);
+			current();
 			}
 /*		if (species.toString().equals("good")){
 			try {
@@ -141,6 +141,11 @@ public class Avatar extends GameActor {
 	}
 	
 	public static void setCurrentActive(boolean boo){
+		if (Math.round(Math.random()) == 1){
+			currentDirection = Side.left;
+		}else{
+			currentDirection = Side.right;
+		}
 		currentActive = boo;
 		
 	}
@@ -150,8 +155,7 @@ public class Avatar extends GameActor {
 	}
 	
 	
-	public void current(long now){
-		long currentStart = now;
+	public void current(){
 		if (currentDirection == Side.right){
 			rightCurrent();
 		} else {
