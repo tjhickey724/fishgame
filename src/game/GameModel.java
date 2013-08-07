@@ -485,7 +485,7 @@ public class GameModel {
 		long now=System.nanoTime();
 		if (actors.size()<1 && now>this.lastEventTime+gameSpec.minFishRelease*500000000 && now<this.nextEventTime-gameSpec.minFishRelease*500000000 && !this.Avatar.currentActive){
 			System.out.println(this.nextEventTime+ ", " + gameSpec.minFishRelease+", "+ now);
-			Avatar.setCurrentActive(true);
+			if (Math.random()<Avatar.currentProbability) Avatar.setCurrentActive(true);
 			this.lastEventTime=this.nextEventTime;
 			
 		} 

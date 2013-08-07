@@ -21,12 +21,15 @@ public class Avatar extends GameActor {
 	static int rightEdge;
 	public static double moveSpeed=1;
 	public static double currentSpeed=0.1;
+	public static double currentProbability=0.5;
 	public static char leftMoveKey = 'a';
 	public static char rightMoveKey = 's';
 	public static String currentType = "random";
 	// this is the direction the current will be pushing the boat
 	public static Side currentDirection = Side.right;
 	public static boolean currentActive = false;
+	private boolean movingLeft;
+	private boolean movingRight;
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -69,6 +72,10 @@ public class Avatar extends GameActor {
 		long now = System.nanoTime();
 		double dt = (now -this.lastUpdate)/1000000000.0;
 		this.lastUpdate = now;
+		if (x>49 && x<51){
+			movingLeft=false;
+			movingRight=false;
+		}
 		if (!inMiddle()){
 			setCurrentActive(false);
 		}
@@ -76,6 +83,12 @@ public class Avatar extends GameActor {
 		if (currentActive){
 			current();
 			}
+		if (movingLeft){
+			moveLeft();
+		}
+		if(movingRight){
+			moveRight();
+		}
 /*		if (species.toString().equals("good")){
 			try {
 				this.ct=new AudioClip("src/sound8.wav");
@@ -165,13 +178,19 @@ public class Avatar extends GameActor {
 		}
 	
 	public void moveLeft(){
-		x-=moveSpeed;
+		if (x>51){
 		setCurrentActive(false);
+		x-=moveSpeed;
+		this.movingLeft=true;
+		}
 	}
 	
 	public void moveRight(){
-		x+=moveSpeed;
+		if (x<49){
 		setCurrentActive(false);
+		x+=moveSpeed;
+		this.movingRight=true;
+		}
 	}
 
 	//this method checks if the avatar is inside the darker middle portion of the screen
