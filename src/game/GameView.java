@@ -87,7 +87,7 @@ public class GameView extends JPanel{
 					return;
 				if (e.getKeyChar() == 't'){
 					Avatar.setCurrentActive(true);
-					
+					return;
 				}
 				if (e.getKeyChar() == game.Avatar.leftMoveKey){
 					gm.Avatar.moveLeft();
@@ -119,6 +119,8 @@ public class GameView extends JPanel{
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
+				//gm.timeRemaining-=responseTime/100000000.0;
+				//System.out.println(gm.timeRemaining);
 				boolean correctResponse = hitCorrectKey(e.getKeyChar(),
 						lastFish);
 				String log = e.getKeyChar() + " " + responseTime / 1000000.0
@@ -274,6 +276,8 @@ public class GameView extends JPanel{
 		
 		drawBackground(g);
 		
+		drawTimeBar(g);
+		
 		drawFish(g); 
 		
 		drawAvatar(g);
@@ -284,7 +288,17 @@ public class GameView extends JPanel{
 		
 
 	}
-	
+	private void drawTimeBar(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+		g.fillRect(0, 0, getWidth(), 10);
+		g.setColor(Color.GREEN);
+		g.fillRect(0, 0, getWidth()-toViewCoords(((int) gm.timeLimit-(int) gm.timeRemaining)), 10);
+		//System.out.println(gm.timeRemaining);
+		
+	}
+
+
 	//method to draw the boat avatar
 	private void drawAvatar(Graphics g) {
 		// This draws the boat in the middle

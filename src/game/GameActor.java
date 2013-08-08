@@ -34,6 +34,7 @@ public class GameActor {
 		public static double timeOnScreen=20;
 		long birthTime;
 		long lastUpdate;
+		long lifeSpan;
 		long gameStart=GameActor.GAME_START;
 		Color 
 			color1=new Color(150,0,0), 
@@ -106,6 +107,7 @@ public class GameActor {
 		
 			long now = System.nanoTime();
 			if (now<birthTime+timeOnScreen*100000000){
+				this.lifeSpan=now-birthTime;
 			double dt = (now -this.lastUpdate)/1000000000.0;
 			this.lastUpdate = now;
 			double turnspeed = 0.1;

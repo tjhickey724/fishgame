@@ -320,6 +320,10 @@ public class GameModel {
 	
 
 	private long lastLogEventTimeNano = 0;
+
+	public double timeLimit = 10.0;
+
+	public double timeRemaining = 10.0;
 	
 	public void pause(){
 		this.nextEventTime = Long.MAX_VALUE;
