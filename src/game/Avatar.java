@@ -21,7 +21,7 @@ public class Avatar extends GameActor {
 	static int rightEdge;
 	public static double moveSpeed=1;
 	public static double currentSpeed=0.1;
-	public static double currentProbability=0.5;
+	public static double currentProbability=1.0;
 	public static char leftMoveKey = 'a';
 	public static char rightMoveKey = 's';
 	public static String currentType = "random";
@@ -30,6 +30,9 @@ public class Avatar extends GameActor {
 	public static boolean currentActive = false;
 	private boolean movingLeft;
 	private boolean movingRight;
+	public int health=3;
+	public int lives=5;
+	public String boatFileName = "images/boat.png";
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -69,6 +72,15 @@ public class Avatar extends GameActor {
 	
 	
 	public void update(){
+		//check if the boat has health
+		if (health==0){
+			//lose a life if boat runs out of health
+			lives--;
+			health=3;
+		}
+		if (lives==0){
+			System.out.println("boat has died");
+		}
 		long now = System.nanoTime();
 		double dt = (now -this.lastUpdate)/1000000000.0;
 		this.lastUpdate = now;
@@ -78,6 +90,8 @@ public class Avatar extends GameActor {
 		}
 		if (!inMiddle()){
 			setCurrentActive(false);
+			if (x < 50){ moveRight(); }else{ moveLeft();}
+			health--;
 		}
 		
 		if (currentActive){

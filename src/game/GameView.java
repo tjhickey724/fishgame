@@ -43,7 +43,7 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fishL,fishR,boat;
+	public BufferedImage streamImage, streamImage2,fishL,fishR,boat,boat1,boat2;
 	
 	public JLabel header = new JLabel("Right: Wrong:");
 	
@@ -189,7 +189,9 @@ public class GameView extends JPanel{
 					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
 
-			boat = ImageIO.read(new File("images/boat.png"));
+			boat = ImageIO.read(new File("images/boat0.png"));
+			boat1 = ImageIO.read(new File("images/boat1.png"));
+			boat2 = ImageIO.read(new File("images/boat2.png"));
 			fishL = ImageIO.read(new File("images/fish/fishL.png"));
 			fishR = ImageIO.read(new File("images/fish/fishR.png"));
 			if (!gs.bgSound.equals(this.lastbgSound)){	
@@ -302,7 +304,12 @@ public class GameView extends JPanel{
 	//method to draw the boat avatar
 	private void drawAvatar(Graphics g) {
 		// This draws the boat in the middle
+		if (gm.Avatar.health == 3){
 		g.drawImage(boat,toXViewCoords(gm.Avatar.x),toYViewCoords(gm.Avatar.y),44,128,null);
+		} else if (gm.Avatar.health==2) {
+		g.drawImage(boat1,toXViewCoords(gm.Avatar.x),toYViewCoords(gm.Avatar.y),44,128,null);
+		}else if (gm.Avatar.health==1){g.drawImage(boat2,toXViewCoords(gm.Avatar.x),toYViewCoords(gm.Avatar.y),44,128,null);
+		}
 	}
 
 	private void updateScore(Graphics g){
