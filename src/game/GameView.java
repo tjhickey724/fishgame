@@ -114,21 +114,21 @@ public class GameView extends JPanel {
 				// play the appropriate sound and modify the score
 				if (correctResponse) {
 					if (lastFish.species == Species.good) {
-						chaching.play();
+						chaching.playDelay();
 						gm.setHits(gm.getHits() + 1);
 						gm.health++;
 					} else {
-						goodclip.play();
+						goodclip.playDelay();
 						gm.setHits(gm.getHits() + 1);
 						gm.wealth++;
 					}
 				} else {
 					if (lastFish.species == Species.bad) {
-						eww.play();
+						eww.playDelay();
 						gm.setMisses(gm.getMisses() + 1);
 						gm.health--;
 					} else {
-						awe.play();
+						awe.playDelay();
 						gm.setMisses(gm.getMisses() + 1);
 						gm.wealth--;
 					}

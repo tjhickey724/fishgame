@@ -49,9 +49,13 @@ public class AudioClip {
 			}
 		});
 	}
-	//delay play of sound for science
-	public void playDelay() {
-		
+	//delay play of sound for science 200 milli seconds
+	public synchronized void playDelay() {
+		double seconds = System.nanoTime() / 1000000000.0;
+		double start = seconds;
+		if(seconds - start > .2) {
+			play();
+		}
 	}
 	public void loop() {
 	// play the sound clip 
