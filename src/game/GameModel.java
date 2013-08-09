@@ -324,6 +324,9 @@ public class GameModel {
 	public double timeLimit = 10.0;
 
 	public double timeRemaining = 10.0;
+	public double totalFishTime =0;
+
+	
 	
 	public void pause(){
 		this.nextEventTime = Long.MAX_VALUE;
@@ -487,6 +490,7 @@ public class GameModel {
 		// so we can randomly generate one script and then use it many times...
 		
 		long now=System.nanoTime();
+		// here we check if there are no fish on screen and that the time is within a safe interval between fish events
 		if (actors.size()<1 && now>this.lastEventTime+gameSpec.minFishRelease*500000000 && now<this.nextEventTime-gameSpec.minFishRelease*500000000 && !this.Avatar.currentActive){
 			System.out.println(this.nextEventTime+ ", " + gameSpec.minFishRelease+", "+ now);
 			if (Math.random()<Avatar.currentProbability) Avatar.setCurrentActive(true);
@@ -507,7 +511,7 @@ public class GameModel {
 				this.setNoKeyPress(this.getNoKeyPress() + 1);
 				GameActor lastFish = this.actors.get(this.actors.size()-1);
 				lastFish.ct.stop();
-
+				
 				this.actors.clear();
 
 				
@@ -535,6 +539,7 @@ public class GameModel {
 			if (actors.size()>0){
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
+			//this.currentFishTime=a.lifeSpan;
 			keepOnBoard(a);
 			if (!a.active){
 				a.ct.stop();
