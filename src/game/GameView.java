@@ -293,7 +293,7 @@ public class GameView extends JPanel{
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, getWidth(), 10);
 		g.setColor(Color.GREEN);
-		g.fillRect(0, 0, getWidth()-toViewCoords(((int) gm.timeLimit-(int) gm.timeRemaining)), 10);
+		g.fillRect(0, 0, getWidth()-toViewCoords((gm.totalActorTime/gm.timeLimit)), 10);
 		//System.out.println(gm.timeRemaining);
 		
 	}

@@ -34,7 +34,15 @@ public class GameModel {
 	public double height;
 	public double size;
 	
-	
+	private long lastLogEventTimeNano = 0;
+
+	public double timeLimit = 100;
+
+	public double timeRemaining = 100;
+	public double totalActorTime =0;
+	public double currentActorTime=0;
+	public double previousActorTime=0;
+
 	public int health=10;
 	public int wealth=0;
 	
@@ -319,12 +327,6 @@ public class GameModel {
 	}
 	
 
-	private long lastLogEventTimeNano = 0;
-
-	public double timeLimit = 10.0;
-
-	public double timeRemaining = 10.0;
-	public double totalFishTime =0;
 
 	
 	
@@ -490,6 +492,8 @@ public class GameModel {
 		// so we can randomly generate one script and then use it many times...
 		
 		long now=System.nanoTime();
+		totalActorTime=(previousActorTime+currentActorTime)/1000000;
+		System.out.println(totalActorTime + ", "+ previousActorTime +", "+ currentActorTime);
 		// here we check if there are no fish on screen and that the time is within a safe interval between fish events
 		if (actors.size()<1 && now>this.lastEventTime+gameSpec.minFishRelease*500000000 && now<this.nextEventTime-gameSpec.minFishRelease*500000000 && !this.Avatar.currentActive){
 			System.out.println(this.nextEventTime+ ", " + gameSpec.minFishRelease+", "+ now);
@@ -501,15 +505,22 @@ public class GameModel {
 			// time to launch the next fish!
 			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
 			//  (this.nextFishTime-this.gameStart)/1000000);
-			
+			this.lastEventTime = this.nextEventTime;
 			this.nextEventTime = this.updateNextEventTime();
-			if (this.isGameOver()) return;
 			
+			if (this.isGameOver()) return;
+			previousActorTime+=currentActorTime;
+			currentActorTime=0;
 			
 			if (this.actors.size()>0) {
+
 				// this is the case where we didn't press a key to kill or eat the fish
 				this.setNoKeyPress(this.getNoKeyPress() + 1);
 				GameActor lastFish = this.actors.get(this.actors.size()-1);
+				//lastFish.update();
+				lastFish.active=false;
+				previousActorTime+=lastFish.lifeSpan;
+				currentActorTime=0;
 				lastFish.ct.stop();
 				
 				this.actors.clear();
@@ -539,13 +550,17 @@ public class GameModel {
 			if (actors.size()>0){
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
-			//this.currentFishTime=a.lifeSpan;
+			
 			keepOnBoard(a);
 			if (!a.active){
 				a.ct.stop();
+				previousActorTime+=a.lifeSpan;
+				currentActorTime=0;
 				this.setNoKeyPress(this.getNoKeyPress() + 1);
 				this.writeToLog(new GameEvent(a));
 				this.actors.clear();
+			} else {
+				this.currentActorTime=a.lifeSpan;
 			}
 			}
 		} catch(Exception e){

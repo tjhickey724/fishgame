@@ -148,6 +148,7 @@ public class GameActor {
 		} */
 		} else {
 			this.active = false;
+			this.ct.stop();
 		}
 		}
 		
