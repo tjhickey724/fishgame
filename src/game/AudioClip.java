@@ -51,11 +51,14 @@ public class AudioClip {
 	}
 	//delay play of sound for science 200 milli seconds
 	public synchronized void playDelay() {
-		double seconds = System.nanoTime() / 1000000000.0;
-		double start = seconds;
-		if(seconds - start > .2) {
-			play();
+		double current = System.nanoTime() / 1000000000.0;
+		double start = current;
+		while(current - start < .2) {
+			//to test if delay is working
+			//System.out.println("delaying");
+			current = System.nanoTime() / 1000000000.0;
 		}
+		play();
 	}
 	public void loop() {
 	// play the sound clip 
