@@ -11,7 +11,7 @@
 0	badsoundFile	sounds/8hz
 0	badimageFile	images/fish1
 0	badthrobRate	8
-0	backgroundImage	images/streamB.jpg
+0	backgroundImage	images/stream.jpg
 0	goodSound	sounds/good.wav
 0	badSound	sounds/bad.wav
 3873	bad 	right	1
