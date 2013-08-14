@@ -43,9 +43,9 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fishL,fishR,boat,boat1,boat2;
+	public BufferedImage streamImage, streamImage2,fishL,fishR,boat,boat1,boat2,coin;
 	
-	public JLabel header = new JLabel("Right: Wrong:");
+	public JLabel header = new JLabel("");
 	
 	
 	/**
@@ -134,9 +134,9 @@ public class GameView extends JPanel{
 					if (lastFish.species == Species.good) {
 						chaching.play();
 						gm.setHits(gm.getHits() + 1);
-						gm.health++;
+						gm.wealth++;
 					} else {
-						goodclip.play();
+						chaching.play();
 						gm.setHits(gm.getHits() + 1);
 						gm.wealth++;
 					}
@@ -194,6 +194,7 @@ public class GameView extends JPanel{
 			boat2 = ImageIO.read(new File("images/boat2.png"));
 			fishL = ImageIO.read(new File("images/fish/fishL.png"));
 			fishR = ImageIO.read(new File("images/fish/fishR.png"));
+			coin = ImageIO.read(new File("images/wealth.png"));
 			if (!gs.bgSound.equals(this.lastbgSound)){	
 				this.lastbgSound = gs.bgSound;
 				if (bgSound != null) 
@@ -280,6 +281,8 @@ public class GameView extends JPanel{
 		
 		drawTimeBar(g);
 		
+		drawHud(g);
+		
 		drawFish(g); 
 		
 		drawAvatar(g);
@@ -297,7 +300,20 @@ public class GameView extends JPanel{
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, getWidth()-toViewCoords((gm.totalActorTime/gm.timeLimit)), 10);
 		//System.out.println(gm.timeRemaining);
+		//g.drawString("", toViewCoords(50), 20);
 		
+	}
+	
+	public void drawHud(Graphics g){
+		for (int i=0; i<=gm.Avatar.lives; i++){
+			
+		
+		g.drawImage(boat, getWidth()-(i*20), 10, 20, 50,null); 
+	}
+		g.drawImage(coin, 2, 10, 50,50,null);
+		g.setColor(Color.RED);
+		g.setFont(new Font("Helvetica",Font.BOLD,50));
+		g.drawString(gm.wealth+"",55,55);
 	}
 
 
@@ -316,7 +332,7 @@ public class GameView extends JPanel{
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
 		
-		header.setText("<html><table style=\"font-size:24pt;\">"
+/*		header.setText("<html><table style=\"font-size:24pt;\">"
 				+ "<tr><td>Right:</td>" + "<td>Wrong:</td>"
 				+ "<td>Misses:</td>" + "<td>Total:</td>" + "</tr>" + "<tr><td>"
 				+ gm.getHits() + "</td><td>" + gm.getMisses() + "</td><td>"
@@ -324,6 +340,8 @@ public class GameView extends JPanel{
 				+ "</tr>" + "<tr><td><td>Health: </td><td>" + gm.health
 				+ "</td><td>Wealth: " + gm.wealth + "<td>"
 				+ "</tr></table></html>");
+		*/
+
 
 	}
 	

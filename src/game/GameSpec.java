@@ -50,6 +50,8 @@ public class GameSpec {
 	public double backgroundSpeed=0.1;
 	public double curSpeed = 0.1;
 	public double timeOnScreen = 20;
+
+	public double currentProbability=1.0;
 	public GameSpec(){
 		// create default GameSpec
 	}
@@ -77,6 +79,7 @@ public class GameSpec {
 		s+= scriptLine("channelWidth", ""+channelWidth);
 		s+= scriptLine("currentSpeed", ""+curSpeed);
 		s+= scriptLine("timeOnScreen", ""+timeOnScreen);
+		s+= scriptLine("currentProbability", ""+currentProbability);
 		return(s);
 		
 	}
@@ -119,6 +122,8 @@ public class GameSpec {
 			this.curSpeed = Double.parseDouble(value);
 		}else if (prop.equals("timeOnScreen")){
 			this.timeOnScreen = Double.parseDouble(value);
+		}else if (prop.equals("currentProbability")){
+			this.currentProbability = Double.parseDouble(value);
 		} else return false;
 		return true;
 	}

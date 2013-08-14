@@ -386,6 +386,7 @@ public class GameModel {
 		spawnFish();
 		game.Avatar.channelWidth = gameSpec.channelWidth;
 		game.Avatar.currentSpeed = gameSpec.curSpeed;
+		game.Avatar.currentProbability = gameSpec.currentProbability;
 		game.GameActor.timeOnScreen = gameSpec.timeOnScreen;
 		
 	}
@@ -493,6 +494,7 @@ public class GameModel {
 		
 		long now=System.nanoTime();
 		totalActorTime=(previousActorTime+currentActorTime)/1000000;
+		timeRemaining=timeLimit-totalActorTime;
 		//System.out.println(totalActorTime + ", "+ previousActorTime +", "+ currentActorTime);
 		// here we check if there are no fish on screen and that the time is within a safe interval between fish events
 		if (actors.size()<1 && now>this.lastEventTime+gameSpec.minFishRelease*500000000 && now<this.nextEventTime-gameSpec.minFishRelease*500000000 && !this.Avatar.currentActive){
