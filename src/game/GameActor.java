@@ -45,6 +45,9 @@ public class GameActor {
 		//AudioClip bt;
 		Species species; 
 		
+		public int minBrightness= 10;
+		public int maxBrightness= 14;
+		
 		private java.util.Random rand = new java.util.Random();
 
 		public GameActor(double x, double y, boolean active, Species spec) {

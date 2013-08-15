@@ -11,6 +11,8 @@ import java.awt.*;
 import java.io.*;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+
 import javax.imageio.ImageIO;
 
 import java.util.ArrayList;
@@ -43,9 +45,13 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fishL,fishR;
+	public BufferedImage streamImage, streamImage2,fish;
+	
+	//these arrays store the sprite images used to adjust brightness. the default brightness is in image, 12, accesible using fishL[12] or fishR[12]
+	public BufferedImage[] fishL,fishR;
 	
 	public JLabel header = new JLabel("Right: Wrong:");
+	public int thisFrame = 12;
 	
 	
 	/**
@@ -164,8 +170,9 @@ public class GameView extends JPanel{
 			streamImage2 = op.filter(streamImage, null);
 
 
-			fishL = ImageIO.read(new File("images/fish/fishL.png"));
-			fishR = ImageIO.read(new File("images/fish/fishR.png"));
+			fish = ImageIO.read(new File("images/fish/fish.png"));
+			fishL = spriteImageArray(fish, 5, 5);
+			fishR = spriteImageArray(horizontalFlip(fish),5,5);
 			if (!gs.bgSound.equals(this.lastbgSound)){	
 				this.lastbgSound = gs.bgSound;
 				if (bgSound != null) 
@@ -342,25 +349,38 @@ public class GameView extends JPanel{
 				System.nanoTime(),
 				visualHz);
 		
-		double aspectRatio = fishL.getHeight()/(1.0*fishL.getWidth());
+		thisFrame = interpolateBrightness(gm.gameSpec.minBrightness,
+				gm.gameSpec.maxBrightness,
+				a.birthTime,
+				System.nanoTime(),
+				visualHz);
+		
+		double aspectRatio = fishL[12].getHeight()/(1.0*fishL[12].getWidth());
+		
+		
  
 		int theWidth  = gm.gameSpec.minThrobSize; //theSize; //(int) (theSize);
-		int theHeight = theSize*fishL.getHeight()/fishL.getWidth(); //(int) ((theSize * aspectRatio)/100);
+		int theHeight = theSize*fishL[12].getHeight()/fishL[12].getWidth();//(int) ((theSize * aspectRatio)/100);
 		if (a.fromLeft){
-			g.drawImage(fishL,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
+			g.drawImage(fishL[thisFrame],x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
 		} else {
-			g.drawImage(fishR,x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
+			g.drawImage(fishR[thisFrame],x-theWidth/2,y-theHeight/2,theWidth,theHeight,null);
 		}
 
 	}
+		
 	
-	private Color interpolate(Color c1, Color c2, long birth, long now, double freq){
+	// brightness works by cycling through a sprite image that has 25 different levels of brightness. 
+	private int interpolateBrightness(int min, int max, long birth, long now, double freq){
+		// t is the number of cycles so far; take the time in seconds that the actor has been active, multiply by the frequency
 		double t = ((now-birth)/1000000000.0)*freq;
+		// y is the sinusoidal position of the cycle
 		double y = 0.5*(Math.sin(Math.PI*2*t)+1);
-		float red = (float) (c1.getRed()/255.0*y + c2.getRed()/255.0*(1-y));
-		float green = (float) (c1.getGreen()/255.0*y + c2.getGreen()/255.0*(1-y));
-		float blue = (float) (c1.getBlue()/255.0*y + c2.getBlue()/255.0*(1-y));
-		return new Color(red,green,blue);
+		// frame oscillates between min and max, as y oscillates from 0 to 1. 
+		int range = (int) (max-min);
+		//int segment = (int) range/25;
+		int frame = (int) (range*(y-(y%0.04)));
+		return frame;
 	}
 	
 	private int interpolateSize(double min, double max, long birth, long now, double freq){
@@ -370,5 +390,35 @@ public class GameView extends JPanel{
 		int size = (int)Math.round(s);
 		return size;
 }
+	
+	
+	// code from http://www.javalobby.org/articles/ultimate-image/ 
+	public static BufferedImage[] spriteImageArray(BufferedImage img, int cols, int rows) {  
+        int w = img.getWidth()/cols;  
+        int h = img.getHeight()/rows;  
+        int num = 0;  
+        BufferedImage imgs[] = new BufferedImage[w*h];  
+        for(int y = 0; y < rows; y++) {  
+            for(int x = 0; x < cols; x++) {  
+                imgs[num] = new BufferedImage(w, h, img.getType());  
+                // Tell the graphics to draw only one block of the image  
+                Graphics2D sg = imgs[num].createGraphics();  
+                sg.drawImage(img, 0, 0, w, h, w*x, h*y, w*x+w, h*y+h, null);  
+                sg.dispose();  
+                num++;  
+            }  
+        }  
+        return imgs;  
+    }  
+	
+	public static BufferedImage horizontalFlip(BufferedImage img) {  
+        int w = img.getWidth();  
+        int h = img.getHeight();  
+        BufferedImage dimg = new BufferedImage(w, h, img.getType());  
+        Graphics2D g = dimg.createGraphics();  
+        g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);  
+        g.dispose();  
+        return dimg;  
+    }  
 
 }

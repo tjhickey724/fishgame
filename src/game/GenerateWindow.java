@@ -35,9 +35,12 @@ public class GenerateWindow extends JFrame {
 	
 	JTextField 
 	    mintim = new JTextField("30"),
-	    maxtim = new JTextField("80");
-	JComboBox vidtype,stype,vol;
-	String[] speeds,videotypes,soundtypes,volumes;
+	    maxtim = new JTextField("80"),
+	    maxBrightnessTF = new JTextField("24"),
+	    minBrightnessTF = new JTextField("0");
+	
+	JComboBox stype,vol;
+	String[] speeds,soundtypes,volumes;
 	JButton gdone,gen;
 	JScrollPane jscrollpane;
 	JTextArea jtextarea;	
@@ -95,9 +98,7 @@ public class GenerateWindow extends JFrame {
 		jscrollpane=new JScrollPane(jtextarea);
 		
 		speeds=new String[]{"none","slow","fast"};
-		videotypes=new String[]{"Throb","Flicker"};
 	
-		vidtype = new JComboBox(videotypes);
 
 		soundtypes=new String[]{"Stereo","Mono"};
 		stype = new JComboBox(soundtypes);
@@ -123,6 +124,8 @@ public class GenerateWindow extends JFrame {
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+				gs.maxBrightness = (int) Integer.parseInt(maxBrightnessTF.getText());
+				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -214,7 +217,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.setLayout(new GridLayout(5,2));
 		
 		matrix4 = new JPanel();
-		matrix4.setLayout(new GridLayout(2,2));
+		matrix4.setLayout(new GridLayout(3,2));
 		
 		col1.add(actorspecies);
 		col1.add(good);
@@ -239,9 +242,6 @@ public class GenerateWindow extends JFrame {
 		
 		row1.add(soundType);
 		row1.add(stype);
-		
-		row2.add(videoType);
-		row2.add(vidtype);
 		
 		row3.add(gen);
 		row3.add(gdone);
@@ -277,6 +277,11 @@ public class GenerateWindow extends JFrame {
 		//matrix4.add(imageSelect);
 		matrix4.add(volLabel);
 		matrix4.add(vol);
+		matrix4.add(new JLabel("Max Brightness"));
+		matrix4.add(maxBrightnessTF);
+		matrix4.add(new JLabel("MainBrightness"));
+		matrix4.add(minBrightnessTF);
+		
 		
 		
 		add(matrix1);

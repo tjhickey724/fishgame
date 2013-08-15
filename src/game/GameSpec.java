@@ -45,6 +45,9 @@ public class GameSpec {
 	public int
 		minThrobSize = 100,
 		maxThrobSize = 125;
+
+	public int minBrightness= 10;
+	public int maxBrightness= 14;
 	
 	public GameSpec(){
 		// create default GameSpec
@@ -63,12 +66,15 @@ public class GameSpec {
 		s+= scriptLine("stereo",""+stereo);
 		s+= scriptLine("minThrobSize",""+minThrobSize);
 		s+= scriptLine("maxThrobSize",""+maxThrobSize);
+		s+= scriptLine("minBrightness",""+minBrightness);
+		s+= scriptLine("maxBrightness",""+maxBrightness);
 		s+= scriptLine("bgSound",""+this.bgSound);
 		s += good.toScript("good");
 		s += bad.toScript("bad");
 		s+= scriptLine("backgroundImage",backgroundImage);
 		s+= scriptLine("goodSound",""+goodSound);
 		s+= scriptLine("badSound",""+badSound);
+
 		return(s);
 		
 	}
@@ -103,6 +109,10 @@ public class GameSpec {
 		} else if (prop.equals("bgSound")) {
 			this.bgSound = value;
 			this.requireGameViewUpdate = true;
+		}else if (prop.equals("minBrightness")){
+			this.minBrightness = Integer.parseInt(value);
+		}else if (prop.equals("maxBrightness")){
+			this.maxBrightness = Integer.parseInt(value);
 		} else return false;
 		return true;
 	}

@@ -268,7 +268,9 @@ public class GameModel {
 		this.gameOver = false;
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
-		this.nextFishTime = updateNextFishTime(); 
+		this.nextFishTime = updateNextFishTime();
+		//GameActor.minBrightness = gameSpec.minBrightness;
+		
 		spawnFish();
 		
 	}
