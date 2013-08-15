@@ -35,7 +35,10 @@ public class GenerateWindow extends JFrame {
 	
 	JTextField 
 	    mintim = new JTextField("30"),
-	    maxtim = new JTextField("80");
+	    maxtim = new JTextField("80"),
+	    maxBrightnessTF = new JTextField("24"),
+	    minBrightnessTF = new JTextField("0");
+	    
 	JComboBox soundtype,vol;
 	JTextArea jtextarea=new JTextArea(5,20);	
 	JTextField goodVisualHzTF = new JTextField("6");
@@ -108,6 +111,8 @@ public class GenerateWindow extends JFrame {
 				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
+				gs.maxBrightness = (int) Integer.parseInt(maxBrightnessTF.getText());
+				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -179,7 +184,7 @@ public class GenerateWindow extends JFrame {
 		matrix1 = new JPanel();
 		matrix1.setLayout(new GridLayout(3,3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(4,2));
+		matrix2.setLayout(new GridLayout(6,2));
 		
 		matrix3 = new JPanel();
 		matrix3.setLayout(new GridLayout(5,2));
@@ -217,6 +222,10 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(videotype);
 		matrix2.add(volLabel);
 		matrix2.add(vol);
+		matrix2.add(new JLabel("Max Brightness"));
+		matrix2.add(maxBrightnessTF);
+		matrix2.add(new JLabel("MainBrightness"));
+		matrix2.add(minBrightnessTF);
 		matrix2.add(gen);
 		matrix2.add(gdone);
 
