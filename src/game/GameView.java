@@ -81,10 +81,20 @@ public class GameView extends JPanel {
 
 				// play good/bad sounds alone by key press for demo purpose
 				if (e.getKeyChar() == 'g') {
-					goodclip.play();
+					try {
+						goodclip.play();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					return;
 				} else if (e.getKeyChar() == 'b') {
-					badclip.play();
+					try {
+						badclip.play();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					return;
 				}
 
@@ -94,7 +104,12 @@ public class GameView extends JPanel {
 					String log = "KeyPress for no fish!";
 					// gm.writeToLog(log);
 					gm.writeToLog(new GameEvent(e.getKeyChar()));
-					badclip.play();
+					try {
+						badclip.play();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					return;
 				}
 				// otherwise, remove the last fish (should only be one!)

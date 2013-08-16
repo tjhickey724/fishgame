@@ -6,6 +6,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
@@ -17,8 +18,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioClip {
 	public Clip clip;
 	public String filename;
-	public AudioClip(String audiof){
+	public Float volumeControl;
+	public AudioClip(String audiof, Float vc){
 		filename = audiof;
+		volumeControl = vc;
+	}
+	public AudioClip(String audiof) {
+		filename = audiof;
+		volumeControl = -10.0f;
 	}
 	public void play() {
 	// play the sound clip 
@@ -36,6 +43,10 @@ public class AudioClip {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+		FloatControl gainControl = 
+			    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(volumeControl);
 		clip.start();
 		
 		clip.addLineListener(new LineListener(){
