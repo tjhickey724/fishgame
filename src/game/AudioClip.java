@@ -19,13 +19,13 @@ public class AudioClip {
 	public Clip clip;
 	public String filename;
 	public Float volumeControl;
-	public AudioClip(String audiof, Float vc){
-		filename = audiof;
-		volumeControl = vc;
+	public AudioClip(Object[] audioInfo){
+		filename = (String) audioInfo[0];
+		volumeControl = (Float) audioInfo[1];
 	}
 	public AudioClip(String audiof) {
 		filename = audiof;
-		volumeControl = -10.0f;
+		volumeControl = 0.0f;
 	}
 	public void play() {
 	// play the sound clip 
@@ -52,6 +52,7 @@ public class AudioClip {
 		clip.addLineListener(new LineListener(){
 
 			//checks if clip is finished playing
+			@Override
 			public void update(LineEvent event) {
 				if(!clip.isRunning()){
 					clip.stop();
@@ -93,6 +94,7 @@ public class AudioClip {
 		clip.addLineListener(new LineListener(){
 
 			//checks if clip is finished playing
+			@Override
 			public void update(LineEvent event) {
 				if(!clip.isRunning()){
 					clip.stop();

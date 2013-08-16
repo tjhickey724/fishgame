@@ -25,12 +25,12 @@ public class GameSpec {
 	   backgroundImage = "images/streamB.jpg";
 	
 	
-	public String goodSound = "sounds/good.wav";
-	public String badSound = "sounds/bad.wav";
-	public String chaching = "sounds/chaching.wav";
-	public String awe = "sounds/awe.wav";
-	public String eww = "sounds/eww.wav";
-	public String woo = "sounds/woo.wav";
+	public Object[] goodSound = {"sounds/good.wav", 0.0f};
+	public Object[] badSound = {"sounds/bad.wav", 0.0f};
+	public Object[] chaching = {"sounds/chaching.wav", 0.0f};
+	public Object[] awe = {"sounds/awe.wav", 0.0f};
+	public Object[] eww = {"sounds/eww.wav", 0.0f};
+	public Object[] woo = {"sounds/woo.wav", 0.0f};
 	// we can expand to more sounds later ...
 	/*
 	public String eatGood = goodSound;
