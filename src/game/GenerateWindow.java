@@ -127,7 +127,7 @@ public class GenerateWindow extends JFrame {
 						
 				int numberOfFish = Integer.parseInt(numactors.getText());
 				System.out.println(gs.toScript());
-				sgen.generate(gs,numberOfFish);
+				sgen.generate(gs);
 				
 				// here we generate a report for the user, so they know what's happening
 				jtextarea.append(gs.toScript());

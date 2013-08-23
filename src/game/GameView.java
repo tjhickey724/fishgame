@@ -152,9 +152,9 @@ public class GameView extends JPanel{
 		}
 			
 		
-		goodclip = new AudioClip(gs.goodSound);
+		goodclip = new AudioClip(gs.goodResponseSound);
 		
-		badclip = new AudioClip(gs.badSound);
+		badclip = new AudioClip(gs.badResponseSound);
 
 
 

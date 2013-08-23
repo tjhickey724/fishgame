@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 /**
  * This class keeps track of all of the state of a game except for the
  * launching of the fish. These parameters will be written to the script file
@@ -24,9 +26,21 @@ public class GameSpec {
 	public String 
 	   backgroundImage = "images/stream.jpg";
 	
+	//length of the session in minutes
+	public int runLength=20;
+	//how many blocks in the session. a block is the time that the subject is being scanned.
+	public int blocksPerRun=5;
+	//how many trials in a block. a trial is a fish event. 
+	public int trialsPerBlock=50;
 	
-	public String goodSound = "sounds/good.wav";
-	public String badSound = "sounds/bad.wav";
+	public double blockLength = runLength/blocksPerRun;
+	public double trialLength = blockLength/trialsPerBlock;
+	public int totalTrials = trialsPerBlock*blocksPerRun;
+	public ArrayList<Trial> trials = new ArrayList<Trial>();
+	
+	public String goodResponseSound = "sounds/good.wav";
+	public String badResponseSound = "sounds/bad.wav";
+	
 	// we can expand to more sounds later ...
 	/*
 	public String eatGood = goodSound;
@@ -72,8 +86,8 @@ public class GameSpec {
 		s += good.toScript("good");
 		s += bad.toScript("bad");
 		s+= scriptLine("backgroundImage",backgroundImage);
-		s+= scriptLine("goodSound",""+goodSound);
-		s+= scriptLine("badSound",""+badSound);
+		s+= scriptLine("goodSound",""+goodResponseSound);
+		s+= scriptLine("badSound",""+badResponseSound);
 		return(s);
 		
 	}
