@@ -89,11 +89,15 @@ public class GameView extends JPanel{
 					Avatar.setCurrentActive(true);
 					return;
 				}
-				if (e.getKeyChar() == game.Avatar.leftMoveKey){
-					gm.Avatar.moveLeft();
-					return;
-				} else if (e.getKeyChar() == game.Avatar.rightMoveKey){
-					gm.Avatar.moveRight();
+				if (e.getKeyChar() == game.Avatar.moveKey){
+					if (gm.Avatar.currentActive){
+					if (gm.Avatar.x<50){
+						gm.Avatar.moveRight();
+					} else if (gm.Avatar.x>50){
+						gm.Avatar.moveLeft();
+					}
+					}
+					System.out.println(gm.Avatar.x);
 					return;
 				}
 				

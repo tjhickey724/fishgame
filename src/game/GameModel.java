@@ -482,6 +482,7 @@ public class GameModel {
 	 * from 1 to 4, and spawn a fish if so.
 	 */
 	public void update() { //throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		if (Avatar.lives<=0) setGameOver(true);
 		if (isPaused() || isGameOver()) return;
 		
 		// here is where we decide whether to spawn a fish
@@ -507,10 +508,12 @@ public class GameModel {
 			// time to launch the next fish!
 			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
 			//  (this.nextFishTime-this.gameStart)/1000000);
+			Avatar.stabilize();
 			this.lastEventTime = this.nextEventTime;
 			this.nextEventTime = this.updateNextEventTime();
 			
 			if (this.isGameOver()) return;
+			
 			previousActorTime+=currentActorTime;
 			currentActorTime=0;
 			

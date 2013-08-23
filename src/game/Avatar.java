@@ -4,6 +4,7 @@
 package game;
 
 /**
+ * The avatar reamins in the middle of the screen until a current is activated to push the boat to one side.
  * @author Mike
  *
  */
@@ -14,25 +15,41 @@ public class Avatar extends GameActor {
 	 * @param y
 	 * @param active
 	 * @param spec
+	 * 
 	 */
-
+	//the width of the middle part that is safe for the boat to be in
 	public static int channelWidth;
+	//the left edge fo the middle 
 	static int leftEdge;
+	//the right edge of the middle
 	static int rightEdge;
+	//how fast the boat moves with keypresses. this is no longer used because there is now a single key used to 
+	//stabilize the boat from any position
 	public static double moveSpeed=1;
+	//how strong the current is, and therefore how much time the player has to react to a current before the boat
+	// hits the edge
 	public static double currentSpeed=0.1;
+	//how likely the current is to occur, at 1 it will always occur
 	public static double currentProbability=1.0;
-	public static char leftMoveKey = 'a';
-	public static char rightMoveKey = 's';
+	//the key to stabilize the boat
+	public static char moveKey = 'a';
+	// if you want to determine which side the current will go, then currentType will NOT be random
 	public static String currentType = "random";
 	// this is the direction the current will be pushing the boat
 	public static Side currentDirection = Side.right;
+	//while the current is active, this is true
 	public static boolean currentActive = false;
-	private boolean movingLeft;
-	private boolean movingRight;
+	//true while the boat is moving left or right
+	private boolean movingLeft,movingRight;
+	//the number of hits to the edge the boat can withstand
 	public int health=3;
+	//the number of times health can reach 0 before the game ends
 	public int lives=5;
+	//the picture file
 	public String boatFileName = "images/boat.png";
+	//checks if boat is still alive
+	public boolean alive = true;
+	
 	public Avatar(double x, double y, boolean active, Species spec) {
 		super(x, y, active, Species.avatar);
 		speed=4;
@@ -76,21 +93,24 @@ public class Avatar extends GameActor {
 		if (health==0){
 			//lose a life if boat runs out of health
 			lives--;
+			//reset to full health
 			health=3;
 		}
 		if (lives==0){
 			System.out.println("boat has died");
+			//set the status
+			alive=false;
+			
 		}
 		long now = System.nanoTime();
 		double dt = (now -this.lastUpdate)/1000000000.0;
 		this.lastUpdate = now;
-		if (x>49 && x<51){
-			movingLeft=false;
-			movingRight=false;
-		}
+		
+
+		//if the boat is outside the edges of the center band, the current stops and the avatar is stabilized. 
 		if (!inMiddle()){
 			setCurrentActive(false);
-			if (x < 50){ moveRight(); }else{ moveLeft();}
+			stabilize();
 			health--;
 		}
 		
@@ -102,6 +122,12 @@ public class Avatar extends GameActor {
 		}
 		if(movingRight){
 			moveRight();
+		}
+		//if the avatar is in the very center with an x near 50
+		if (x<51 && x>49 && (movingLeft || movingRight)){
+			movingLeft=false;
+			movingRight=false;
+			
 		}
 /*		if (species.toString().equals("good")){
 			try {
@@ -160,7 +186,7 @@ public class Avatar extends GameActor {
 		vx=currentSpeed;
 		x+=vx;
 		}
-	
+	// it is wise to use a method to set and get values if they are accessed by outside classes
 	public static void setCurrentActive(boolean boo, Side s){
 		currentActive = boo;
 		currentDirection = s;
@@ -192,20 +218,18 @@ public class Avatar extends GameActor {
 		}
 	
 	public void moveLeft(){
-		if (x>51){
-		setCurrentActive(false);
+	
 		x-=moveSpeed;
 		this.movingLeft=true;
 		}
-	}
+	
 	
 	public void moveRight(){
-		if (x<49){
-		setCurrentActive(false);
+		
 		x+=moveSpeed;
 		this.movingRight=true;
 		}
-	}
+	
 
 	//this method checks if the avatar is inside the darker middle portion of the screen
 	public boolean inMiddle(){
@@ -214,4 +238,13 @@ public class Avatar extends GameActor {
 		return (x<rightEdge && x>leftEdge);
 	}
 
+	public void stabilize(){
+		setCurrentActive(false);
+		if (x==50) return;
+		if (x>50){
+			moveLeft();
+		} else if (x<50){
+			moveRight();
+			}
+	}
 }
