@@ -43,7 +43,7 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fish;
+	public BufferedImage streamImage, streamImage2,fish, boat;
 	
 	//these arrays store the sprite images used to adjust brightness. the default brightness is in image, 12, accesible using fishL[12] or fishR[12]
 	public BufferedImage[] fishL,fishR;
@@ -167,7 +167,7 @@ public class GameView extends JPanel{
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
 
-
+			boat = ImageIO.read(new File("images/boat1.png"));
 			fish = ImageIO.read(new File("images/fish/fish.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish),5,5);
@@ -254,6 +254,8 @@ public class GameView extends JPanel{
 		drawBackground(g);
 		
 		drawFish(g); 
+		
+		drawAvatar(g);
 
 		updateScore(g);
 		
@@ -262,6 +264,14 @@ public class GameView extends JPanel{
 
 	}
 	
+	//method to draw the boat avatar
+	private void drawAvatar(Graphics g) {
+		// This draws the boat in the middle
+	    int x = (this.getWidth() - boat.getWidth(null)) / 2;
+	    int y = (this.getHeight() - boat.getHeight(null)/2) ;
+		g.drawImage(boat,x,y,boat.getWidth(),boat.getHeight(),null);
+	}
+
 	private void updateScore(Graphics g){
 		g.setFont(new Font("Helvetica",Font.BOLD,20));
 		g.setColor(Color.WHITE);
