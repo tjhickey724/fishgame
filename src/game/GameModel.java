@@ -34,6 +34,17 @@ public class GameModel {
 	public double height;
 	public double size;
 	
+	private long lastLogEventTimeNano1 = 0;
+
+	public double timeLimit = 20;
+
+	public double timeRemaining = 20;
+	public double totalActorTime =0;
+	public double currentActorTime=0;
+	public double previousActorTime=0;
+
+	public int health=10;
+	public int wealth=0;
 	
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
@@ -87,7 +98,8 @@ public class GameModel {
 	
 	// we should be more clear about these ...
 	private long startTime=System.nanoTime();
-	private long nextFishTime=0;
+	private long nextEventTime=0;
+	private long lastEventTime=0;
 	private GameActor nextFish=null;
 	private long gameStart = startTime;
 	
@@ -229,7 +241,8 @@ public class GameModel {
 	 * when its time to launch the next fish!
 	 * @return
 	 */
-	private long updateNextFishTime() {
+	private long updateNextEventTime() {
+		this.lastEventTime=this.nextEventTime;
 		//initialize the scanner if its the first time we're reading a line
 		if (scan==null){
 			try {
@@ -243,7 +256,7 @@ public class GameModel {
 		}
         if (! scan.hasNext()){
         	this.setGameOver(true);
-        	return this.nextFishTime + 10*1000000000L;
+        	return this.nextEventTime + 10*1000000000L;
         }
 		long interval=-1;
 		try {
@@ -265,23 +278,23 @@ public class GameModel {
 			}
 			//System.out.println("interval="+interval+" prop="+prop+" value="+value);
 			interval = scan.nextLong();
-			gameSpec.update(prop,value); 
+			gameSpec.update(prop,value);
 		}
 		
 
 		// calculate the next FishTime and the basic characteristics of the nextFish (species and side)
-		this.nextFishTime = interval*1000000 + this.nextFishTime;
+		this.nextEventTime = interval*1000000 + this.nextEventTime;
 		String species = scan.next();
 		String side = scan.next();
 		this.setFishNum(scan.nextInt());
-		scan.nextLine(); // skip over the rest of the line
+		if (scan.hasNextLine()) scan.nextLine(); // skip over the rest of the line
 
 		//create the next Fish to be launched
 		GameActor a = new GameActor();
 		a.fromLeft = side.equals("left");
 		a.species = (species.equals("good"))?Species.good:Species.bad;
 		this.nextFish = a;
-		return nextFishTime;
+		return nextEventTime;
 		
 	}
 	
@@ -299,8 +312,8 @@ public class GameModel {
 	public void writeToLog(String s){
 		try{
 			long theTime = (System.nanoTime()-this.gameStart);
-			long theInterval = theTime - lastLogEventTimeNano;
-			lastLogEventTimeNano = theTime;
+			long theInterval = theTime - lastLogEventTimeNano1;
+			lastLogEventTimeNano1 = theTime;
 			int theSeconds = (int) Math.round(theInterval/1000000.0);
 			String logLine = theSeconds+GameEvent.sep + theTime/1000000 +" "+s+"\n";
 			getLogFile(); // make sure the logfile is open!
@@ -320,12 +333,12 @@ public class GameModel {
 	private long lastLogEventTimeNano = 0;
 	
 	public void pause(){
-		this.nextFishTime = Long.MAX_VALUE;
+		this.nextEventTime = Long.MAX_VALUE;
 		this.writeToLog("PAUSE");
 	}
 	
 	public void restart() {
-		this.nextFishTime = System.nanoTime() + 2*1000000000L;
+		this.nextEventTime = System.nanoTime() + 2*1000000000L;
 		this.writeToLog("RESTART");
 	}
 	
@@ -346,7 +359,7 @@ public class GameModel {
 		
 		// pick starting location and velocity
 		double y = this.height/2;
-		double x = (side==Side.left)? 10 : this.width-10;
+		double x = (side==Side.left)? 1 : this.width-1;
 		
 		// then make an actor with that position
 		GameActor a = new GameActor(x,y,true,s,gameSpec.stereo,gameSpec.good.soundFile,gameSpec.bad.soundFile);
@@ -361,6 +374,7 @@ public class GameModel {
 		// start playing the music for the fish
 		if (a.fromLeft) a.ct = a.ctL; else a.ct = a.ctR;
 		a.ct.loop();
+		a.vx = (side==Side.left)?1:-1;
 
 		
 		// add the fish to the list of actors...
@@ -371,9 +385,9 @@ public class GameModel {
 	public void start(){
 		this.setPaused(false);
 		this.setGameOver(false);
-		this.nextFishTime = System.nanoTime();
-		this.gameStart = nextFishTime;
-		this.nextFishTime = updateNextFishTime(); 
+		this.nextEventTime = System.nanoTime();
+		this.gameStart = nextEventTime;
+		this.nextEventTime = updateNextEventTime(); 
 		spawnFish();
 		
 	}
@@ -480,10 +494,12 @@ public class GameModel {
 		// so we can randomly generate one script and then use it many times...
 		
 		long now=System.nanoTime();
+		totalActorTime=(currentActorTime)/1000000;
+		timeRemaining=timeLimit-totalActorTime;
 		long millisecond = 1000*1000L;
 		int delay = 0;
 		
-		if ((this.actors.size()>0) && (now > this.nextFishTime - delay*millisecond)) {
+		if ((this.actors.size()>0) && (now > this.nextEventTime - delay*millisecond)) {
 			// this is the case where we didn't press a key to kill or eat the fish
 			this.setNoKeyPress(this.getNoKeyPress() + 1);
 			GameActor lastFish = this.actors.get(this.actors.size()-1);
@@ -493,14 +509,35 @@ public class GameModel {
 			this.writeToLog(new GameEvent(lastFish));
 		}
 		
-		if (now > this.nextFishTime){
+		if (now > this.nextEventTime){
 			// time to launch the next fish!
 			//System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
 			//  (this.nextFishTime-this.gameStart)/1000000);
+			this.lastEventTime = this.nextEventTime;
+			this.nextEventTime = this.updateNextEventTime();
 			
-			this.nextFishTime = this.updateNextFishTime();
+			this.nextEventTime = this.updateNextEventTime();
 			if (this.isGameOver()) return;
+			previousActorTime+=currentActorTime;
+			currentActorTime=0;
 			
+			if (this.actors.size()>0) {
+
+				// this is the case where we didn't press a key to kill or eat the fish
+				this.setNoKeyPress(this.getNoKeyPress() + 1);
+				GameActor lastFish = this.actors.get(this.actors.size()-1);
+				//lastFish.update();
+				lastFish.active=false;
+				previousActorTime+=lastFish.lifeSpan;
+				currentActorTime=0;
+				lastFish.ct.stop();
+				
+				this.actors.clear();
+
+				
+				this.writeToLog(new GameEvent(lastFish));
+
+			}
 			
 			// we now spawn the next fish
 			spawnFish();
@@ -522,6 +559,16 @@ public class GameModel {
 			GameActor a = (GameActor) actors.get(0);
 			a.update();
 			keepOnBoard(a);
+			if (!a.active){
+				a.ct.stop();
+				previousActorTime+=a.lifeSpan;
+				currentActorTime=0;
+				this.setNoKeyPress(this.getNoKeyPress() + 1);
+				this.writeToLog(new GameEvent(a));
+				this.actors.clear();
+			} else {
+				this.currentActorTime=a.lifeSpan;
+			}
 			}
 		} catch(Exception e){
 			System.out.println("Exception on update: "+e);

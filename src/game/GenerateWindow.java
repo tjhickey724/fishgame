@@ -69,7 +69,7 @@ public class GenerateWindow extends JFrame {
         System.out.println("Current dir using System:" +currentDir);
 		fc=new JFileChooser(currentDir+"/sounds");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
+		
 
 		/*
 		 * all of these initializations should be done as the variables are being

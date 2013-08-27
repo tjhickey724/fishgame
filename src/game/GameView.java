@@ -43,7 +43,7 @@ public class GameView extends JPanel{
 	
 	public boolean gameActive = false; // shouldn't this be in the model???
 	
-	public BufferedImage streamImage, streamImage2,fish, boat;
+	public BufferedImage streamImage, streamImage2,fish, boat,coin;
 	
 	//these arrays store the sprite images used to adjust brightness. the default brightness is in image, 12, accesible using fishL[12] or fishR[12]
 	public BufferedImage[] fishL,fishR;
@@ -126,11 +126,11 @@ public class GameView extends JPanel{
 				// play the appropriate sound and modify the score
 				if (correctResponse){
 					goodclip.play();
-					gm.score += 2;
+					gm.wealth++;
 					gm.setHits(gm.getHits() + 1);
 				}else {
 					badclip.play();
-					gm.score -= 1;
+					gm.wealth--;
 					gm.setMisses(gm.getMisses() + 1);
 				}
 				
@@ -169,6 +169,7 @@ public class GameView extends JPanel{
 
 			boat = ImageIO.read(new File("images/boat1.png"));
 			fish = ImageIO.read(new File("images/fish/fish.png"));
+			coin = ImageIO.read(new File("images/wealth.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish),5,5);
 			if (!gs.bgSound.equals(this.lastbgSound)){	
@@ -253,6 +254,10 @@ public class GameView extends JPanel{
 		
 		drawBackground(g);
 		
+		drawTimeBar(g);
+		
+		drawHud(g);
+		
 		drawFish(g); 
 		
 		drawAvatar(g);
@@ -263,7 +268,26 @@ public class GameView extends JPanel{
 		
 
 	}
+	private void drawTimeBar(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+		g.fillRect(0, 0, getWidth(), 10);
+		g.setColor(Color.GREEN);
+		g.fillRect(0, 0, getWidth()-toViewCoords((gm.totalActorTime/gm.timeLimit)), 10);
+		//System.out.println(gm.timeRemaining);
+		//g.drawString("", toViewCoords(50), 20);
+		
+	}
 	
+	public void drawHud(Graphics g){
+
+		g.drawImage(coin, 2, 10, 50,50,null);
+		g.setColor(Color.RED);
+		g.setFont(new Font("Helvetica",Font.BOLD,50));
+		g.drawString(gm.wealth+"",55,55);
+	}
+
+
 	//method to draw the boat avatar
 	private void drawAvatar(Graphics g) {
 		// This draws the boat in the middle

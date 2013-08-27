@@ -58,7 +58,7 @@ public class ScriptWindow extends JFrame {
 		JButton sdone=new JButton("Done");
 		
 		
-		fc = new JFileChooser();
+		fc=new JFileChooser(System.getProperty("user.dir")+"/scripts");
 		
 		openButton = new JButton("Open");
 		openButton.addActionListener(new ActionListener(){
@@ -69,7 +69,7 @@ public class ScriptWindow extends JFrame {
 
 		            if (returnVal == JFileChooser.APPROVE_OPTION) {
 		                File scriptFile = fc.getSelectedFile();
-		                openButton.setText(scriptFile.getName());
+		                openButton.setText("scripts/"+scriptFile.getName());
 		            }}});
 	
 		
@@ -93,7 +93,7 @@ public class ScriptWindow extends JFrame {
 				GameActor.GAME_START = System.nanoTime();
 
 				// the GameModel is the object that reads the script
-				gm.setInputScript(scr.getText());
+				gm.setInputScript(openButton.getText());
 				
 				// Now we write the header on the log file recording
 				// the relevant information for this session
@@ -105,7 +105,7 @@ public class ScriptWindow extends JFrame {
 					gm.writeToLog("Experimenter:           "+ ExperimenterID);
 					gm.writeToLog("Subject:                " + SubjectID);
 					gm.writeToLog("Date:                   "+ (new java.util.Date()).toString());
-					gm.writeToLog("Scriptfile:             "+scr.getText());
+					gm.writeToLog("Scriptfile:             "+openButton.getText());
 					gm.logfile.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -150,7 +150,7 @@ public class ScriptWindow extends JFrame {
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
 		scriptpanel.add(new JLabel("ScriptFile: "));
-		scriptpanel.add(scr);
+		scriptpanel.add(openButton);
 		scriptpanel.add(start);
 		//scriptpanel.add(restart);
 		//scriptpanel.add(stop);

@@ -26,12 +26,15 @@ public class GameActor {
 		double vy;
 		// still on board?
 		boolean active;
-		// speed
+		// speed of the actor
 		double speed=40;
 		// species
 		boolean fromLeft; // true if fish comes from left
+		//this is the time it stays on screen, in tenths of a second
+		public static double timeOnScreen=20;
 		long birthTime;
 		long lastUpdate;
+		long lifeSpan;
 		long gameStart=GameActor.GAME_START;
 		Color 
 			color1=new Color(150,0,0), 
@@ -61,9 +64,8 @@ public class GameActor {
 				         boolean stereo,
 				         String goodFishSounds, String badFishSounds) {
 			this.x=x; this.y=y; this.active=active;
-			// fish starts off moving forward always
-			this.vx = speed*(rand.nextDouble());
-			this.vy = speed*(rand.nextDouble()-0.5);
+			//this.vx = speed*(rand.nextDouble()-0.5);
+			this.vy = (speed*(rand.nextDouble()-0.5));
 			this.birthTime = System.nanoTime();
 			this.lastUpdate = this.birthTime;
 			this.gameStart=GameActor.GAME_START;
@@ -104,16 +106,18 @@ public class GameActor {
 		 */
 		public void update(){
 			long now = System.nanoTime();
+			if (now<birthTime+timeOnScreen*100000000){
+				this.lifeSpan=now-birthTime;
 			double dt = (now -this.lastUpdate)/1000000000.0;
 			this.lastUpdate = now;
 			double turnspeed = 0.1;
-			vx += rand.nextDouble()*turnspeed -turnspeed/2;
+			//vx += rand.nextDouble()*turnspeed -turnspeed/2;
 			vy += rand.nextDouble()*turnspeed -turnspeed/2;
 			double tmpSpeed = Math.sqrt(vx*vx+vy*vy);
-			vx /= tmpSpeed;
+			//vx /= tmpSpeed;
 			vy /= tmpSpeed;
 			x += vx*speed*dt;
-			y += vy*speed*dt;
+			y += vy*10*speed*dt;
 	/*		if (species.toString().equals("good")){
 				try {
 					this.ct=new AudioClip("src/sound8.wav");
@@ -142,6 +146,10 @@ public class GameActor {
 				}
 			}
 		} */
+		} else {
+			this.active = false;
+			this.ct.stop();
+		}
 		}
 		
 		public String toString(){
