@@ -36,10 +36,10 @@ public class GameModel {
 	
 	private long lastLogEventTimeNano1 = 0;
 
-	public double timeLimit = 20;
+	public double timePerTrial = 20;
 
-	public double timeRemaining = 20;
-	public double totalActorTime =0;
+	public double timeRemaining = 100;
+	public double totalActorTime = 0;
 	public double currentActorTime=0;
 	public double previousActorTime=0;
 
@@ -495,7 +495,7 @@ public class GameModel {
 		
 		long now=System.nanoTime();
 		totalActorTime=(currentActorTime)/1000000;
-		timeRemaining=timeLimit-totalActorTime;
+		timeRemaining=100-(totalActorTime/timePerTrial);
 		long millisecond = 1000*1000L;
 		int delay = 0;
 		
