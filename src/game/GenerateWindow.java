@@ -22,8 +22,9 @@ import javax.swing.JTextField;
 /**
  * This creates a window that allow the experimenter to create a session script
  * that will be used to run experiments.
+ * 
  * @author mike
- *
+ * 
  */
 public class GenerateWindow extends JFrame {
 
@@ -31,74 +32,68 @@ public class GenerateWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
-	
-	
-	JTextField 
-	    mintim = new JTextField("30"),
-	    maxtim = new JTextField("80"),
-	    maxBrightnessTF = new JTextField("24"),
-	    minBrightnessTF = new JTextField("0");
-	    
-	JComboBox soundtype,vol;
-	JTextArea jtextarea=new JTextArea(5,20);	
+
+	JTextField mintim = new JTextField("30"), maxtim = new JTextField("80"),
+			maxBrightnessTF = new JTextField("24"),
+			minBrightnessTF = new JTextField("0");
+
+	JComboBox soundtype, vol;
+	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-	
-	
+
 	JTextField minSizeTF = new JTextField("100");
-	
+
 	JTextField maxSizeTF = new JTextField("120");
-	
+
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
-	
+
 	JTextField numactors = new JTextField("7");
-	
+
 	ScriptGenerator sgen = new ScriptGenerator();
-	
+
 	JFileChooser fc;
-	public GenerateWindow(){
+
+	public GenerateWindow() {
 		super("Generate Window");
-		setLayout(new GridLayout(4,1));
-		setSize(300,600);
-		
-		JPanel matrix1,matrix2,matrix3;
+		setLayout(new GridLayout(4, 1));
+		setSize(300, 600);
+
+		JPanel matrix1, matrix2, matrix3;
 
 		String currentDir = System.getProperty("user.dir");
-        System.out.println("Current dir using System:" +currentDir);
-		fc=new JFileChooser(currentDir+"/sounds");
+		System.out.println("Current dir using System:" + currentDir);
+		fc = new JFileChooser(currentDir + "/sounds");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-
 		/*
-		 * all of these initializations should be done as the variables are being
-		 * declared. That makes it clear what the variables are and it simplifies the
-		 * body of the constructor.  REFACTOR....
+		 * all of these initializations should be done as the variables are
+		 * being declared. That makes it clear what the variables are and it
+		 * simplifies the body of the constructor. REFACTOR....
 		 */
 
-		
 		JLabel volLabel = new JLabel("Volume:");
-		
-		
-		JScrollPane jscrollpane=new JScrollPane(jtextarea);
-		
-		String[] videotypes=new String[]{"Throb","Flicker"};
-	
+
+		JScrollPane jscrollpane = new JScrollPane(jtextarea);
+
+		String[] videotypes = new String[] { "Throb", "Flicker" };
+
 		JComboBox videotype = new JComboBox(videotypes);
 
-		String[] soundtypes=new String[]{"Stereo","Mono"};
+		String[] soundtypes = new String[] { "Stereo", "Mono" };
 		soundtype = new JComboBox(soundtypes);
-		
-		String[] volumes=new String[]{"low","med","hi"};
+
+		String[] volumes = new String[] { "low", "med", "hi" };
 		vol = new JComboBox(volumes);
-		
-		JButton gdone=new JButton("Done");
-		JButton gen=new JButton("Generate");
-		
-		gen.addActionListener(new ActionListener(){
+
+		JButton gdone = new JButton("Done");
+		JButton gen = new JButton("Generate");
+
+		gen.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e) {
 				// here we create a GameSpec and use the user input
 				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
@@ -106,118 +101,115 @@ public class GenerateWindow extends JFrame {
 				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
-				gs.stereo = (soundtype.getSelectedItem().toString().equals("Stereo"));
-				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF.getText());
-				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF.getText());	
+				gs.stereo = (soundtype.getSelectedItem().toString()
+						.equals("Stereo"));
+				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF
+						.getText());
+				gs.bad.throbRate = (int) Integer.parseInt(badVisualHzTF
+						.getText());
 				gs.maxThrobSize = (int) Integer.parseInt(maxSizeTF.getText());
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
-				gs.maxBrightness = (int) Integer.parseInt(maxBrightnessTF.getText());
-				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF.getText());
+				gs.maxBrightness = (int) Integer.parseInt(maxBrightnessTF
+						.getText());
+				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF
+						.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
-			    if (volumeLevel.equals("low")) {
-			    	gs.bgSound = "water1.wav";
-			    }else if (volumeLevel.equals("med")){
-			    	gs.bgSound = "water2.wav";
-			    } else {
-			    	gs.bgSound = "water3.wav";
-			    }
-			    gs.bgSound = "sounds/background/" + gs.bgSound;
-				
+				if (volumeLevel.equals("low")) {
+					gs.bgSound = "water1.wav";
+				} else if (volumeLevel.equals("med")) {
+					gs.bgSound = "water2.wav";
+				} else {
+					gs.bgSound = "water3.wav";
+				}
+				gs.bgSound = "sounds/background/" + gs.bgSound;
 
-						
 				int numberOfFish = Integer.parseInt(numactors.getText());
 				System.out.println(gs.toScript());
 				sgen.generate(gs);
-				
-				// here we generate a report for the user, so they know what's happening
+
+				// here we generate a report for the user, so they know what's
+				// happening
 				jtextarea.append(gs.toScript());
-				jtextarea.append("GENERATE "+numberOfFish+" events\n");
-				
+				jtextarea.append("GENERATE " + numberOfFish + " events\n");
 
 			}
 		});
-		
-		gdone.addActionListener(new ActionListener(){
+
+		gdone.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e) {
 				sgen.close();
 				setVisible(false);
 			}
 		});
-		
 
-		
-		goodSoundTF.addActionListener(new ActionListener(){
+		goodSoundTF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+				// Handle open button action.
+				int returnVal = fc.showOpenDialog(GenerateWindow.this);
 
-		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File goodsoundfile = fc.getSelectedFile();
-		                goodSoundTF.setText("sounds/"+goodsoundfile.getName());
-		            }}});
-		
-		badSoundTF.addActionListener(new ActionListener(){
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File goodsoundfile = fc.getSelectedFile();
+					goodSoundTF.setText("sounds/" + goodsoundfile.getName());
+				}
+			}
+		});
+
+		badSoundTF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+				// Handle open button action.
+				int returnVal = fc.showOpenDialog(GenerateWindow.this);
 
-		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File badsoundfile = fc.getSelectedFile();
-		                badSoundTF.setText("sounds/"+badsoundfile.getName());
-		            }}});
-		
-		imageSelect.addActionListener(new ActionListener(){
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File badsoundfile = fc.getSelectedFile();
+					badSoundTF.setText("sounds/" + badsoundfile.getName());
+				}
+			}
+		});
+
+		imageSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-		        //Handle open button action.
-		            int returnVal = fc.showOpenDialog(GenerateWindow.this);
+				// Handle open button action.
+				int returnVal = fc.showOpenDialog(GenerateWindow.this);
 
-		            if (returnVal == JFileChooser.APPROVE_OPTION) {
-		                File imagefile = fc.getSelectedFile();
-		                imageSelect.setText("images/"+imagefile.getName());
-		            }}});
-		
-		
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File imagefile = fc.getSelectedFile();
+					imageSelect.setText("images/" + imagefile.getName());
+				}
+			}
+		});
+
 		matrix1 = new JPanel();
-		matrix1.setLayout(new GridLayout(3,3));
+		matrix1.setLayout(new GridLayout(3, 3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(6,2));
-		
-		matrix3 = new JPanel();
-		matrix3.setLayout(new GridLayout(5,2));
+		matrix2.setLayout(new GridLayout(6, 2));
 
-		
+		matrix3 = new JPanel();
+		matrix3.setLayout(new GridLayout(5, 2));
+
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
 		matrix1.add(new JLabel("Visual"));
-		
+
 		matrix1.add(new JLabel("Good"));
 		matrix1.add(this.goodSoundTF);
 		matrix1.add(this.goodVisualHzTF);
-		
+
 		matrix1.add(new JLabel("Bad"));
 		matrix1.add(this.badSoundTF);
 		matrix1.add(this.badVisualHzTF);
-		//col2.add(gs);
-		//col2.add(bs);
-		
-	
-		
-		
-		//col3.add(gv);
-		//col3.add(bv);
-		
-		
-		
-		
-		
-		
+		// col2.add(gs);
+		// col2.add(bs);
+
+		// col3.add(gv);
+		// col3.add(bv);
+
 		matrix2.add(new JLabel("Sound Type: "));
 		matrix2.add(soundtype);
-		
+
 		matrix2.add(new JLabel("Video Type: "));
 		matrix2.add(videotype);
 		matrix2.add(volLabel);
@@ -229,10 +221,8 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(gen);
 		matrix2.add(gdone);
 
-		
-		
-
-		matrix3.setBorder(javax.swing.BorderFactory.createTitledBorder("Gen and Vis") );
+		matrix3.setBorder(javax.swing.BorderFactory
+				.createTitledBorder("Gen and Vis"));
 		matrix3.add(new JLabel("Min Time: "));
 		matrix3.add(mintim);
 		matrix3.add(new JLabel("Max Time: "));
@@ -247,7 +237,6 @@ public class GenerateWindow extends JFrame {
 		matrix3.setBackground(Color.pink);
 		matrix1.setBackground(Color.cyan);
 
-		
 		add(matrix1);
 		add(matrix3);
 		add(matrix2);

@@ -1,44 +1,44 @@
 package game;
 
-
 /**
  * this stores a complete specification of how the fish are to be rendered
+ * 
  * @author tim
- *
+ * 
  */
 public class FishSpec {
 	public String soundFile = "sounds/fish6hz0p";
 	public String imageFile = "images/fish1";
 
-
 	public int throbRate = 3;
 	private String sep = ScriptGenerator.SEP;
-	
-	public FishSpec(){
+
+	public FishSpec() {
 		// creates a default fish whose fields we set directly.
 	}
-	
-	private String scriptLine(String prop, String val){
-		return "0"+sep+prop+sep+val+"\n";
+
+	private String scriptLine(String prop, String val) {
+		return "-1" + sep + prop + sep + val + "\n";
 	}
-	
-	public String toScript(String type){
-		String s ="";
-		s+= scriptLine(type+"soundFile",soundFile);
-		s += scriptLine(type+"imageFile",imageFile);
-		s+= scriptLine(type+"throbRate",""+throbRate);
-		return s;		
+
+	public String toScript(String type) {
+		String s = "";
+		s += scriptLine(type + "soundFile", soundFile);
+		s += scriptLine(type + "imageFile", imageFile);
+		s += scriptLine(type + "throbRate", "" + throbRate);
+		return s;
 	}
-	
-	public boolean update(String prop, String val){
+
+	public boolean update(String prop, String val) {
 
 		if (prop.equals("soundFile")) {
 			this.soundFile = val;
-		} else if (prop.equals("imageFile")){
+		} else if (prop.equals("imageFile")) {
 			this.imageFile = val;
 		} else if (prop.equals("throbRate")) {
 			throbRate = Integer.parseInt(val);
-		} else return false;
+		} else
+			return false;
 
 		return true;
 	}

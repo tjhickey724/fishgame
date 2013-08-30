@@ -1,4 +1,5 @@
 package game;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -12,90 +13,90 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- audio file object with play and stop play methods
+ * audio file object with play and stop play methods
  */
 public class AudioClip {
 	public Clip clip;
 	public String filename;
-	public AudioClip(String audiof){
+
+	public AudioClip(String audiof) {
 		filename = audiof;
 	}
+
 	public void play() {
-	// play the sound clip 
+		// play the sound clip
 		try {
 			loadClip(filename);
-		} catch (UnsupportedAudioFileException  e) {
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 catch ( IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		 catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		clip.start();
-		
-		clip.addLineListener(new LineListener(){
 
-			//checks if clip is finished playing
+		clip.addLineListener(new LineListener() {
+
+			// checks if clip is finished playing
 			public void update(LineEvent event) {
-				if(!clip.isRunning()){
+				if (!clip.isRunning()) {
 					clip.stop();
 					clip.flush();
 				}
 			}
 		});
 	}
-	
+
 	public void loop() {
-	// play the sound clip 
+		// play the sound clip
 		try {
 			loadClip(filename);
-		} catch (UnsupportedAudioFileException  e) {
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 catch ( IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		 catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		//clip.start();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);  
+		// clip.start();
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		// REFACTOR -- do we need this LineListener?
-		clip.addLineListener(new LineListener(){
+		clip.addLineListener(new LineListener() {
 
-			//checks if clip is finished playing
+			// checks if clip is finished playing
 			public void update(LineEvent event) {
-				if(!clip.isRunning()){
+				if (!clip.isRunning()) {
 					clip.stop();
 					clip.flush();
 				}
 			}
 		});
 	}
-  
+
 	public void stop() {
-		if (clip != null){
+		if (clip != null) {
 			if (clip.isRunning())
 				clip.stop();
-		}else System.out.println("Trying to stop a null clip!!");
+		} else
+			System.out.println("Trying to stop a null clip!!");
 	}
-	
-	public void loadClip(String path) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-		//find audio file
-			File soundFile = new File(path);
-			AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
 
-	    // load the sound into memory 
-			DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
-			clip = (Clip) AudioSystem.getLine(info);
-			clip.open(sound);
+	public void loadClip(String path) throws UnsupportedAudioFileException,
+			IOException, LineUnavailableException {
+		// find audio file
+		File soundFile = new File(path);
+		AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
+
+		// load the sound into memory
+		DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
+		clip = (Clip) AudioSystem.getLine(info);
+		clip.open(sound);
 	}
-}        
+}
