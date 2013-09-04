@@ -3,6 +3,7 @@
  */
 package game;
 
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -43,7 +45,7 @@ public class GenerateWindow extends JFrame {
 	JTextArea jtextarea=new JTextArea(5,20);	
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-	
+	Checkbox hasAvatar = new Checkbox();
 	
 	JTextField minSizeTF = new JTextField("100");
 	
@@ -113,6 +115,7 @@ public class GenerateWindow extends JFrame {
 				gs.minThrobSize = (int) Integer.parseInt(minSizeTF.getText());
 				gs.maxBrightness = (int) Integer.parseInt(maxBrightnessTF.getText());
 				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF.getText());
+				gs.hasAvatar = hasAvatar.getState();
 				String volumeLevel = (vol.getSelectedItem()).toString();
 			    if (volumeLevel.equals("low")) {
 			    	gs.bgSound = "water1.wav";
@@ -187,7 +190,7 @@ public class GenerateWindow extends JFrame {
 		matrix2.setLayout(new GridLayout(6,2));
 		
 		matrix3 = new JPanel();
-		matrix3.setLayout(new GridLayout(5,2));
+		matrix3.setLayout(new GridLayout(6,2));
 
 		
 		matrix1.add(new JLabel("Fish Type:"));
@@ -243,6 +246,10 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(maxSizeTF);
 		matrix3.add(new JLabel("Fish to generate:"));
 		matrix3.add(numactors);
+		matrix3.add(new JLabel("Avatar?"));
+		matrix3.add(hasAvatar);
+		
+		
 		matrix2.setBackground(Color.green);
 		matrix3.setBackground(Color.pink);
 		matrix1.setBackground(Color.cyan);

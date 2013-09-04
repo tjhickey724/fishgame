@@ -18,7 +18,7 @@ public class GameSpec {
 	public boolean requireGameViewUpdate = true;
 	
 	public boolean stereo = true;
-	
+	public boolean hasAvatar=true;
 	public String bgSound = "sounds/water/mid.wav";
 	
 	private String sep = ScriptGenerator.SEP;
@@ -88,6 +88,7 @@ public class GameSpec {
 		s+= scriptLine("backgroundImage",backgroundImage);
 		s+= scriptLine("goodSound",""+goodResponseSound);
 		s+= scriptLine("badSound",""+badResponseSound);
+		s+= scriptLine("hasAvatar",""+hasAvatar);
 		return(s);
 		
 	}
@@ -126,6 +127,9 @@ public class GameSpec {
 			this.minBrightness = Integer.parseInt(value);
 		}else if (prop.equals("maxBrightness")){
 			this.maxBrightness = Integer.parseInt(value);
+		
+		}else if (prop.equals("hasAvatar")){
+			this.hasAvatar = (value == "true" ? true : false);
 		} else return false;
 		return true;
 	}

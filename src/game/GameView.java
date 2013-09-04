@@ -32,6 +32,7 @@ public class GameView extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private GameModel gm = null;
+	boolean hasAvatar = true;
 
 	public AudioClip bgSound;
 	String lastbgSound;
@@ -260,7 +261,7 @@ public class GameView extends JPanel{
 		
 		drawFish(g); 
 		
-		drawAvatar(g);
+		if (hasAvatar) drawAvatar(g);
 
 		updateScore(g);
 		
@@ -274,7 +275,7 @@ public class GameView extends JPanel{
 		g.fillRect(0, 0, getWidth(), 20);
 		g.setColor(Color.GREEN);
 		// this is supposed to reference the timePerTrial rather than timeLimit. 
-		g.fillRect(0, 0, toViewCoords(gm.timeRemaining), 20);
+		g.fillRect(0, 0, toXViewCoords(gm.timeRemaining), 20);
 		//System.out.println(gm.timeRemaining);
 		//g.drawString("", toViewCoords(50), 20);
 		

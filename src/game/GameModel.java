@@ -35,10 +35,11 @@ public class GameModel {
 	public double size;
 	
 	private long lastLogEventTimeNano1 = 0;
-
+	// time per trial is represented as tenths of seconds
 	public double timePerTrial = 20;
-
+	// time remaining is represented as a percentage
 	public double timeRemaining = 100;
+	//total actor time is the 
 	public double totalActorTime = 0;
 	public double currentActorTime=0;
 	public double previousActorTime=0;
