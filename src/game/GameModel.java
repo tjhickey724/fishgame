@@ -366,7 +366,7 @@ public class GameModel {
 		this.setGameOver(false);
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
-		//this.nextFishTime = updateNextFishTime();
+		this.nextFishTime = updateNextFishTime();
 		spawnFish();
 
 	}
