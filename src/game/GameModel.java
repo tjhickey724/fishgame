@@ -344,7 +344,8 @@ public class GameModel {
 		a.fromLeft = (side == Side.left);
 		a.origin = (side == Side.left) ? 0 : 1; // we'll convert origin to Side
 												// later
-
+		a.setCongruent(nextFish.congruent);
+		a.setBT(nextFish.block, nextFish.trial);
 		// make sure it is moving inward if it comes from the right
 		if (!a.fromLeft)
 			a.vy = -a.vy;
