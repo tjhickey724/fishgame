@@ -255,6 +255,7 @@ public class GameModel {
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		boolean congruent = scan.nextBoolean();
+		
 		int block = scan.nextInt();
 		int trialnum = scan.nextInt();
 		boolean fromLeft = scan.nextBoolean();
@@ -264,9 +265,9 @@ public class GameModel {
 		// create the next Fish to be launched
 		GameActor a = new GameActor();
 		a.fromLeft = fromLeft;
-		a.congruent = congruent;
+		a.setCongruent(congruent);
 		a.block = block;
-		a.trial = trialnum;
+		a.setBT(block, trialnum);
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
 		this.nextFish = a;
 		return nextFishTime;
@@ -365,7 +366,7 @@ public class GameModel {
 		this.setGameOver(false);
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
-		this.nextFishTime = updateNextFishTime();
+		//this.nextFishTime = updateNextFishTime();
 		spawnFish();
 
 	}

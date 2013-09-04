@@ -32,9 +32,9 @@ public class GameActor {
 	double speed = 40;
 	// species
 	boolean fromLeft; // true if fish comes from left
-	boolean congruent;
-	int block;
-	int trial;
+	public boolean congruent;
+	public int block;
+	public int trial;
 	long birthTime;
 	long lastUpdate;
 	long gameStart = GameActor.GAME_START;
@@ -144,7 +144,15 @@ public class GameActor {
 		 * Auto-generated catch block e.printStackTrace(); } } }
 		 */
 	}
-
+	//set congruent
+	public void setCongruent(boolean congruent) {
+		this.congruent = congruent;
+	}
+	//set block
+	public void setBT(int block, int trial) {
+		this.block = block;
+		this.trial = trial;
+	}
 	public String toString() {
 		int ix = (int) x;
 		int iy = (int) y;

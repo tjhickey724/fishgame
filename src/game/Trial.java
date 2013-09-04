@@ -8,16 +8,19 @@ public class Trial {
 	public Trial(Long interval, String soundFile, int visualHz,
 			boolean congruent, Boolean fromLeft, Species spec) {
 		specs.add(0, interval);
+		//trial start
 		specs.add(1, 0);
+		//trial end
 		specs.add(2, 0);
 		specs.add(3, soundFile);
 		specs.add(4, visualHz);
 		specs.add(5, congruent);
+		//block
 		specs.add(6, 0);
+		//trial number
 		specs.add(7, 0);
 		specs.add(8, fromLeft);
 		specs.add(9, spec);
-
 	}
 
 	public String toScriptString() {
