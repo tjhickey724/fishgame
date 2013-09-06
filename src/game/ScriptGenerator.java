@@ -127,7 +127,7 @@ public class ScriptGenerator {
 
 	// chooses randomly between the 3 interfish intervals from gamespec
 	public Long getInterval(Long[] ifi) {
-		int pick = rand.nextInt(2);
+		int pick = rand.nextInt(3);
 		return ifi[pick];
 	}
 
