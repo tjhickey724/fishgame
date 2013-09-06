@@ -69,7 +69,7 @@ public class ScriptGenerator {
 
 			int halfTrials = (int) Math.floor(g.totalTrials / 2);
 			int block = 1;
-			//trial start time and finish time
+			// trial start time and finish time
 			Long tstart = (long) 0;
 			Long tfinish = tstart + g.trialLength;
 			int i = 0;
@@ -106,7 +106,7 @@ public class ScriptGenerator {
 			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).specs.set(7, j + 1);
-				//set trial start and finish time
+				// set trial start and finish time
 				trials.get(j).specs.set(1, tstart);
 				trials.get(j).specs.set(2, tfinish);
 				tstart = tfinish;

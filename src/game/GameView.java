@@ -64,27 +64,6 @@ public class GameView extends JPanel {
 
 		KeyAdapter kl = new KeyAdapter() {
 
-			/**
-			 * returns true if the key press was correct
-			 * 
-			 * @param c
-			 * @param lastFish
-			 * @return
-			 */
-			private boolean hitCorrectKey(char c, GameActor lastFish) {
-				Species s = lastFish.species;
-				boolean onLeft = lastFish.origin == 0;
-				if (s == Species.good)
-					if (onLeft)
-						return c == 'q';
-					else
-						return c == 'p';
-				else if (onLeft)
-					return c == 'a';
-				else
-					return c == 'l';
-			}
-
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (gm.isGameOver())
@@ -110,20 +89,18 @@ public class GameView extends JPanel {
 				}
 				// otherwise, remove the last fish (should only be one!)
 				GameActor lastFish = gm.removeLastFish();
-
+				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
-				boolean correctResponse = hitCorrectKey(e.getKeyChar(),
-						lastFish);
 				String log = e.getKeyChar() + " " + responseTime / 1000000.0
-						+ " " + correctResponse + " " + lastFish;
+						+ " " + ge.correctResponse + " " + lastFish;
 				System.out.println(log);
-
-				gm.writeToLog(new GameEvent(e.getKeyChar(), lastFish));
+				
+				gm.writeToLog(ge);
 
 				// play the appropriate sound and modify the score
-				if (correctResponse) {
+				if (ge.correctResponse) {
 					goodclip.play();
 					gm.score += 2;
 					gm.setHits(gm.getHits() + 1);

@@ -32,7 +32,7 @@ public class GameEvent {
 
 	/** the fish species **/
 	public Species species = Species.none;
-	
+
 	public boolean congruent;
 
 	/** thie fish side **/

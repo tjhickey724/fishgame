@@ -242,20 +242,20 @@ public class GameModel {
 			}
 			// System.out.println("interval="+interval+" prop="+prop+" value="+value);
 			interval = scan.nextLong();
-			
+
 			gameSpec.update(prop, value);
 		}
 
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
-		
+
 		tstart = scan.nextLong();
 		tfinish = scan.nextLong();
 		nextFishTime = this.gameStart + (tstart + interval) * 1000000L;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		boolean congruent = scan.nextBoolean();
-		
+
 		int block = scan.nextInt();
 		int trialnum = scan.nextInt();
 		boolean fromLeft = scan.nextBoolean();
@@ -275,8 +275,8 @@ public class GameModel {
 	}
 
 	public void writeToLog(GameActor f) {
-		String logLine = "launch\t" + f.species + "\t"
-				+ f.congruent + "\t" + f.block + "\t" + f.trial + "\t";
+		String logLine = "launch\t" + f.species + "\t" + f.congruent + "\t"
+				+ f.block + "\t" + f.trial + "\t";
 		writeToLog(logLine);
 	}
 

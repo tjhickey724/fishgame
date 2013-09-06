@@ -70,15 +70,14 @@ public class GameActor {
 		this.gameStart = GameActor.GAME_START;
 		this.species = spec;
 		String fishSounds;
-		//handles congruence
+		// handles congruence
 		if (congruent) {
 			if (species.equals(Species.good))
 				fishSounds = goodFishSounds;
 			else
 				fishSounds = badFishSounds;
-		}
-		else {
-			if(species.equals(Species.good))
+		} else {
+			if (species.equals(Species.good))
 				fishSounds = badFishSounds;
 			else
 				fishSounds = goodFishSounds;
@@ -144,15 +143,18 @@ public class GameActor {
 		 * Auto-generated catch block e.printStackTrace(); } } }
 		 */
 	}
-	//set congruent
+
+	// set congruent
 	public void setCongruent(boolean congruent) {
 		this.congruent = congruent;
 	}
-	//set block
+
+	// set block
 	public void setBT(int block, int trial) {
 		this.block = block;
 		this.trial = trial;
 	}
+
 	public String toString() {
 		int ix = (int) x;
 		int iy = (int) y;

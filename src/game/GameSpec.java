@@ -26,22 +26,22 @@ public class GameSpec {
 
 	// length of the session in milliseconds
 	public int runLength = 20 * 60 * 1000;
-	
+
 	// how many blocks in the session. a block is the time that the subject is
 	// being scanned.
 	public int blocksPerRun = 5;
-	
+
 	// how many trials in a block. a trial is a fish event.
 	public int trialsPerBlock = 50;
 
 	// length of a block in milliseconds
 	public Long blockLength = (long) (runLength / blocksPerRun);
-	
+
 	public Long trialLength = (blockLength) / trialsPerBlock;
-	
+
 	public int totalTrials = trialsPerBlock * blocksPerRun;
-	
-	//  interfish intervals stored in an array...
+
+	// interfish intervals stored in an array...
 	public Long[] ifi = new Long[3];
 
 	public String goodResponseSound = "sounds/good.wav";
@@ -90,8 +90,8 @@ public class GameSpec {
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
 		s += scriptLine("Totaltrials:", "" + totalTrials);
-		s += scriptLine("BlockLength: ", blockLength.toString() ); //milliseconds
-		s += scriptLine("TrialLength: ", trialLength.toString() ); // milliseconds
+		s += scriptLine("BlockLength: ", blockLength.toString()); // milliseconds
+		s += scriptLine("TrialLength: ", trialLength.toString()); // milliseconds
 
 		return (s);
 
