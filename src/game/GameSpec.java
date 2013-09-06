@@ -18,11 +18,14 @@ public class GameSpec {
 
 	public boolean stereo = true;
 
+	public boolean hasAvatar = true;
+
 	public String bgSound = "sounds/water/mid.wav";
 
 	private String sep = ScriptGenerator.SEP;
 
 	public String backgroundImage = "images/stream.jpg";
+
 
 	// length of the session in milliseconds
 	public int runLength = 20 * 60 * 1000;
@@ -43,6 +46,7 @@ public class GameSpec {
 
 	// interfish intervals stored in an array...
 	public Long[] ifi = new Long[3];
+
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
@@ -70,7 +74,9 @@ public class GameSpec {
 	}
 
 	private String scriptLine(String prop, String val) {
+
 		return "-1" + sep + prop + sep + val + "\n";
+
 	}
 
 	public String toScript() {
@@ -89,9 +95,13 @@ public class GameSpec {
 		s += scriptLine("backgroundImage", backgroundImage);
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
+
 		s += scriptLine("Totaltrials:", "" + totalTrials);
 		s += scriptLine("BlockLength: ", blockLength.toString()); // milliseconds
 		s += scriptLine("TrialLength: ", trialLength.toString()); // milliseconds
+
+
+		s += scriptLine("hasAvatar", "" + hasAvatar);
 
 		return (s);
 
@@ -132,6 +142,11 @@ public class GameSpec {
 			this.minBrightness = Integer.parseInt(value);
 		} else if (prop.equals("maxBrightness")) {
 			this.maxBrightness = Integer.parseInt(value);
+
+
+		} else if (prop.equals("hasAvatar")) {
+			this.hasAvatar = (value == "true" ? true : false);
+
 		} else
 			return false;
 		return true;

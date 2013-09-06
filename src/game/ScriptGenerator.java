@@ -22,7 +22,9 @@ public class ScriptGenerator {
 	public final static String SEP = "\t";
 	public int fishNum = 0;
 	public String scriptname;
+
 	public ArrayList<Trial> trials = new ArrayList<Trial>();
+
 
 	public ScriptGenerator() {
 		this(makeScriptFilename());
@@ -56,7 +58,9 @@ public class ScriptGenerator {
 				try {
 					this.scriptFile = new BufferedWriter(new FileWriter(
 							new File(this.scriptname + ".txt")));
+
 					this.scriptFile.write("-1" + sep + "version" + sep
+
 							+ RunGame.versionNum + "\n");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -69,40 +73,51 @@ public class ScriptGenerator {
 
 			int halfTrials = (int) Math.floor(g.totalTrials / 2);
 			int block = 1;
+
 			// trial start time and finish time
 			Long tstart = (long) 0;
 			Long tfinish = tstart + g.trialLength;
+
 			int i = 0;
 			// generate good, congruent trials
 			while (i <= halfTrials / 2) {
+
 				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
 						g.good.throbRate, true, (rand.nextInt(2) == 1),
 						Species.good));
+
 				i++;
 			}
 			// congruent bad fishes
 			while (i <= halfTrials) {
+
 				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
 						g.bad.throbRate, true, (rand.nextInt(2) == 1),
-						Species.bad));
-				i++;
-			}
-			// incongruent bad fishes
-			while (i <= halfTrials / 2 + halfTrials) {
-				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
-						g.bad.throbRate, false, (rand.nextInt(2) == 1),
 						Species.bad));
 
 				i++;
 			}
+			// incongruent bad fishes
+			while (i <= halfTrials / 2 + halfTrials) {
+
+				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
+						g.bad.throbRate, false, (rand.nextInt(2) == 1),
+						Species.bad));
+
+
+				i++;
+			}
 			// incongruent good fishes
+
 			while (i < g.totalTrials) {
 				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
 						g.good.throbRate, true, (rand.nextInt(2) == 1),
 						Species.good));
+
 				i++;
 			}
 			// shuffle
+
 			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).specs.set(7, j + 1);
@@ -111,12 +126,15 @@ public class ScriptGenerator {
 				trials.get(j).specs.set(2, tfinish);
 				tstart = tfinish;
 				tfinish = tfinish + g.trialLength;
+
 				if ((j + 1) % g.trialsPerBlock == 0)
 					block++;
+
 				trials.get(j).specs.set(6, block);
 
 				System.out.print(trials.get(j).toScriptString());
 				scriptFile.write(trials.get(j).toScriptString());
+
 			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -125,11 +143,13 @@ public class ScriptGenerator {
 
 	}
 
+
 	// chooses randomly between the 3 interfish intervals from gamespec
 	public Long getInterval(Long[] ifi) {
 		int pick = rand.nextInt(3);
 		return ifi[pick];
 	}
+
 
 	public void close() {
 		try {

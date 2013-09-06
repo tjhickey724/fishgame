@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 
+
 /**
  * A Trial is a Fish Event, e.g. Good Fish from Right Bad Fish from Left and it
  * has a fixed amount of time. In fMRI mode, the previous trial ends with the
@@ -57,5 +58,6 @@ public class Trial {
 				+ specs.get(4) + " " + specs.get(5) + " " + specs.get(6) + " "
 				+ specs.get(7) + " " + specs.get(8) + " "
 				+ specs.get(9).toString() + "\n";
+
 	}
 }

@@ -33,7 +33,9 @@ public class GameEvent {
 	/** the fish species **/
 	public Species species = Species.none;
 
+
 	public boolean congruent;
+
 
 	/** thie fish side **/
 	public String side = "none";
@@ -90,7 +92,9 @@ public class GameEvent {
 		this.responseTime = 0;
 		this.fish = fish;
 		this.species = fish.species;
+
 		this.congruent = fish.congruent;
+
 		this.side = (fish.fromLeft) ? "left" : "right";
 		this.correctResponse = false;
 		this.fishRelease = fish.birthTime;
@@ -109,6 +113,7 @@ public class GameEvent {
 		this.keyPressed = keyPressed;
 		this.fish = fish;
 		this.species = fish.species;
+
 		this.congruent = fish.congruent;
 		this.side = (fish.fromLeft) ? "left" : "right";
 		this.fishRelease = fish.birthTime;

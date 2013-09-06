@@ -29,6 +29,7 @@ public class GameView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private GameModel gm = null;
+	boolean hasAvatar = true;
 
 	public AudioClip bgSound;
 	String lastbgSound;
@@ -39,7 +40,9 @@ public class GameView extends JPanel {
 
 	public boolean gameActive = false; // shouldn't this be in the model???
 
-	public BufferedImage streamImage, streamImage2, fish;
+
+	public BufferedImage streamImage, streamImage2, fish, boat, coin;
+
 
 	// these arrays store the sprite images used to adjust brightness. the
 	// default brightness is in image, 12, accesible using fishL[12] or
@@ -63,6 +66,7 @@ public class GameView extends JPanel {
 		this.requestFocus();
 
 		KeyAdapter kl = new KeyAdapter() {
+
 
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -89,24 +93,32 @@ public class GameView extends JPanel {
 				}
 				// otherwise, remove the last fish (should only be one!)
 				GameActor lastFish = gm.removeLastFish();
+
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
+
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
 				long responseTime = keyPressTime - lastFish.birthTime;
+
 				String log = e.getKeyChar() + " " + responseTime / 1000000.0
 						+ " " + ge.correctResponse + " " + lastFish;
+
 				System.out.println(log);
+
 				
 				gm.writeToLog(ge);
 
+
 				// play the appropriate sound and modify the score
+
 				if (ge.correctResponse) {
+
 					goodclip.play();
-					gm.score += 2;
+					gm.wealth++;
 					gm.setHits(gm.getHits() + 1);
 				} else {
 					badclip.play();
-					gm.score -= 1;
+					gm.wealth--;
 					gm.setMisses(gm.getMisses() + 1);
 				}
 
@@ -140,7 +152,11 @@ public class GameView extends JPanel {
 					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
 
+
+			boat = ImageIO.read(new File("images/boat1.png"));
+
 			fish = ImageIO.read(new File("images/fish/fish.png"));
+			coin = ImageIO.read(new File("images/wealth.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
 			if (!gs.bgSound.equals(this.lastbgSound)) {
@@ -229,11 +245,49 @@ public class GameView extends JPanel {
 
 		drawBackground(g);
 
+		drawTimeBar(g);
+
+		drawHud(g);
+
 		drawFish(g);
+
+		if (hasAvatar)
+			drawAvatar(g);
+
 
 		updateScore(g);
 
 	}
+
+
+	private void drawTimeBar(Graphics g) {
+		// TODO Auto-generated method stub
+		g.setColor(Color.RED);
+		g.fillRect(0, 0, getWidth(), 20);
+		g.setColor(Color.GREEN);
+		// this is supposed to reference the timePerTrial rather than timeLimit.
+		g.fillRect(0, 0, toXViewCoords(gm.timeRemaining), 20);
+		// System.out.println(gm.timeRemaining);
+		// g.drawString("", toViewCoords(50), 20);
+
+	}
+
+	public void drawHud(Graphics g) {
+
+		g.drawImage(coin, 2, 20, 50, 50, null);
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("Helvetica", Font.BOLD, 50));
+		g.drawString(gm.wealth + "", 55, 65);
+	}
+
+	// method to draw the boat avatar
+	private void drawAvatar(Graphics g) {
+		// This draws the boat in the middle
+		int x = (this.getWidth() - boat.getWidth(null)) / 2;
+		int y = (this.getHeight() - boat.getHeight(null) / 4);
+		g.drawImage(boat, x, y, boat.getWidth(), boat.getHeight(), null);
+	}
+
 
 	private void updateScore(Graphics g) {
 		g.setFont(new Font("Helvetica", Font.BOLD, 20));

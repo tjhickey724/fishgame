@@ -28,6 +28,7 @@ public class GameActor {
 	double vy;
 	// still on board?
 	boolean active;
+
 	// speed
 	double speed = 40;
 	// species
@@ -37,6 +38,10 @@ public class GameActor {
 	public int trial;
 	long birthTime;
 	long lastUpdate;
+	// this is the time it stays on screen, in tenths of a second
+	public static double timeOnScreen = 20;
+	long lifeSpan;
+
 	long gameStart = GameActor.GAME_START;
 	Color color1 = new Color(150, 0, 0), color2 = new Color(200, 0, 0),
 			color3 = new Color(100, 100, 100),
@@ -50,6 +55,7 @@ public class GameActor {
 
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
+
 
 	private java.util.Random rand = new java.util.Random();
 
@@ -118,30 +124,39 @@ public class GameActor {
 	 */
 	public void update() {
 		long now = System.nanoTime();
-		double dt = (now - this.lastUpdate) / 1000000000.0;
-		this.lastUpdate = now;
-		double turnspeed = 0.1;
-		vx += rand.nextDouble() * turnspeed - turnspeed / 2;
-		vy += rand.nextDouble() * turnspeed - turnspeed / 2;
-		double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
-		vx /= tmpSpeed;
-		vy /= tmpSpeed;
-		x += vx * speed * dt;
-		y += vy * speed * dt;
-		/*
-		 * if (species.toString().equals("good")){ try { this.ct=new
-		 * AudioClip("src/sound8.wav"); } catch (UnsupportedAudioFileException
-		 * e) { // TODO Auto-generated catch block e.printStackTrace(); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } catch (LineUnavailableException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); } } else if
-		 * (species.toString().equals("bad")){ try { this.ct=new
-		 * AudioClip("src/bad.wav"); } catch (UnsupportedAudioFileException e) {
-		 * // TODO Auto-generated catch block e.printStackTrace(); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } catch (LineUnavailableException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); } } }
-		 */
+
+		if (now < birthTime + timeOnScreen * 100000000) {
+			this.lifeSpan = now - birthTime;
+			double dt = (now - this.lastUpdate) / 1000000000.0;
+			this.lastUpdate = now;
+			double turnspeed = 0.1;
+			// vx += rand.nextDouble()*turnspeed -turnspeed/2;
+			vy += rand.nextDouble() * turnspeed - turnspeed / 2;
+			double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
+			// vx /= tmpSpeed;
+			vy /= tmpSpeed;
+			x += vx * speed * dt;
+			y += vy * 10 * speed * dt;
+			/*
+			 * if (species.toString().equals("good")){ try { this.ct=new
+			 * AudioClip("src/sound8.wav"); } catch
+			 * (UnsupportedAudioFileException e) { // TODO Auto-generated catch
+			 * block e.printStackTrace(); } catch (IOException e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); } catch
+			 * (LineUnavailableException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); } } else if
+			 * (species.toString().equals("bad")){ try { this.ct=new
+			 * AudioClip("src/bad.wav"); } catch (UnsupportedAudioFileException
+			 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
+			 * catch (IOException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); } catch (LineUnavailableException e) { //
+			 * TODO Auto-generated catch block e.printStackTrace(); } } }
+			 */
+		} else {
+			this.active = false;
+			this.ct.stop();
+		}
+
 	}
 
 	// set congruent
