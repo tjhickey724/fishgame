@@ -159,6 +159,7 @@ public class GameView extends JPanel {
 			coin = ImageIO.read(new File("images/wealth.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
+			hasAvatar=gs.hasAvatar;
 			if (!gs.bgSound.equals(this.lastbgSound)) {
 				this.lastbgSound = gs.bgSound;
 				if (bgSound != null)
@@ -262,7 +263,7 @@ public class GameView extends JPanel {
 
 	private void drawTimeBar(Graphics g) {
 		// TODO Auto-generated method stub
-		g.setColor(Color.RED);
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), 20);
 		g.setColor(Color.GREEN);
 		// this is supposed to reference the timePerTrial rather than timeLimit.
