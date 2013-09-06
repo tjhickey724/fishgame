@@ -251,7 +251,7 @@ public class GameModel {
 		
 		tstart = scan.nextLong();
 		tfinish = scan.nextLong();
-		nextFishTime = tstart + interval;
+		nextFishTime = this.gameStart + (tstart + interval) * 1000000L;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		boolean congruent = scan.nextBoolean();
