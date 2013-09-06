@@ -35,7 +35,7 @@ public class GameSpec {
 	public Long blockLength = (long) (runLength / blocksPerRun);
 	public Long trialLength = (blockLength * 60) / (long) trialsPerBlock;
 	public int totalTrials = trialsPerBlock * blocksPerRun;
-	public ArrayList<Trial> trials = new ArrayList<Trial>();
+	
 	// set interfish intervals
 	public Long[] ifi = new Long[3];
 

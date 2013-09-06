@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class ScriptGenerator {
 	public final static String SEP = "\t";
 	public int fishNum = 0;
 	public String scriptname;
+	public ArrayList<Trial> trials = new ArrayList<Trial>();
 
 	public ScriptGenerator() {
 		this(makeScriptFilename());
@@ -73,21 +75,21 @@ public class ScriptGenerator {
 			int i = 0;
 			// generate good, congruent trials
 			while (i <= halfTrials / 2) {
-				g.trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
 						g.good.throbRate, true, (rand.nextInt(2) == 1),
 						Species.good));
 				i++;
 			}
 			// congruent bad fishes
 			while (i <= halfTrials) {
-				g.trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
 						g.bad.throbRate, true, (rand.nextInt(2) == 1),
 						Species.bad));
 				i++;
 			}
 			// incongruent bad fishes
 			while (i <= halfTrials / 2 + halfTrials) {
-				g.trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
 						g.bad.throbRate, false, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -95,26 +97,26 @@ public class ScriptGenerator {
 			}
 			// incongruent good fishes
 			while (i <= halfTrials) {
-				g.trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
 						g.good.throbRate, true, (rand.nextInt(2) == 1),
 						Species.good));
 				i++;
 			}
 			// shuffle
-			Collections.shuffle(g.trials);
-			for (int j = 0; j < g.trials.size(); j++) {
-				g.trials.get(j).specs.set(7, j + 1);
+			Collections.shuffle(trials);
+			for (int j = 0; j < trials.size(); j++) {
+				trials.get(j).specs.set(7, j + 1);
 				//set trial start and finish time
-				g.trials.get(j).specs.set(1, tstart);
-				g.trials.get(j).specs.set(2, tfinish);
+				trials.get(j).specs.set(1, tstart);
+				trials.get(j).specs.set(2, tfinish);
 				tstart = tfinish;
 				tfinish = tfinish + g.trialLength;
 				if ((j + 1) % g.trialsPerBlock == 0)
 					block++;
-				g.trials.get(j).specs.set(6, block);
+				trials.get(j).specs.set(6, block);
 
-				System.out.print(g.trials.get(j).toScriptString());
-				scriptFile.write(g.trials.get(j).toScriptString());
+				System.out.print(trials.get(j).toScriptString());
+				scriptFile.write(trials.get(j).toScriptString());
 			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
