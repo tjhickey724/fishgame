@@ -131,7 +131,7 @@ public class GameEvent {
 		if (s == Species.good)
 			return c == 'p';
 		else
-			return c == 'q';
+			return c == 'l';
 	}
 
 	public String toString() {
