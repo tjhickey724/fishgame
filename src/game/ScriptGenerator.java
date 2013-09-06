@@ -96,7 +96,7 @@ public class ScriptGenerator {
 				i++;
 			}
 			// incongruent good fishes
-			while (i <= halfTrials) {
+			while (i < g.totalTrials) {
 				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
 						g.good.throbRate, true, (rand.nextInt(2) == 1),
 						Species.good));
