@@ -94,8 +94,7 @@ public class GameActor {
 			if (stereo) {
 				this.ctR = new AudioClip(fishSounds + "/fishR.wav");
 				this.ctL = new AudioClip(fishSounds + "/fishL.wav");
-				// (fishSounds+"/fishR.wav");
-				// System.out.println(fishSounds+"/fishL.wav");
+				
 			} else {
 				this.ctR = this.ct;
 				this.ctL = this.ct;
@@ -105,15 +104,11 @@ public class GameActor {
 		}
 	}
 
-	public GameActor(double x, double y) { // throws
-											// UnsupportedAudioFileException,
-											// IOException,
-											// LineUnavailableException {
+	public GameActor(double x, double y) { 
 		this(x, y, true, Species.good);
 	}
 
-	public GameActor() { // throws UnsupportedAudioFileException, IOException,
-							// LineUnavailableException {
+	public GameActor() { 
 		this(0, 0, true, Species.good);
 	}
 
@@ -137,21 +132,7 @@ public class GameActor {
 			vy /= tmpSpeed;
 			x += vx * speed * dt;
 			y += vy * 10 * speed * dt;
-			/*
-			 * if (species.toString().equals("good")){ try { this.ct=new
-			 * AudioClip("src/sound8.wav"); } catch
-			 * (UnsupportedAudioFileException e) { // TODO Auto-generated catch
-			 * block e.printStackTrace(); } catch (IOException e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); } catch
-			 * (LineUnavailableException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); } } else if
-			 * (species.toString().equals("bad")){ try { this.ct=new
-			 * AudioClip("src/bad.wav"); } catch (UnsupportedAudioFileException
-			 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
-			 * catch (IOException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); } catch (LineUnavailableException e) { //
-			 * TODO Auto-generated catch block e.printStackTrace(); } } }
-			 */
+			
 		} else {
 			this.active = false;
 			this.ct.stop();
@@ -173,7 +154,6 @@ public class GameActor {
 	public String toString() {
 		int ix = (int) x;
 		int iy = (int) y;
-		// return "["+ix+","+iy+","+active+"]";
 		return "[" + this.species + "," + this.origin + "]";
 	}
 
