@@ -348,6 +348,10 @@ public class GameModel {
 
 	private long lastLogEventTimeNano = 0;
 
+	public boolean flash;
+
+	public long indicatorUpdate;
+
 	public void pause() {
 
 		this.nextFishTime = Long.MAX_VALUE;
@@ -370,7 +374,7 @@ public class GameModel {
 	public void spawnFish() {
 		if (this.isGameOver())
 			return;
-
+		
 		Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
 		Species s = this.nextFish.species;
 		// System.out.println("spawning "+s+" "+side);
@@ -410,6 +414,9 @@ public class GameModel {
 
 		// add the fish to the list of actors...
 		this.actors.add(a);
+		//send a flash to the indicator
+		flash=true;
+		indicatorUpdate=System.nanoTime()+50000000l;
 		writeToLog(a); // indicate that a was spawned
 	}
 
@@ -552,7 +559,7 @@ public class GameModel {
 
 
 		if (now > this.nextFishTime) {
-
+			
 			// time to launch the next fish!
 			// System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
 			// (this.nextFishTime-this.gameStart)/1000000);

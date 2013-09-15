@@ -30,7 +30,8 @@ public class GameView extends JPanel {
 
 	private GameModel gm = null;
 	boolean hasAvatar = true;
-
+	boolean flash = false;
+	
 	public AudioClip bgSound;
 	String lastbgSound;
 
@@ -48,6 +49,7 @@ public class GameView extends JPanel {
 	// default brightness is in image, 12, accesible using fishL[12] or
 	// fishR[12]
 	public BufferedImage[] fishL, fishR;
+	public long indicatorUpdate;
 
 	public JLabel header = new JLabel("Right: Wrong:");
 	public int thisFrame = 12;
@@ -72,7 +74,10 @@ public class GameView extends JPanel {
 			public void keyTyped(KeyEvent e) {
 				if (gm.isGameOver())
 					return;
-
+				// when a key is pressed, we send a 'flash' to the indicator in the corner
+				flash=true;
+				// we set the update time to be 50 ms after the keypress, so the indicator stays lit for 50 ms
+				indicatorUpdate=System.nanoTime()+50000000l;
 				// play good/bad sounds alone by key press for demo purpose
 				if (e.getKeyChar() == 'g') {
 					goodclip.play();
@@ -254,12 +259,31 @@ public class GameView extends JPanel {
 
 		if (hasAvatar)
 			drawAvatar(g);
+		
+		drawIndicator(g);
 
 
 		updateScore(g);
 
 	}
 
+
+	private void drawIndicator(Graphics g) {
+		if (flash){
+			g.setColor(Color.white);
+			
+			if (indicatorUpdate<System.nanoTime())flash=false;
+		} else if (gm.flash){
+			g.setColor(Color.white);
+			if (gm.indicatorUpdate<System.nanoTime())gm.flash=false;
+		} else {
+			g.setColor(Color.black);
+		}
+		
+		g.fillRect(0, getHeight()-60, 60, 60);
+		
+		
+	}
 
 	private void drawTimeBar(Graphics g) {
 		// TODO Auto-generated method stub
@@ -385,6 +409,8 @@ public class GameView extends JPanel {
 																				// ((theSize
 																				// *
 																				// aspectRatio)/100);
+		// here we send a 'flash' to the corner indicator
+
 		if (a.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
 					theWidth, theHeight, null);
