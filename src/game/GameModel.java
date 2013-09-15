@@ -435,7 +435,8 @@ public class GameModel {
 		try {
 			if (actors.size() > 0) {
 				GameActor a = actors.get(0);
-				a.ct.stop();
+				if(a.congruent != 2)
+					a.ct.stop();
 			}
 
 		} catch (Exception e) {
@@ -495,7 +496,8 @@ public class GameModel {
 	public GameActor removeLastFish() {
 		if (this.actors.size() > 0) {
 			GameActor lastFish = this.actors.get(0);
-			lastFish.ct.stop();
+			if(lastFish.congruent != 2)
+				lastFish.ct.stop();
 			lastFish.active = false;
 			this.actors.clear();
 			return lastFish;
@@ -543,7 +545,8 @@ public class GameModel {
 			// fish
 			this.setNoKeyPress(this.getNoKeyPress() + 1);
 			GameActor lastFish = this.actors.get(this.actors.size() - 1);
-			lastFish.ct.stop();
+			if(lastFish.congruent != 2)
+				lastFish.ct.stop();
 
 			this.actors.clear();
 			this.writeToLog(new GameEvent(lastFish));
@@ -573,7 +576,8 @@ public class GameModel {
 				lastFish.active = false;
 				previousActorTime += lastFish.lifeSpan;
 				currentActorTime = 0;
-				lastFish.ct.stop();
+				if(lastFish.congruent != 2)
+					lastFish.ct.stop();
 
 				this.actors.clear();
 
