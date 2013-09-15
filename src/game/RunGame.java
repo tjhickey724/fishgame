@@ -23,7 +23,6 @@ public class RunGame {
 	 */
 	public static String versionNum = "3";
 
-
 	public static void main(String[] args) {
 
 		ExperimenterWindow params = new ExperimenterWindow();

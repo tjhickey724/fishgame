@@ -60,9 +60,7 @@ public class ScriptWindow extends JFrame {
 		// stop = new JButton("Stop");
 		JButton sdone = new JButton("Done");
 
-
 		fc = new JFileChooser(System.getProperty("user.dir") + "/scripts");
-
 
 		openButton = new JButton("Open");
 		openButton.addActionListener(new ActionListener() {
@@ -102,7 +100,6 @@ public class ScriptWindow extends JFrame {
 				// the GameModel is the object that reads the script
 
 				gm.setInputScript(openButton.getText());
-
 
 				// Now we write the header on the log file recording
 				// the relevant information for this session

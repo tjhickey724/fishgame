@@ -41,9 +41,7 @@ public class GameView extends JPanel {
 
 	public boolean gameActive = false; // shouldn't this be in the model???
 
-
 	public BufferedImage streamImage, streamImage2, fish, boat, coin;
-
 
 	// these arrays store the sprite images used to adjust brightness. the
 	// default brightness is in image, 12, accesible using fishL[12] or
@@ -68,7 +66,6 @@ public class GameView extends JPanel {
 		this.requestFocus();
 
 		KeyAdapter kl = new KeyAdapter() {
-
 
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -110,9 +107,7 @@ public class GameView extends JPanel {
 
 				System.out.println(log);
 
-				
 				gm.writeToLog(ge);
-
 
 				// play the appropriate sound and modify the score
 
@@ -156,7 +151,6 @@ public class GameView extends JPanel {
 			AffineTransformOp op = new AffineTransformOp(tx,
 					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			streamImage2 = op.filter(streamImage, null);
-
 
 			boat = ImageIO.read(new File("images/boat1.png"));
 
@@ -262,11 +256,9 @@ public class GameView extends JPanel {
 		
 		drawIndicator(g);
 
-
 		updateScore(g);
 
 	}
-
 
 	private void drawIndicator(Graphics g) {
 		if (flash){
@@ -312,7 +304,6 @@ public class GameView extends JPanel {
 		int y = (this.getHeight() - boat.getHeight(null) / 4);
 		g.drawImage(boat, x, y, boat.getWidth(), boat.getHeight(), null);
 	}
-
 
 	private void updateScore(Graphics g) {
 		g.setFont(new Font("Helvetica", Font.BOLD, 20));
