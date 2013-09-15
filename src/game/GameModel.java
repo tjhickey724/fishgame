@@ -34,7 +34,6 @@ public class GameModel {
 	public double height;
 	public double size;
 
-
 	private long lastLogEventTimeNano1 = 0;
 	// time per trial is represented as tenths of seconds
 	public double timePerTrial = 20;
@@ -47,7 +46,6 @@ public class GameModel {
 
 	public int health = 10;
 	public int wealth = 0;
-
 
 	// currently we only ever have one actor at a time ...
 	private List<GameActor> actors = new ArrayList<GameActor>();
@@ -272,8 +270,6 @@ public class GameModel {
 			gameSpec.update(prop, value);
 		}
 
-
-
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
 
@@ -282,7 +278,7 @@ public class GameModel {
 		nextFishTime = this.gameStart + (tstart + interval) * 1000000L;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
-		boolean congruent = scan.nextBoolean();
+		int congruent = scan.nextInt();
 
 		int block = scan.nextInt();
 		int trialnum = scan.nextInt();
@@ -291,7 +287,6 @@ public class GameModel {
 		String species = scan.next();
 
 		scan.nextLine(); // skip over the rest of the line
-
 
 		// create the next Fish to be launched
 		GameActor a = new GameActor();
@@ -305,7 +300,6 @@ public class GameModel {
 		this.nextFish = a;
 
 		return nextFishTime;
-
 
 	}
 
@@ -380,7 +374,6 @@ public class GameModel {
 
 		double x = (side == Side.left) ? 1 : this.width - 1;
 
-
 		// then make an actor with that position
 		GameActor a = new GameActor(x, y, true, s, gameSpec.stereo,
 				gameSpec.good.soundFile, gameSpec.bad.soundFile);
@@ -401,12 +394,11 @@ public class GameModel {
 			a.ct = a.ctL;
 		else
 			a.ct = a.ctR;
-		a.ct.loop();
-
-
-
+		//if fish is not silent play sound
+		if (a.congruent != 2) 
+			a.ct.loop();
+		
 		a.vx = (side == Side.left) ? 1 : -1;
-
 
 		// add the fish to the list of actors...
 		this.actors.add(a);
@@ -538,7 +530,7 @@ public class GameModel {
 
 		if ((this.actors.size() > 0)
 
-				&& (now > this.nextFishTime - delay * millisecond)) {
+		&& (now > this.nextFishTime - delay * millisecond)) {
 
 			// this is the case where we didn't press a key to kill or eat the
 			// fish
@@ -549,7 +541,6 @@ public class GameModel {
 			this.actors.clear();
 			this.writeToLog(new GameEvent(lastFish));
 		}
-
 
 		if (now > this.nextFishTime) {
 
@@ -582,7 +573,6 @@ public class GameModel {
 				this.writeToLog(new GameEvent(lastFish));
 
 			}
-
 
 			// we now spawn the next fish
 			spawnFish();

@@ -26,16 +26,15 @@ public class GameSpec {
 
 	public String backgroundImage = "images/stream.jpg";
 
-
 	// length of the session in milliseconds
-	public int runLength = 20 * 60 * 1000;
+	public int runLength = 18 * 60 * 1000;
 
 	// how many blocks in the session. a block is the time that the subject is
 	// being scanned.
-	public int blocksPerRun = 5;
+	public int blocksPerRun = 6;
 
 	// how many trials in a block. a trial is a fish event.
-	public int trialsPerBlock = 50;
+	public int trialsPerBlock = 30;
 
 	// length of a block in milliseconds
 	public Long blockLength = (long) (runLength / blocksPerRun);
@@ -46,7 +45,6 @@ public class GameSpec {
 
 	// interfish intervals stored in an array...
 	public Long[] ifi = new Long[3];
-
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
@@ -100,7 +98,6 @@ public class GameSpec {
 		s += scriptLine("BlockLength: ", blockLength.toString()); // milliseconds
 		s += scriptLine("TrialLength: ", trialLength.toString()); // milliseconds
 
-
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 
 		return (s);
@@ -142,7 +139,6 @@ public class GameSpec {
 			this.minBrightness = Integer.parseInt(value);
 		} else if (prop.equals("maxBrightness")) {
 			this.maxBrightness = Integer.parseInt(value);
-
 
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value == "true" ? true : false);

@@ -2,7 +2,6 @@ package game;
 
 import java.util.ArrayList;
 
-
 /**
  * A Trial is a Fish Event, e.g. Good Fish from Right Bad Fish from Left and it
  * has a fixed amount of time. In fMRI mode, the previous trial ends with the
@@ -19,11 +18,13 @@ public class Trial {
 	public Long[] interval = new Long[3];
 	public String soundFile;
 	public int visualHz;
-	public boolean congruent;
+	// congruent = 0, incongruent = 1, silent = 3
+	public int congruent;
 	public int block;
 	public int trial;
 	public boolean fromLeft;
 	public Species spec;
+
 	/**
 	 * 
 	 * @param interval
@@ -40,8 +41,8 @@ public class Trial {
 	 *            the Species of fish (i.e. good or bad) correlated with the
 	 *            visualHz field sort of ...
 	 */
-	public Trial(Long interval, String soundFile, int visualHz,
-			boolean congruent, Boolean fromLeft, Species spec) {
+	public Trial(Long interval, String soundFile, int visualHz, int congruent,
+			Boolean fromLeft, Species spec) {
 		this.interval[0] = interval;
 		this.soundFile = soundFile;
 		this.visualHz = visualHz;
@@ -52,10 +53,9 @@ public class Trial {
 
 	public String toScriptString() {
 		return interval[0].toString() + " " + interval[1].toString() + " "
-				+ interval[2].toString() + " " + soundFile + " "
-				+ visualHz + " " + congruent + " " + block + " "
-				+ trial + " " + fromLeft + " "
-				+ spec.toString() + "\n";
+				+ interval[2].toString() + " " + soundFile + " " + visualHz
+				+ " " + congruent + " " + block + " " + trial + " " + fromLeft
+				+ " " + spec.toString() + "\n";
 
 	}
 }

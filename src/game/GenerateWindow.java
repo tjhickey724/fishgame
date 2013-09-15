@@ -46,7 +46,6 @@ public class GenerateWindow extends JFrame {
 
 	Checkbox hasAvatar = new Checkbox();
 
-
 	JTextField minSizeTF = new JTextField("100");
 
 	JTextField maxSizeTF = new JTextField("120");
@@ -198,7 +197,6 @@ public class GenerateWindow extends JFrame {
 		matrix3 = new JPanel();
 
 		matrix3.setLayout(new GridLayout(6, 2));
-
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));

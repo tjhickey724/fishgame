@@ -33,7 +33,7 @@ public class GameActor {
 	double speed = 40;
 	// species
 	boolean fromLeft; // true if fish comes from left
-	public boolean congruent;
+	public int congruent;
 	public int block;
 	public int trial;
 	long birthTime;
@@ -56,7 +56,6 @@ public class GameActor {
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
 
-
 	private java.util.Random rand = new java.util.Random();
 
 	public GameActor(double x, double y, boolean active, Species spec) {
@@ -77,7 +76,7 @@ public class GameActor {
 		this.species = spec;
 		String fishSounds;
 		// handles congruence
-		if (congruent) {
+		if (congruent == 0) {
 			if (species.equals(Species.good))
 				fishSounds = goodFishSounds;
 			else
@@ -88,13 +87,12 @@ public class GameActor {
 			else
 				fishSounds = goodFishSounds;
 		}
-
 		try {
 			this.ct = new AudioClip(fishSounds + "/fish.wav");
 			if (stereo) {
 				this.ctR = new AudioClip(fishSounds + "/fishR.wav");
 				this.ctL = new AudioClip(fishSounds + "/fishL.wav");
-				
+
 			} else {
 				this.ctR = this.ct;
 				this.ctL = this.ct;
@@ -102,13 +100,14 @@ public class GameActor {
 		} catch (Exception e) {
 			System.out.println("Audio problems!!:" + e);
 		}
+
 	}
 
-	public GameActor(double x, double y) { 
+	public GameActor(double x, double y) {
 		this(x, y, true, Species.good);
 	}
 
-	public GameActor() { 
+	public GameActor() {
 		this(0, 0, true, Species.good);
 	}
 
@@ -132,7 +131,7 @@ public class GameActor {
 			vy /= tmpSpeed;
 			x += vx * speed * dt;
 			y += vy * 10 * speed * dt;
-			
+
 		} else {
 			this.active = false;
 			this.ct.stop();
@@ -141,7 +140,7 @@ public class GameActor {
 	}
 
 	// set congruent
-	public void setCongruent(boolean congruent) {
+	public void setCongruent(int congruent) {
 		this.congruent = congruent;
 	}
 
