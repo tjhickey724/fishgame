@@ -37,11 +37,11 @@ public class GameSpec {
 	public int trialsPerBlock = 30;
 
 	// length of a block in milliseconds
-	public Long blockLength = (long) (runLength / blocksPerRun);
+	public Long blockLength;
 
-	public Long trialLength = (blockLength) / trialsPerBlock;
+	public Long trialLength;
 
-	public int totalTrials = trialsPerBlock * blocksPerRun;
+	public int totalTrials;
 
 	// interfish intervals stored in an array...
 	public Long[] ifi = new Long[3];
@@ -66,11 +66,16 @@ public class GameSpec {
 
 	public GameSpec() {
 		// create default GameSpec
-		ifi[0] = trialLength / 2;
-		ifi[1] = ifi[0] + trialLength / 4;
-		ifi[2] = ifi[0] - trialLength / 4;
+		
+
 	}
 
+	public void createIntervals(){
+				ifi[0] = trialLength / 2;
+		ifi[1] = ifi[0] + trialLength / 4;
+		ifi[2] = ifi[0] - trialLength / 4;
+		
+	}
 	private String scriptLine(String prop, String val) {
 
 		return "-1" + sep + prop + sep + val + "\n";
@@ -92,9 +97,12 @@ public class GameSpec {
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
 
-		s += scriptLine("Totaltrials:", "" + totalTrials);
-		s += scriptLine("BlockLength: ", blockLength.toString()); // milliseconds
-		s += scriptLine("TrialLength: ", trialLength.toString()); // milliseconds
+		s += scriptLine("totalTrials", "" + totalTrials);
+		s += scriptLine("runLength", ""+runLength);
+		s += scriptLine("blocksPerRun", ""+blocksPerRun);
+		s += scriptLine("blockLength", blockLength.toString()); // milliseconds
+		s += scriptLine("trialsPerBlock", ""+trialsPerBlock);
+		s += scriptLine("trialLength", trialLength.toString()); // milliseconds
 
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 
@@ -137,7 +145,12 @@ public class GameSpec {
 			this.minBrightness = Integer.parseInt(value);
 		} else if (prop.equals("maxBrightness")) {
 			this.maxBrightness = Integer.parseInt(value);
-
+		} else if (prop.equals("runLength")){
+			this.runLength = Integer.parseInt(value);
+		}else if (prop.equals("blocksPerRun")){
+			this.blocksPerRun = Integer.parseInt(value);
+		} else if (prop.equals("trialsPerBlock")){ 
+			this.trialsPerBlock = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value == "true" ? true : false);
 

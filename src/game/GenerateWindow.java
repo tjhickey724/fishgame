@@ -35,7 +35,7 @@ public class GenerateWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
 
-	JTextField mintim = new JTextField("30"), maxtim = new JTextField("80"),
+	JTextField runLen = new JTextField("30"), numBlocks = new JTextField("80"),
 			maxBrightnessTF = new JTextField("24"),
 			minBrightnessTF = new JTextField("0");
 
@@ -54,7 +54,7 @@ public class GenerateWindow extends JFrame {
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
 
-	JTextField numactors = new JTextField("7");
+	JTextField numTrials = new JTextField("7");
 
 	ScriptGenerator sgen = new ScriptGenerator();
 
@@ -101,8 +101,13 @@ public class GenerateWindow extends JFrame {
 				// here we create a GameSpec and use the user input
 				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
-				gs.minFishRelease = (int) Integer.parseInt(mintim.getText());
-				gs.maxFishRelease = (int) Integer.parseInt(maxtim.getText());
+				gs.runLength = (int) Integer.parseInt(runLen.getText()) *60 *1000;
+				gs.blocksPerRun = (int) Integer.parseInt(numBlocks.getText());
+				gs.trialsPerBlock = Integer.parseInt(numTrials.getText());
+				gs.totalTrials = gs.trialsPerBlock * gs.blocksPerRun;
+				gs.blockLength = (long) (gs.runLength / gs.blocksPerRun);
+				gs.trialLength = (gs.blockLength) / gs.trialsPerBlock;
+				gs.createIntervals();
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
 				gs.stereo = (soundtype.getSelectedItem().toString()
@@ -130,14 +135,14 @@ public class GenerateWindow extends JFrame {
 				}
 				gs.bgSound = "sounds/background/" + gs.bgSound;
 
-				int numberOfFish = Integer.parseInt(numactors.getText());
+				
 				System.out.println(gs.toScript());
 				sgen.generate(gs);
 
 				// here we generate a report for the user, so they know what's
 				// happening
 				jtextarea.append(gs.toScript());
-				jtextarea.append("GENERATE " + numberOfFish + " events\n");
+				jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
 
 			}
 		});
@@ -231,16 +236,17 @@ public class GenerateWindow extends JFrame {
 
 		matrix3.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Gen and Vis"));
-		matrix3.add(new JLabel("Min Time: "));
-		matrix3.add(mintim);
-		matrix3.add(new JLabel("Max Time: "));
-		matrix3.add(maxtim);
+		matrix3.add(new JLabel("Run Length in Minutes"));
+		matrix3.add(runLen);
+		matrix3.add(new JLabel("Blocks per Run"));
+		matrix3.add(numBlocks);
+		matrix3.add(new JLabel("Trials per Block"));
+		matrix3.add(numTrials);
 		matrix3.add(new JLabel("Min Size(%)"));
 		matrix3.add(minSizeTF);
 		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
-		matrix3.add(new JLabel("Fish to generate:"));
-		matrix3.add(numactors);
+
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);
 
