@@ -120,17 +120,17 @@ public class ScriptGenerator {
 
 			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
-				trials.get(j).specs.set(7, j + 1);
+				trials.get(j).trial =  j + 1;
 				// set trial start and finish time
-				trials.get(j).specs.set(1, tstart);
-				trials.get(j).specs.set(2, tfinish);
+				trials.get(j).interval[1] = tstart;
+				trials.get(j).interval[2] = tfinish;
 				tstart = tfinish;
 				tfinish = tfinish + g.trialLength;
 
 				if ((j + 1) % g.trialsPerBlock == 0)
 					block++;
 
-				trials.get(j).specs.set(6, block);
+				trials.get(j).block = block;
 
 				System.out.print(trials.get(j).toScriptString());
 				scriptFile.write(trials.get(j).toScriptString());
