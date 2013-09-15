@@ -24,7 +24,7 @@ public class GameSpec {
 
 	private String sep = ScriptGenerator.SEP;
 
-	public String backgroundImage = "images/stream.jpg";
+	public String backgroundImage = "images/streamB.jpg";
 
 	// length of the session in milliseconds
 	public int runLength = 18 * 60 * 1000;
@@ -80,8 +80,6 @@ public class GameSpec {
 	public String toScript() {
 		String s = "";
 
-		s += scriptLine("minFishRelease", "" + minFishRelease);
-		s += scriptLine("maxFishRelease", "" + maxFishRelease);
 		s += scriptLine("stereo", "" + stereo);
 		s += scriptLine("minThrobSize", "" + minThrobSize);
 		s += scriptLine("maxThrobSize", "" + maxThrobSize);
