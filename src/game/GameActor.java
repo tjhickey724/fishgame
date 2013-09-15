@@ -33,7 +33,7 @@ public class GameActor {
 	double speed = 40;
 	// species
 	boolean fromLeft; // true if fish comes from left
-	public boolean congruent;
+	public int congruent;
 	public int block;
 	public int trial;
 	long birthTime;
@@ -77,7 +77,7 @@ public class GameActor {
 		this.species = spec;
 		String fishSounds;
 		// handles congruence
-		if (congruent) {
+		if (congruent == 0) {
 			if (species.equals(Species.good))
 				fishSounds = goodFishSounds;
 			else
@@ -160,7 +160,7 @@ public class GameActor {
 	}
 
 	// set congruent
-	public void setCongruent(boolean congruent) {
+	public void setCongruent(int congruent) {
 		this.congruent = congruent;
 	}
 
