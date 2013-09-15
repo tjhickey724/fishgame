@@ -136,7 +136,7 @@ public class GameActor {
 			// vx /= tmpSpeed;
 			vy /= tmpSpeed;
 			x += vx * speed * dt;
-			y += vy * 10 * speed * dt;
+			y += vy *5 * speed * dt;
 			/*
 			 * if (species.toString().equals("good")){ try { this.ct=new
 			 * AudioClip("src/sound8.wav"); } catch
