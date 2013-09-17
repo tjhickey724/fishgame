@@ -15,12 +15,11 @@ public class Trial {
 	/**
 	 * an ArrayList storing the properties of the trial
 	 */
-	public Long[] interval = new Long[3];
+	public Long interval;
 	public String soundFile;
 	public int visualHz;
 	// congruent = 0, incongruent = 1, silent = 3
 	public int congruent;
-	public int block;
 	public int trial;
 	public boolean fromLeft;
 	public Species spec;
@@ -43,7 +42,7 @@ public class Trial {
 	 */
 	public Trial(Long interval, String soundFile, int visualHz, int congruent,
 			Boolean fromLeft, Species spec) {
-		this.interval[0] = interval;
+		this.interval = interval;
 		this.soundFile = soundFile;
 		this.visualHz = visualHz;
 		this.congruent = congruent;
@@ -52,9 +51,8 @@ public class Trial {
 	}
 
 	public String toScriptString() {
-		return interval[0].toString() + " " + interval[1].toString() + " "
-				+ interval[2].toString() + " " + soundFile + " " + visualHz
-				+ " " + congruent + " " + block + " " + trial + " " + fromLeft
+		return interval.toString() + " " + soundFile + " " + visualHz
+				+ " " + congruent + " " + trial + " " + fromLeft
 				+ " " + spec.toString() + "\n";
 
 	}

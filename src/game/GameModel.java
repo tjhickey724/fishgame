@@ -250,7 +250,6 @@ public class GameModel {
 					+ " scanning for the first long on a line" + e);
 			e.printStackTrace();
 		}
-		long tstart, tfinish;
 		// process all the 0 interval commands (which set game properties)
 
 		while (interval == -1) {
@@ -273,14 +272,10 @@ public class GameModel {
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
 
-		tstart = scan.nextLong();
-		tfinish = scan.nextLong();
-		nextFishTime = this.gameStart + (tstart + interval) * 1000000L;
+		nextFishTime = (interval - nextFishTime);
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
-
-		int block = scan.nextInt();
 		int trialnum = scan.nextInt();
 		boolean fromLeft = scan.nextBoolean();
 
@@ -293,9 +288,7 @@ public class GameModel {
 
 		a.fromLeft = fromLeft;
 		a.setCongruent(congruent);
-		a.block = block;
-		a.setBT(block, trialnum);
-
+		a.setTrial(trialnum);
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
 		this.nextFish = a;
 
@@ -305,8 +298,8 @@ public class GameModel {
 
 	public void writeToLog(GameActor f) {
 
-		String logLine = "launch\t" + f.species + "\t" + f.congruent + "\t"
-				+ f.block + "\t" + f.trial + "\t";
+		String logLine = "launch\t" + f.species + "\t" + f.congruent
+				+ "\t" + f.trial + "\t";
 
 		writeToLog(logLine);
 	}
@@ -388,7 +381,7 @@ public class GameModel {
 												// later
 
 		a.setCongruent(nextFish.congruent);
-		a.setBT(nextFish.block, nextFish.trial);
+		a.setTrial(nextFish.trial);
 		// make sure it is moving inward if it comes from the right
 		if (!a.fromLeft)
 			a.vy = -a.vy;

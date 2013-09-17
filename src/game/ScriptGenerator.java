@@ -71,17 +71,12 @@ public class ScriptGenerator {
 			scriptFile.write(g.toScript());
 
 			int sixthTrials = (int) Math.floor(g.totalTrials / 6);
-			int block = 1;
-
-			// trial start time and finish time
-			Long tstart = (long) 0;
-			Long tfinish = tstart + g.trialLength;
 
 			int i = 0;
 			// generate good, congruent trials
 			while (i <= sixthTrials) {
 
-				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -90,7 +85,7 @@ public class ScriptGenerator {
 			// congruent bad fishes
 			while (i <= sixthTrials * 2) {
 
-				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
 						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -99,7 +94,7 @@ public class ScriptGenerator {
 			// incongruent bad fishes
 			while (i <= sixthTrials * 3) {
 
-				trials.add(i, new Trial(getInterval(g.ifi), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.good.soundFile,
 						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -108,7 +103,7 @@ public class ScriptGenerator {
 			// incongruent good fishes
 			
 			while (i <= sixthTrials * 4) {
-				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
 						g.good.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -116,7 +111,7 @@ public class ScriptGenerator {
 			}
 			//good silent fish
 			while (i <= sixthTrials * 5) {
-				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -124,7 +119,7 @@ public class ScriptGenerator {
 			}
 			//bad silent fish
 			while (i < g.totalTrials) {
-				trials.add(i, new Trial(getInterval(g.ifi), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -135,16 +130,6 @@ public class ScriptGenerator {
 			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).trial = j + 1;
-				// set trial start and finish time
-				trials.get(j).interval[1] = tstart;
-				trials.get(j).interval[2] = tfinish;
-				tstart = tfinish;
-				tfinish = tfinish + g.trialLength;
-
-				if ((j + 1) % g.trialsPerBlock == 0)
-					block++;
-
-				trials.get(j).block = block;
 
 				System.out.print(trials.get(j).toScriptString());
 				scriptFile.write(trials.get(j).toScriptString());
@@ -157,10 +142,13 @@ public class ScriptGenerator {
 
 	}
 
-	// chooses randomly between the 3 interfish intervals from gamespec
-	public Long getInterval(Long[] ifi) {
-		int pick = rand.nextInt(3);
-		return ifi[pick];
+	// chooses randomly inbetween min fish release and max
+	public Long getInterval( int minFishRelease, int maxFishRelease) {
+		int minFish = minFishRelease;
+		int maxFish = maxFishRelease;
+		int r = rand.nextInt((maxFish - minFish) * 100);
+		long m = minFish * 100;
+		return m + r;
 	}
 
 	public void close() {

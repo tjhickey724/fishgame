@@ -101,13 +101,6 @@ public class GenerateWindow extends JFrame {
 				// here we create a GameSpec and use the user input
 				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
-				gs.runLength = (int) Integer.parseInt(runLen.getText()) *60 *1000;
-				gs.blocksPerRun = (int) Integer.parseInt(numBlocks.getText());
-				gs.trialsPerBlock = Integer.parseInt(numTrials.getText());
-				gs.totalTrials = gs.trialsPerBlock * gs.blocksPerRun;
-				gs.blockLength = (long) (gs.runLength / gs.blocksPerRun);
-				gs.trialLength = (gs.blockLength) / gs.trialsPerBlock;
-				gs.createIntervals();
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
 				gs.stereo = (soundtype.getSelectedItem().toString()

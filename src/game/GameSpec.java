@@ -26,25 +26,9 @@ public class GameSpec {
 
 	public String backgroundImage = "images/streamB.jpg";
 
-	// length of the session in milliseconds
-	public int runLength = 18 * 60 * 1000;
+	public int totalTrials = 50;
 
-	// how many blocks in the session. a block is the time that the subject is
-	// being scanned.
-	public int blocksPerRun = 6;
-
-	// how many trials in a block. a trial is a fish event.
-	public int trialsPerBlock = 30;
-
-	// length of a block in milliseconds
-	public Long blockLength;
-
-	public Long trialLength;
-
-	public int totalTrials;
-
-	// interfish intervals stored in an array...
-	public Long[] ifi = new Long[3];
+	
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
@@ -65,16 +49,7 @@ public class GameSpec {
 	public int maxBrightness = 14;
 
 	public GameSpec() {
-		// create default GameSpec
-		
 
-	}
-
-	public void createIntervals(){
-				ifi[0] = trialLength / 2;
-		ifi[1] = ifi[0] + trialLength / 4;
-		ifi[2] = ifi[0] - trialLength / 4;
-		
 	}
 	private String scriptLine(String prop, String val) {
 
@@ -98,11 +73,6 @@ public class GameSpec {
 		s += scriptLine("badSound", "" + badResponseSound);
 
 		s += scriptLine("totalTrials", "" + totalTrials);
-		s += scriptLine("runLength", ""+runLength);
-		s += scriptLine("blocksPerRun", ""+blocksPerRun);
-		s += scriptLine("blockLength", blockLength.toString()); // milliseconds
-		s += scriptLine("trialsPerBlock", ""+trialsPerBlock);
-		s += scriptLine("trialLength", trialLength.toString()); // milliseconds
 
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 
@@ -145,12 +115,6 @@ public class GameSpec {
 			this.minBrightness = Integer.parseInt(value);
 		} else if (prop.equals("maxBrightness")) {
 			this.maxBrightness = Integer.parseInt(value);
-		} else if (prop.equals("runLength")){
-			this.runLength = Integer.parseInt(value);
-		}else if (prop.equals("blocksPerRun")){
-			this.blocksPerRun = Integer.parseInt(value);
-		} else if (prop.equals("trialsPerBlock")){ 
-			this.trialsPerBlock = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value == "true" ? true : false);
 

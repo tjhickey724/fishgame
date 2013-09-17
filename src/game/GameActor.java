@@ -34,7 +34,6 @@ public class GameActor {
 	// species
 	boolean fromLeft; // true if fish comes from left
 	public int congruent;
-	public int block;
 	public int trial;
 	long birthTime;
 	long lastUpdate;
@@ -151,8 +150,7 @@ public class GameActor {
 	}
 
 	// set block
-	public void setBT(int block, int trial) {
-		this.block = block;
+	public void setTrial(int trial) {
 		this.trial = trial;
 	}
 
