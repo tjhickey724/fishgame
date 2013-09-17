@@ -272,7 +272,7 @@ public class GameModel {
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
 
-		nextFishTime = (interval - nextFishTime);
+		nextFishTime = interval *1000000 + this.nextFishTime;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
