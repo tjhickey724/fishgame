@@ -299,7 +299,7 @@ public class GameModel {
 	public void writeToLog(GameActor f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
-				+ "\t" + f.trial + "\t";
+				+ "\t" + f.trial + "\t" + f.fromLeft;
 
 		writeToLog(logLine);
 	}
