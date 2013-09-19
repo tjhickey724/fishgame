@@ -76,7 +76,7 @@ public class ScriptGenerator {
 			// generate good, congruent trials
 			while (i <= sixthTrials) {
 
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -85,7 +85,7 @@ public class ScriptGenerator {
 			// congruent bad fishes
 			while (i <= sixthTrials * 2) {
 
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -94,7 +94,7 @@ public class ScriptGenerator {
 			// incongruent bad fishes
 			while (i <= sixthTrials * 3) {
 
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.good.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
 						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -103,7 +103,7 @@ public class ScriptGenerator {
 			// incongruent good fishes
 			
 			while (i <= sixthTrials * 4) {
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.good.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -111,7 +111,7 @@ public class ScriptGenerator {
 			}
 			//good silent fish
 			while (i <= sixthTrials * 5) {
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -119,7 +119,7 @@ public class ScriptGenerator {
 			}
 			//bad silent fish
 			while (i < g.totalTrials) {
-				trials.add(i, new Trial(getInterval(g.minFishRelease, g.maxFishRelease), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.bad));
 
@@ -143,12 +143,11 @@ public class ScriptGenerator {
 	}
 
 	// chooses randomly inbetween min fish release and max
-	public Long getInterval( int minFishRelease, int maxFishRelease) {
-		int minFish = minFishRelease;
-		int maxFish = maxFishRelease;
-		int r = rand.nextInt((maxFish - minFish) * 100);
-		long m = minFish * 100;
-		return m + r;
+	public Long getInterval( int[] interval) {
+		int index = rand.nextInt(3);
+		
+		long m = interval[index] * 100;
+		return m;
 	}
 
 	public void close() {

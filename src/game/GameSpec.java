@@ -44,7 +44,7 @@ public class GameSpec {
 	public int minFishRelease = 30, maxFishRelease = 60;
 
 	public int minThrobSize = 100, maxThrobSize = 125;
-
+	public int interval[] = {35, 45, 55};
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
 
