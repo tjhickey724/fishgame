@@ -35,7 +35,7 @@ public class GenerateWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
 
-	JTextField runLen = new JTextField("30"), numBlocks = new JTextField("80"),
+	JTextField trialLen = new JTextField("30"), numBlocks = new JTextField("80"),
 			maxBrightnessTF = new JTextField("24"),
 			minBrightnessTF = new JTextField("0");
 
@@ -82,9 +82,6 @@ public class GenerateWindow extends JFrame {
 
 		JScrollPane jscrollpane = new JScrollPane(jtextarea);
 
-		String[] videotypes = new String[] { "Throb", "Flicker" };
-
-		JComboBox videotype = new JComboBox(videotypes);
 
 		String[] soundtypes = new String[] { "Stereo", "Mono" };
 		soundtype = new JComboBox(soundtypes);
@@ -190,7 +187,7 @@ public class GenerateWindow extends JFrame {
 		matrix1 = new JPanel();
 		matrix1.setLayout(new GridLayout(3, 3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(6, 2));
+		matrix2.setLayout(new GridLayout(5, 2));
 
 		matrix3 = new JPanel();
 
@@ -216,8 +213,7 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(new JLabel("Sound Type: "));
 		matrix2.add(soundtype);
 
-		matrix2.add(new JLabel("Video Type: "));
-		matrix2.add(videotype);
+
 		matrix2.add(volLabel);
 		matrix2.add(vol);
 		matrix2.add(new JLabel("Max Brightness"));
@@ -229,8 +225,8 @@ public class GenerateWindow extends JFrame {
 
 		matrix3.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Gen and Vis"));
-		matrix3.add(new JLabel("Run Length in Minutes"));
-		matrix3.add(runLen);
+		matrix3.add(new JLabel("Trial Length in ms"));
+		matrix3.add(trialLen);
 		matrix3.add(new JLabel("Blocks per Run"));
 		matrix3.add(numBlocks);
 		matrix3.add(new JLabel("Trials per Block"));

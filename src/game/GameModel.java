@@ -346,14 +346,14 @@ public class GameModel {
 	public void pause() {
 
 		this.nextFishTime = Long.MAX_VALUE;
-
+		setPaused(true);
 		this.writeToLog("PAUSE");
 	}
 
 	public void restart() {
 
 		this.nextFishTime = System.nanoTime() + 2 * 1000000000L;
-
+		setPaused(false);
 		this.writeToLog("RESTART");
 	}
 

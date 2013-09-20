@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class GameView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private GameModel gm = null;
+	public GameModel gm = null;
 	boolean hasAvatar = true;
 	boolean flash = false;
 	boolean soundflash = false;

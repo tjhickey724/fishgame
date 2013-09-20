@@ -22,6 +22,7 @@ public class SubjectWindow extends JFrame {
 	public JFrame frame;
 	public GameView gameboard;
 	private JLabel status;
+	JButton pause;
 
 	public SubjectWindow(GameModel gamemodel) { // throws
 												// UnsupportedAudioFileException,
@@ -39,12 +40,26 @@ public class SubjectWindow extends JFrame {
 		gameboard = new GameView(gamemodel);
 
 		status = new JLabel("");
-
+		pause = new JButton("pause");
 		// put the frame components together with a border layout
-		frame.add(gameboard.header, BorderLayout.NORTH);
+		frame.add(pause, BorderLayout.NORTH);
 		gameboard.header.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.add(gameboard, BorderLayout.CENTER);
 		frame.add(status, BorderLayout.SOUTH);
+		
+		pause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (pause.getText().equals("pause")) {
+					gameboard.gm.pause();
+					pause.setText("resume");
+				} else {
+					gameboard.gm.restart();
+					pause.setText("pause");
+				}
+
+			}
+		});
 
 	}
 
