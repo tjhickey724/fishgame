@@ -339,6 +339,10 @@ public class GameModel {
 
 	public long indicatorUpdate;
 
+	public boolean soundflash;
+	
+	public long soundIndicatorUpdate;
+
 	public void pause() {
 
 		this.nextFishTime = Long.MAX_VALUE;
@@ -392,9 +396,11 @@ public class GameModel {
 		else
 			a.ct = a.ctR;
 		//if fish is not silent play sound
-		if (a.congruent != 2) 
+		if (a.congruent != 2) {
 			a.ct.loop();
-		
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+		}
 		a.vx = (side == Side.left) ? 1 : -1;
 
 		// add the fish to the list of actors...

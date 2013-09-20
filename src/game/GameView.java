@@ -31,6 +31,7 @@ public class GameView extends JPanel {
 	private GameModel gm = null;
 	boolean hasAvatar = true;
 	boolean flash = false;
+	boolean soundflash = false;
 	
 	public AudioClip bgSound;
 	String lastbgSound;
@@ -48,6 +49,7 @@ public class GameView extends JPanel {
 	// fishR[12]
 	public BufferedImage[] fishL, fishR;
 	public long indicatorUpdate;
+	public long soundIndicatorUpdate;
 
 	public JLabel header = new JLabel("Right: Wrong:");
 	public int thisFrame = 12;
@@ -78,9 +80,13 @@ public class GameView extends JPanel {
 				// play good/bad sounds alone by key press for demo purpose
 				if (e.getKeyChar() == 'g') {
 					goodclip.play();
+					soundflash=true;
+					soundIndicatorUpdate=System.nanoTime()+50000000l;
 					return;
 				} else if (e.getKeyChar() == 'b') {
 					badclip.play();
+					soundflash=true;
+					soundIndicatorUpdate=System.nanoTime()+50000000l;
 					return;
 				}
 
@@ -114,10 +120,14 @@ public class GameView extends JPanel {
 				if (ge.correctResponse) {
 
 					goodclip.play();
+					soundflash=true;
+					soundIndicatorUpdate=System.nanoTime()+50000000l;
 					gm.wealth++;
 					gm.setHits(gm.getHits() + 1);
 				} else {
 					badclip.play();
+					soundflash=true;
+					soundIndicatorUpdate=System.nanoTime()+50000000l;
 					gm.wealth--;
 					gm.setMisses(gm.getMisses() + 1);
 				}
@@ -255,6 +265,7 @@ public class GameView extends JPanel {
 			drawAvatar(g);
 		
 		drawIndicator(g);
+		drawSoundIndicator(g);
 
 		updateScore(g);
 
@@ -274,6 +285,21 @@ public class GameView extends JPanel {
 		
 		g.fillRect(0, getHeight()-60, 60, 60);
 		
+		
+	}
+	
+	private void drawSoundIndicator(Graphics g){
+		if (soundflash){
+			g.setColor(Color.white);
+			if (soundIndicatorUpdate<System.nanoTime())soundflash=false;
+		} else if (gm.soundflash){
+			g.setColor(Color.white);
+			if (gm.soundIndicatorUpdate<System.nanoTime())gm.soundflash=false;
+		} else {
+			g.setColor(Color.black);
+		}
+		
+		g.fillRect(getWidth()-60, getHeight()-60, 60, 60);
 		
 	}
 

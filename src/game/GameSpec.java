@@ -26,7 +26,7 @@ public class GameSpec {
 
 	public String backgroundImage = "images/streamB.jpg";
 
-	public int totalTrials = 50;
+	public int totalTrials=50;
 
 	
 
