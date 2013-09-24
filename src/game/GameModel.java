@@ -278,9 +278,9 @@ public class GameModel {
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
 		int block = scan.nextInt();
-		long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
-		nexttrial = nexttrial - this.nextFishTime;
-		nextFishTime = (interval +  nexttrial) * 1000000 + this.nextFishTime;
+		//long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
+		//nexttrial = nexttrial - this.nextFishTime;
+		nextFishTime = (interval +  gameSpec.trialLength) * 1000000 + this.nextFishTime;
 		boolean fromLeft = scan.nextBoolean();
 
 		String species = scan.next();
