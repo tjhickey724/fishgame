@@ -21,6 +21,7 @@ public class Trial {
 	// congruent = 0, incongruent = 1, silent = 3
 	public int congruent;
 	public int trial;
+	public int block;
 	public boolean fromLeft;
 	public Species spec;
 
@@ -49,10 +50,12 @@ public class Trial {
 		this.fromLeft = fromLeft;
 		this.spec = spec;
 	}
-
+	public void setBock(int block) {
+		this.block = block;
+	}
 	public String toScriptString() {
 		return interval.toString() + " " + soundFile + " " + visualHz
-				+ " " + congruent + " " + trial + " " + fromLeft
+				+ " " + congruent + " " + trial + " " + block + " " + fromLeft
 				+ " " + spec.toString() + "\n";
 
 	}

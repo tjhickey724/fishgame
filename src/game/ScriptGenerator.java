@@ -126,11 +126,13 @@ public class ScriptGenerator {
 				i++;
 			}
 			// shuffle
-
 			Collections.shuffle(trials);
+			
+			int trialsperblock = g.totalTrials / g.blocks;
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).trial = j + 1;
-
+				trials.get(j).block = trials.get(j).trial / (trialsperblock + 1) + 1;
+				
 				System.out.print(trials.get(j).toScriptString());
 				scriptFile.write(trials.get(j).toScriptString());
 

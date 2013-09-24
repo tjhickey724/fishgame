@@ -27,7 +27,7 @@ public class GameSpec {
 	public String backgroundImage = "images/streamB.jpg";
 
 	public int totalTrials = 50;
-
+	public int blocks = 5;
 	
 
 	public String goodResponseSound = "sounds/good.wav";
@@ -42,12 +42,12 @@ public class GameSpec {
 	 */
 
 	public int minFishRelease = 30, maxFishRelease = 60;
-
+	public int trialLength = 60;
 	public int minThrobSize = 100, maxThrobSize = 125;
-	public int interval[] = {35, 45, 55};
+	public int interval[] = {25, 35, 45};
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
-
+	
 	public GameSpec() {
 
 	}
@@ -73,7 +73,7 @@ public class GameSpec {
 		s += scriptLine("badSound", "" + badResponseSound);
 
 		s += scriptLine("totalTrials", "" + totalTrials);
-
+		s += scriptLine("Trial Length:", "" + totalTrials);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 
 		return (s);

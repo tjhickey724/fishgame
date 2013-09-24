@@ -35,6 +35,7 @@ public class GameActor {
 	boolean fromLeft; // true if fish comes from left
 	public int congruent;
 	public int trial;
+	public int block;
 	long birthTime;
 	long lastUpdate;
 	// this is the time it stays on screen, in tenths of a second

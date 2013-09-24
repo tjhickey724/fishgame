@@ -272,11 +272,15 @@ public class GameModel {
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
 
-		nextFishTime = interval *1000000 + this.nextFishTime;
+		//nextFishTime = interval *1000000 + this.nextFishTime;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
+		int block = scan.nextInt();
+		long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
+		nexttrial = nexttrial - this.nextFishTime;
+		nextFishTime = (interval +  nexttrial) * 1000000 + this.nextFishTime;
 		boolean fromLeft = scan.nextBoolean();
 
 		String species = scan.next();
@@ -289,6 +293,7 @@ public class GameModel {
 		a.fromLeft = fromLeft;
 		a.setCongruent(congruent);
 		a.setTrial(trialnum);
+		a.block = block;
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
 		this.nextFish = a;
 
@@ -299,7 +304,7 @@ public class GameModel {
 	public void writeToLog(GameActor f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
-				+ "\t" + f.trial + "\t" + f.fromLeft;
+				+ "\t" + f.trial + "\t" + f.block + "\t" + f.fromLeft;
 
 		writeToLog(logLine);
 	}
@@ -382,6 +387,7 @@ public class GameModel {
 
 		a.setCongruent(nextFish.congruent);
 		a.setTrial(nextFish.trial);
+		a.block = nextFish.block;
 		// make sure it is moving inward if it comes from the right
 		if (!a.fromLeft)
 			a.vy = -a.vy;
