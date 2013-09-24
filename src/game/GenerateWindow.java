@@ -34,16 +34,19 @@ public class GenerateWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
-
-	JTextField trialLen = new JTextField("30"), numBlocks = new JTextField("80"),
+	public int interval[] = {35, 45, 55};
+	JTextField int1 = new JTextField(""+interval[0]),
+			int3 = new JTextField(""+interval[2]),
+			int2 = new JTextField(""+interval[1]),
 			maxBrightnessTF = new JTextField("24"),
-			minBrightnessTF = new JTextField("0");
+			minBrightnessTF = new JTextField("0"),
+			numActors = new JTextField("50");
 
 	JComboBox soundtype, vol;
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-
+	
 	Checkbox hasAvatar = new Checkbox();
 
 	JTextField minSizeTF = new JTextField("100");
@@ -54,7 +57,7 @@ public class GenerateWindow extends JFrame {
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
 
-	JTextField numTrials = new JTextField("7");
+
 
 	ScriptGenerator sgen = new ScriptGenerator();
 
@@ -98,6 +101,11 @@ public class GenerateWindow extends JFrame {
 				// here we create a GameSpec and use the user input
 				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
+				interval[0]= Integer.parseInt(int1.getText());
+				interval[1]= Integer.parseInt(int2.getText());
+				interval[2]= Integer.parseInt(int3.getText());
+				gs.interval=interval;
+				gs.totalTrials = Integer.parseInt(numActors.getText());
 				gs.good.soundFile = goodSoundTF.getText();
 				gs.bad.soundFile = badSoundTF.getText();
 				gs.stereo = (soundtype.getSelectedItem().toString()
@@ -112,7 +120,7 @@ public class GenerateWindow extends JFrame {
 						.getText());
 				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF
 						.getText());
-
+				
 				gs.hasAvatar = hasAvatar.getState();
 
 				String volumeLevel = (vol.getSelectedItem()).toString();
@@ -191,7 +199,7 @@ public class GenerateWindow extends JFrame {
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(6, 2));
+		matrix3.setLayout(new GridLayout(7, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -225,16 +233,18 @@ public class GenerateWindow extends JFrame {
 
 		matrix3.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Gen and Vis"));
-		matrix3.add(new JLabel("Trial Length in ms"));
-		matrix3.add(trialLen);
-		matrix3.add(new JLabel("Blocks per Run"));
-		matrix3.add(numBlocks);
-		matrix3.add(new JLabel("Trials per Block"));
-		matrix3.add(numTrials);
+		matrix3.add(new JLabel("Interval 1"));
+		matrix3.add(int1);
+		matrix3.add(new JLabel("Interval 2"));
+		matrix3.add(int2);
+		matrix3.add(new JLabel("Interval 3"));
+		matrix3.add(int3);
 		matrix3.add(new JLabel("Min Size(%)"));
 		matrix3.add(minSizeTF);
 		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
+		matrix3.add(new JLabel("Number of trials"));
+		matrix3.add(numActors);
 
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);
