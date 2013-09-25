@@ -94,7 +94,7 @@ public class GameView extends JPanel {
 					return;
 				}
 				// otherwise, remove the last fish (should only be one!)
-				GameActor lastFish = gm.removeLastFish();
+				GameActor lastFish = gm.getActorList().get(0);
 
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
 
