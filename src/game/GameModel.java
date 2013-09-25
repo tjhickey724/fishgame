@@ -538,7 +538,7 @@ public class GameModel {
 
 		if ((this.actors.size() > 0)
 
-		&& (now > this.nextFishTime - delay * millisecond)) {
+		&& (now > this.nextFishTime - delay * millisecond) && actors.get(0).responded==true) {
 
 			// this is the case where we didn't press a key to kill or eat the
 			// fish
