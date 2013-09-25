@@ -70,7 +70,7 @@ public class ScriptGenerator {
 
 			scriptFile.write(g.toScript());
 
-			int sixthTrials = (int) Math.floor(g.totalTrials / 6);
+			int sixthTrials = (int) Math.floor(g.totalTrials / 2);
 
 			int i = 0;
 			// generate good, congruent trials
@@ -91,40 +91,7 @@ public class ScriptGenerator {
 
 				i++;
 			}
-			// incongruent bad fishes
-			while (i <= sixthTrials * 3) {
 
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.bad));
-
-				i++;
-			}
-			// incongruent good fishes
-			
-			while (i <= sixthTrials * 4) {
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.good.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-			}
-			//good silent fish
-			while (i <= sixthTrials * 5) {
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.good.throbRate, 2, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-			}
-			//bad silent fish
-			while (i < g.totalTrials) {
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.good.throbRate, 2, (rand.nextInt(2) == 1),
-						Species.bad));
-
-				i++;
-			}
 			// shuffle
 			Collections.shuffle(trials);
 			
