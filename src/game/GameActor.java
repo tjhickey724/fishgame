@@ -16,7 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class GameActor {
 	// this is a bit of a hack, I need to refactor later REFACTOR!!
 	public static long GAME_START = 0; // System.nanoTime();
-
+	boolean responded=false;
 	String soundFolder = "fish_6_8_hz_pan0"; // "fish_3_5_hz_pan50";
 	// size
 	double radius = 10;

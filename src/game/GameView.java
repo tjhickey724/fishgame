@@ -95,7 +95,10 @@ public class GameView extends JPanel {
 				}
 				// otherwise, remove the last fish (should only be one!)
 				GameActor lastFish = gm.getActorList().get(0);
-
+				if (lastFish.responded==true){
+					return;
+				}
+				lastFish.responded=true;
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
 
 				// get the response time and write it to the log
