@@ -32,7 +32,7 @@ public class GameSpec {
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
-
+	public String silentResponseSound = "sounds/fish-silence/fish.wav";
 	// we can expand to more sounds later ...
 	/*
 	 * public String eatGood = goodSound; public String eatBad = badSound;
@@ -116,7 +116,7 @@ public class GameSpec {
 		} else if (prop.equals("maxBrightness")) {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
-			this.hasAvatar = (value == "true" ? true : false);
+			this.hasAvatar = (value.contains("true") ? true : false);
 
 		} else
 			return false;

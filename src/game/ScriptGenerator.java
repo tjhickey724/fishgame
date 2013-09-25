@@ -22,7 +22,7 @@ public class ScriptGenerator {
 	public final static String SEP = "\t";
 	public int fishNum = 0;
 	public String scriptname;
-
+	
 	public ArrayList<Trial> trials = new ArrayList<Trial>();
 
 	public ScriptGenerator() {
@@ -111,7 +111,7 @@ public class ScriptGenerator {
 			}
 			//good silent fish
 			while (i <= sixthTrials * 5) {
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+				trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.good));
 
@@ -119,8 +119,8 @@ public class ScriptGenerator {
 			}
 			//bad silent fish
 			while (i < g.totalTrials) {
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.good.throbRate, 2, (rand.nextInt(2) == 1),
+				trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
+						g.bad.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.bad));
 
 				i++;

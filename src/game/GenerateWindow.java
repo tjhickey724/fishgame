@@ -106,8 +106,8 @@ public class GenerateWindow extends JFrame {
 				interval[2]= Integer.parseInt(int3.getText());
 				gs.interval=interval;
 				gs.totalTrials = Integer.parseInt(numActors.getText());
-				gs.good.soundFile = goodSoundTF.getText();
-				gs.bad.soundFile = badSoundTF.getText();
+				gs.good.update("soundFile", goodSoundTF.getText());
+				gs.bad.update("soundFile",  badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
 						.equals("Stereo"));
 				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF
