@@ -137,11 +137,21 @@ public class GameView extends JPanel {
 			System.out.println("gs is null!!!");
 			return;
 		}
+		if(gs.mode == 0) {
+			goodclip = new AudioClip(gs.goodResponseSound);
 
-		goodclip = new AudioClip(gs.goodResponseSound);
+			badclip = new AudioClip(gs.badResponseSound);
+		}
+		else if(gs.mode == 1) {
+			goodclip = new AudioClip(gs.neutralResponseSound);
 
-		badclip = new AudioClip(gs.badResponseSound);
+			badclip = new AudioClip(gs.neutralResponseSound);
+		}
+		else {
+			goodclip = new AudioClip(gs.silence);
 
+			badclip = new AudioClip(gs.silence);
+		}
 		// here we read in the background image which tiles the scene
 		try {
 			streamImage = ImageIO.read(new File(gs.backgroundImage));

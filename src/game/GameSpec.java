@@ -32,7 +32,8 @@ public class GameSpec {
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
-
+	public String neutralResponseSound = "sounds/neutral.wav";
+	public String silence = "sounds/silence.wav";
 	// we can expand to more sounds later ...
 	/*
 	 * public String eatGood = goodSound; public String eatBad = badSound;
@@ -47,7 +48,7 @@ public class GameSpec {
 	public int interval[] = {25, 35, 45};
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
-	
+	public int mode = 1;
 	public GameSpec() {
 
 	}
