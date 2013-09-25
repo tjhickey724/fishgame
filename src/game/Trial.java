@@ -52,7 +52,7 @@ public class Trial {
 
 	public String toScriptString() {
 		return interval.toString() + " " + soundFile + " " + visualHz
-				+ " " + congruent + " " + trial + " " + fromLeft
+				+ " " + congruent + " " + trial + " " + (fromLeft?"left":"right")
 				+ " " + spec.toString() + "\n";
 
 	}

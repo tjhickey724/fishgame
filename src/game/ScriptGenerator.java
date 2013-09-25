@@ -69,12 +69,15 @@ public class ScriptGenerator {
 			}
 
 			scriptFile.write(g.toScript());
-
-			int sixthTrials = (int) Math.floor(g.totalTrials / 6);
-
+			int sixthTrials;
+			if(g.totalTrials==6){
+				sixthTrials = 1;
+			} else{
+			sixthTrials = (int) Math.floor(g.totalTrials / 6);
+			}
 			int i = 0;
 			// generate good, congruent trials
-			while (i <= sixthTrials) {
+			while (i < sixthTrials) {
 
 				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
@@ -83,7 +86,7 @@ public class ScriptGenerator {
 				i++;
 			}
 			// congruent bad fishes
-			while (i <= sixthTrials * 2) {
+			while (i < sixthTrials * 2) {
 
 				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
@@ -92,7 +95,7 @@ public class ScriptGenerator {
 				i++;
 			}
 			// incongruent bad fishes
-			while (i <= sixthTrials * 3) {
+			while (i < sixthTrials * 3) {
 
 				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
 						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
@@ -102,7 +105,7 @@ public class ScriptGenerator {
 			}
 			// incongruent good fishes
 			
-			while (i <= sixthTrials * 4) {
+			while (i < sixthTrials * 4) {
 				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.good.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.good));
@@ -110,7 +113,7 @@ public class ScriptGenerator {
 				i++;
 			}
 			//good silent fish
-			while (i <= sixthTrials * 5) {
+			while (i < sixthTrials * 5) {
 				trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.good));

@@ -280,7 +280,7 @@ public class GameModel {
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
-		boolean fromLeft = scan.nextBoolean();
+		String fromLeft = scan.next();
 
 		String species = scan.next();
 
@@ -289,7 +289,7 @@ public class GameModel {
 		// create the next Fish to be launched
 		GameActor a = new GameActor();
 
-		a.fromLeft = fromLeft;
+		a.fromLeft = fromLeft.equals("left");
 		a.setCongruent(congruent);
 		a.setTrial(trialnum);
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
@@ -302,7 +302,7 @@ public class GameModel {
 	public void writeToLog(GameActor f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
-				+ "\t" + f.trial + "\t" + f.fromLeft;
+				+ "\t" + f.trial + "\t" + (f.fromLeft?"left":"right");
 
 		writeToLog(logLine);
 	}
