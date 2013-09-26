@@ -35,9 +35,11 @@ public class GenerateWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
 
-	JTextField runLen = new JTextField("30"), numBlocks = new JTextField("80"),
+	JTextField trialLen = new JTextField("30"), int1 = new JTextField("25"),
 			maxBrightnessTF = new JTextField("24"),
-			minBrightnessTF = new JTextField("0");
+			minBrightnessTF = new JTextField("0"),
+			int2=new JTextField("35"),
+					int3=new JTextField("45");
 
 	JComboBox soundtype, vol;
 	JTextArea jtextarea = new JTextArea(5, 20);
@@ -117,8 +119,13 @@ public class GenerateWindow extends JFrame {
 						.getText());
 
 				gs.hasAvatar = hasAvatar.getState();
-
+				gs.trialLength= Integer.parseInt(trialLen.getText());
+				gs.totalTrials= Integer.parseInt(numTrials.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
+				gs.interval[0]=Integer.parseInt(int1.getText());
+				gs.interval[1]=Integer.parseInt(int2.getText());
+				gs.interval[2]=Integer.parseInt(int3.getText());
+				
 				if (volumeLevel.equals("low")) {
 					gs.bgSound = "water1.wav";
 				} else if (volumeLevel.equals("med")) {
@@ -194,7 +201,7 @@ public class GenerateWindow extends JFrame {
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(6, 2));
+		matrix3.setLayout(new GridLayout(8, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -229,16 +236,20 @@ public class GenerateWindow extends JFrame {
 
 		matrix3.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Gen and Vis"));
-		matrix3.add(new JLabel("Run Length in Minutes"));
-		matrix3.add(runLen);
-		matrix3.add(new JLabel("Blocks per Run"));
-		matrix3.add(numBlocks);
-		matrix3.add(new JLabel("Trials per Block"));
-		matrix3.add(numTrials);
+		matrix3.add(new JLabel("Trial Length in Sec/10"));
+		matrix3.add(trialLen);
+		matrix3.add(new JLabel("Interval 1"));
+		matrix3.add(int1);
+		matrix3.add(new JLabel("Interval 2"));
+		matrix3.add(int2);
+		matrix3.add(new JLabel("Interval 3"));
+		matrix3.add(int3);
 		matrix3.add(new JLabel("Min Size(%)"));
 		matrix3.add(minSizeTF);
 		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
+		matrix3.add(new JLabel("Number of Trials"));
+		matrix3.add(numTrials);
 
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);

@@ -74,7 +74,7 @@ public class GameSpec {
 		s += scriptLine("badSound", "" + badResponseSound);
 
 		s += scriptLine("totalTrials", "" + totalTrials);
-		s += scriptLine("Trial Length:", "" + totalTrials);
+		s += scriptLine("trialLength", "" + trialLength);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 
 		return (s);
@@ -118,7 +118,10 @@ public class GameSpec {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value == "true" ? true : false);
-
+		} else if (prop.equals("totalTrials")){
+			this.totalTrials = Integer.parseInt(value);
+		}else if(prop.equals("trialLength")){
+			this.trialLength = Integer.parseInt(value);
 		} else
 			return false;
 		return true;
