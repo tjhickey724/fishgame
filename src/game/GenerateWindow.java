@@ -124,11 +124,11 @@ public class GenerateWindow extends JFrame {
 				gs.interval[1]=Integer.parseInt(int2.getText());
 				gs.interval[2]=Integer.parseInt(int3.getText());
 				if (mode.getSelectedItem().equals("Regular")){
-					
+					gs.mode =0;
 				}else if (mode.getSelectedItem().equals("Single Tone")){
-					
+					gs.mode =1;
 				} else if (mode.getSelectedItem().equals("No Tone")){
-					
+					gs.mode =2;
 				}
 				if (volumeLevel.equals("low")) {
 					gs.bgSound = "water1.wav";

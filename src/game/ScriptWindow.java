@@ -27,7 +27,7 @@ public class ScriptWindow extends JFrame {
 	GameSpec gs;
 	SubjectWindow sw;
 	ScriptWindow thisSW;
-	JButton openButton, pause;
+	JButton openButton;
 	JTextField scr, subId, expId;
 
 	JFileChooser fc;
@@ -55,7 +55,6 @@ public class ScriptWindow extends JFrame {
 		scr = new JTextField("scripts/demoscriptv1.txt");
 		JButton start = new JButton("start");
 
-		pause = new JButton("pause");
 		JButton restart = new JButton("Restart");
 		// stop = new JButton("Stop");
 		JButton sdone = new JButton("Done");
@@ -136,25 +135,13 @@ public class ScriptWindow extends JFrame {
 
 		// this pauses or resumes the game so the subject can take a break if
 		// needed
-		pause.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (pause.getText().equals("pause")) {
-					gm.pause();
-					pause.setText("resume");
-				} else {
-					gm.restart();
-					pause.setText("pause");
-				}
 
-			}
-		});
 
 		// Finally we do the layout of the components
 		// we could also have moved all the labels and other info into here
 		// and not given them names at all!
 		scriptpanel = new JPanel();
-		scriptpanel.setLayout(new GridLayout(4, 1));
+		scriptpanel.setLayout(new GridLayout(3, 1));
 
 		scriptpanel.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Main Control"));
@@ -165,7 +152,6 @@ public class ScriptWindow extends JFrame {
 		scriptpanel.add(start);
 		// scriptpanel.add(restart);
 		// scriptpanel.add(stop);
-		scriptpanel.add(pause);
 		scriptpanel.add(sdone);
 		// scriptpanel.add(openButton);
 		// scriptpanel.add(new JLabel("Script File"));

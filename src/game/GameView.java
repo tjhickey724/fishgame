@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class GameView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private GameModel gm = null;
+	public GameModel gm = null;
 	boolean hasAvatar = true;
 	boolean flash = false;
 	
@@ -260,7 +260,7 @@ public class GameView extends JPanel {
 
 		drawTimeBar(g);
 
-		drawHud(g);
+		//drawHud(g);
 
 		drawFish(g);
 
@@ -269,7 +269,7 @@ public class GameView extends JPanel {
 		
 		drawIndicator(g);
 
-		updateScore(g);
+		//updateScore(g);
 
 	}
 

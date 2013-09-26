@@ -347,14 +347,14 @@ public class GameModel {
 	public void pause() {
 
 		this.nextFishTime = Long.MAX_VALUE;
-
+		setPaused(true);
 		this.writeToLog("PAUSE");
 	}
 
 	public void restart() {
 
 		this.nextFishTime = System.nanoTime() + 2 * 1000000000L;
-
+		setPaused(false);
 		this.writeToLog("RESTART");
 	}
 
@@ -538,7 +538,7 @@ public class GameModel {
 
 		if ((this.actors.size() > 0)
 
-		&& (now > this.nextFishTime - delay * millisecond) && actors.get(0).responded==true) {
+		&& (now > this.nextFishTime - delay * millisecond) && actors.get(0).responded!=true) {
 
 			// this is the case where we didn't press a key to kill or eat the
 			// fish
@@ -565,7 +565,7 @@ public class GameModel {
 			previousActorTime += currentActorTime;
 			currentActorTime = 0;
 
-			if (this.actors.size() > 0) {
+	/*		if (this.actors.size() > 0) {
 
 				// this is the case where we didn't press a key to kill or eat
 				// the fish
@@ -582,7 +582,7 @@ public class GameModel {
 
 				this.writeToLog(new GameEvent(lastFish));
 
-			}
+			}*/
 
 			// we now spawn the next fish
 			spawnFish();
@@ -602,14 +602,19 @@ public class GameModel {
 				a.update();
 				keepOnBoard(a);
 
-				if (!a.active) {
+				if (!a.active && !a.responded) {
 					a.ct.stop();
 					previousActorTime += a.lifeSpan;
 					currentActorTime = 0;
 					this.setNoKeyPress(this.getNoKeyPress() + 1);
 					this.writeToLog(new GameEvent(a));
 					this.actors.clear();
-				} else {
+				} else if (!a.active && a.responded){
+					a.ct.stop();
+					previousActorTime += a.lifeSpan;
+					currentActorTime = 0;
+					this.actors.clear();
+				}else {
 					this.currentActorTime = a.lifeSpan;
 				}
 
