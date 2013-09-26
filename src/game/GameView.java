@@ -250,6 +250,11 @@ public class GameView extends JPanel {
 		if (gm.isGameOver()) {
 			g.setFont(new Font("Helvetica", Font.BOLD, 50));
 			g.drawString("GAME OVER", 100, 100);
+			g.setFont(new Font("Helvetica", Font.BOLD, 25));
+			g.drawString("Right: " +gm.getHits(), 100, 130);
+			g.drawString("Wrong: " +gm.getMisses(), 100, 160);
+			g.drawString("Missed: " +gm.getNoKeyPress(), 100, 190);
+			g.drawString("Total: " +gm.getFishNum(), 100, 210);
 			return;
 		}
 
@@ -335,12 +340,7 @@ public class GameView extends JPanel {
 		g.setFont(new Font("Helvetica", Font.BOLD, 20));
 		g.setColor(Color.WHITE);
 
-		header.setText("<html><table style=\"font-size:24pt;\">"
-				+ "<tr><td>Right:</td>" + "<td>Wrong:</td>"
-				+ "<td>Misses:</td>" + "<td>Total:</td>" + "</tr>" + "<tr><td>"
-				+ gm.getHits() + "</td><td>" + gm.getMisses() + "</td><td>"
-				+ gm.getNoKeyPress() + "</td>" + +gm.getFishNum() + "</td>"
-				+ "</tr></table></html>");
+		
 
 	}
 
