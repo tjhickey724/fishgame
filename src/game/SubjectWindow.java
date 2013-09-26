@@ -3,6 +3,7 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -46,15 +47,19 @@ public class SubjectWindow extends JFrame {
 		frame.add(gameboard, BorderLayout.CENTER);
 		frame.add(status, BorderLayout.SOUTH);
 
-		KeyAdapter kl = new KeyAdapter() {
+/*	KeyAdapter kl = new KeyAdapter() {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar()=='='){
-					gameboard.gm.started=true;
+					gameboard.gm.unstarted=false;
 				}
 			}
 		};
+		this.addKeyListener(kl);
+	*/	
+		
+		
 		pause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -68,6 +73,8 @@ public class SubjectWindow extends JFrame {
 
 			}
 		});
+		
 	}
+	
 
 }

@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -91,47 +93,13 @@ public class ScriptWindow extends JFrame {
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// we use the static variable GAME_START of GameActor
-				// to record when the game has begun, this is used to print out
-				// time stamps in the log files
-				GameActor.GAME_START = System.nanoTime();
-
-				// the GameModel is the object that reads the script
-
-				gm.setInputScript(openButton.getText());
-
-				// Now we write the header on the log file recording
-				// the relevant information for this session
-				String SubjectID = subId.getText();
-				String ExperimenterID = expId.getText();
-
-				try {
-					gm.writeToLog("Version:                "
-							+ RunGame.versionNum);
-					gm.writeToLog("Experimenter:           " + ExperimenterID);
-					gm.writeToLog("Subject:                " + SubjectID);
-					gm.writeToLog("Date:                   "
-							+ (new java.util.Date()).toString());
-
-					gm.writeToLog("Scriptfile:             "
-							+ openButton.getText());
-
-					gm.logfile.flush();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				// next we start the game model
-				gm.start();
-				// and start the game loop which will update the model
-				// and view as fast as possible
-				GameLoop gl = new GameLoop(gm, sw.gameboard);
-				Thread t = new Thread(gl);
-				t.start();
-
+				
+				startGame();
 			}
 		});
+
+		
+		
 
 		// this pauses or resumes the game so the subject can take a break if
 		// needed
@@ -157,6 +125,47 @@ public class ScriptWindow extends JFrame {
 		// scriptpanel.add(new JLabel("Script File"));
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
+	}
+	
+	public void startGame(){
+		// we use the static variable GAME_START of GameActor
+		// to record when the game has begun, this is used to print out
+		// time stamps in the log files
+		GameActor.GAME_START = System.nanoTime();
+
+		// the GameModel is the object that reads the script
+
+		gm.setInputScript(openButton.getText());
+
+		// Now we write the header on the log file recording
+		// the relevant information for this session
+		String SubjectID = subId.getText();
+		String ExperimenterID = expId.getText();
+
+		try {
+			gm.writeToLog("Version:                "
+					+ RunGame.versionNum);
+			gm.writeToLog("Experimenter:           " + ExperimenterID);
+			gm.writeToLog("Subject:                " + SubjectID);
+			gm.writeToLog("Date:                   "
+					+ (new java.util.Date()).toString());
+
+			gm.writeToLog("Scriptfile:             "
+					+ openButton.getText());
+
+			gm.logfile.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// next we start the game model
+		gm.start();
+		// and start the game loop which will update the model
+		// and view as fast as possible
+		GameLoop gl = new GameLoop(gm, sw.gameboard);
+		Thread t = new Thread(gl);
+		t.start();
 	}
 
 }

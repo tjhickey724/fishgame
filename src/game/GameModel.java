@@ -265,7 +265,12 @@ public class GameModel {
 			}
 			// System.out.println("interval="+interval+" prop="+prop+" value="+value);
 			interval = scan.nextLong();
-
+			
+			if (interval == 0) {
+				this.stop();
+				this.setGameOver(true);
+				return 1000000000000L;
+			}
 			gameSpec.update(prop, value);
 		}
 
@@ -275,7 +280,14 @@ public class GameModel {
 		//nextFishTime = interval *1000000 + this.nextFishTime;
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
-		int congruent = scan.nextInt();
+		int congruent;
+		if(scan.hasNextInt()){
+			congruent = scan.nextInt();
+		} else{
+			this.stop();
+			this.setGameOver(true);
+			return 1000000000000L;
+		}
 		int trialnum = scan.nextInt();
 		int block = scan.nextInt();
 		//long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
@@ -415,7 +427,6 @@ public class GameModel {
 
 	//this starts the 
 	public void start() {
-
 		this.setPaused(false);
 		this.setGameOver(false);
 		
@@ -424,7 +435,7 @@ public class GameModel {
 		this.nextFishTime = updateNextFishTime();
 
 		spawnFish();
-
+		
 	}
 	
 	public void startGame(){
