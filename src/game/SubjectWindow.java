@@ -46,6 +46,15 @@ public class SubjectWindow extends JFrame {
 		frame.add(gameboard, BorderLayout.CENTER);
 		frame.add(status, BorderLayout.SOUTH);
 
+		KeyAdapter kl = new KeyAdapter() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar()=='='){
+					gameboard.gm.started=true;
+				}
+			}
+		};
 		pause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

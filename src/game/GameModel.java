@@ -57,7 +57,7 @@ public class GameModel {
 	// we need to add a timer to end the session, or have the
 	// experimenter end the session ...
 	private boolean gameOver = false;
-
+	public boolean started;
 	// this checks if the game is over.
 	public boolean isGameOver() {
 		return gameOver;
@@ -344,6 +344,8 @@ public class GameModel {
 
 	public long indicatorUpdate;
 
+
+
 	public void pause() {
 
 		this.nextFishTime = Long.MAX_VALUE;
@@ -411,7 +413,21 @@ public class GameModel {
 		writeToLog(a); // indicate that a was spawned
 	}
 
+	//this starts the 
 	public void start() {
+
+		this.setPaused(false);
+		this.setGameOver(false);
+		
+		this.nextFishTime = System.nanoTime();
+		this.gameStart = nextFishTime;
+		this.nextFishTime = updateNextFishTime();
+
+		spawnFish();
+
+	}
+	
+	public void startGame(){
 		this.setPaused(false);
 		this.setGameOver(false);
 		this.nextFishTime = System.nanoTime();
@@ -419,7 +435,6 @@ public class GameModel {
 		this.nextFishTime = updateNextFishTime();
 
 		spawnFish();
-
 	}
 
 	public void stop() {
