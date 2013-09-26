@@ -76,7 +76,7 @@ public class GameSpec {
 		s += scriptLine("totalTrials", "" + totalTrials);
 		s += scriptLine("trialLength", "" + trialLength);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
-
+		s += scriptLine("mode", "" + mode);
 		return (s);
 
 	}
@@ -122,6 +122,8 @@ public class GameSpec {
 			this.totalTrials = Integer.parseInt(value);
 		}else if(prop.equals("trialLength")){
 			this.trialLength = Integer.parseInt(value);
+		} else if (prop.equals("mode")){
+			this.mode = Integer.parseInt(value);
 		} else
 			return false;
 		return true;

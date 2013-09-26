@@ -41,7 +41,7 @@ public class GenerateWindow extends JFrame {
 			int2=new JTextField("35"),
 					int3=new JTextField("45");
 
-	JComboBox soundtype, vol;
+	JComboBox soundtype, vol,mode;
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
@@ -84,16 +84,14 @@ public class GenerateWindow extends JFrame {
 
 		JScrollPane jscrollpane = new JScrollPane(jtextarea);
 
-		String[] videotypes = new String[] { "Throb", "Flicker" };
-
-		JComboBox videotype = new JComboBox(videotypes);
-
 		String[] soundtypes = new String[] { "Stereo", "Mono" };
 		soundtype = new JComboBox(soundtypes);
 
 		String[] volumes = new String[] { "low", "med", "hi" };
 		vol = new JComboBox(volumes);
-
+		
+		String[] modes = new String[] {"Regular", "Single Tone", "No Tone" };
+		mode = new JComboBox(modes);
 		JButton gdone = new JButton("Done");
 		JButton gen = new JButton("Generate");
 
@@ -125,7 +123,13 @@ public class GenerateWindow extends JFrame {
 				gs.interval[0]=Integer.parseInt(int1.getText());
 				gs.interval[1]=Integer.parseInt(int2.getText());
 				gs.interval[2]=Integer.parseInt(int3.getText());
-				
+				if (mode.getSelectedItem().equals("Regular")){
+					
+				}else if (mode.getSelectedItem().equals("Single Tone")){
+					
+				} else if (mode.getSelectedItem().equals("No Tone")){
+					
+				}
 				if (volumeLevel.equals("low")) {
 					gs.bgSound = "water1.wav";
 				} else if (volumeLevel.equals("med")) {
@@ -220,11 +224,11 @@ public class GenerateWindow extends JFrame {
 		// col3.add(gv);
 		// col3.add(bv);
 
-		matrix2.add(new JLabel("Sound Type: "));
+		matrix2.add(new JLabel("Stereo: "));
 		matrix2.add(soundtype);
 
-		matrix2.add(new JLabel("Video Type: "));
-		matrix2.add(videotype);
+		matrix2.add(new JLabel("Sound mode: "));
+		matrix2.add(mode);
 		matrix2.add(volLabel);
 		matrix2.add(vol);
 		matrix2.add(new JLabel("Max Brightness"));
