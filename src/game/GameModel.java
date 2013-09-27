@@ -281,7 +281,7 @@ public class GameModel {
 		//long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
 		//nexttrial = nexttrial - this.nextFishTime;
 		nextFishTime = (interval +  gameSpec.trialLength) * 1000000 + this.nextFishTime;
-		boolean fromLeft = scan.nextBoolean();
+		boolean fromLeft = (scan.next().equals("left"));
 
 		String species = scan.next();
 
@@ -304,7 +304,7 @@ public class GameModel {
 	public void writeToLog(GameActor f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
-				+ "\t" + f.trial + "\t" + f.block + "\t" + f.fromLeft;
+				+ "\t" + f.trial + "\t" + f.block + "\t" + (f.fromLeft? "left":"right");
 
 		writeToLog(logLine);
 	}
