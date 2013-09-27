@@ -228,7 +228,7 @@ public class ScriptGenerator {
 			}
 			// shuffle
 
-			//Collections.shuffle(trials);
+			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).trial = j + 1;
 
