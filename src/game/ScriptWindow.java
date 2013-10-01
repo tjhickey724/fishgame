@@ -27,7 +27,7 @@ public class ScriptWindow extends JFrame {
 	GameSpec gs;
 	SubjectWindow sw;
 	ScriptWindow thisSW;
-	JButton openButton;
+	JButton openButton,pause;
 	JTextField scr, subId, expId;
 
 	JFileChooser fc;
@@ -54,7 +54,7 @@ public class ScriptWindow extends JFrame {
 		subId = new JTextField("Subject");
 		scr = new JTextField("scripts/demoscriptv1.txt");
 		JButton start = new JButton("start");
-
+		pause = new JButton("pause");
 		
 		JButton restart = new JButton("Restart");
 		// stop = new JButton("Stop");
@@ -62,7 +62,7 @@ public class ScriptWindow extends JFrame {
 
 		fc = new JFileChooser(System.getProperty("user.dir") + "/scripts");
 
-		openButton = new JButton("Open");
+		openButton = new JButton("Script File");
 		openButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -78,6 +78,20 @@ public class ScriptWindow extends JFrame {
 			}
 		});
 
+		pause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (pause.getText().equals("pause")) {
+					gm.pause();
+					pause.setText("resume");
+				} else {
+					gm.restart();
+					pause.setText("pause");
+				}
+
+			}
+		});
+		
 		sdone.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -148,7 +162,7 @@ public class ScriptWindow extends JFrame {
 				.createTitledBorder("Main Control"));
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
-		scriptpanel.add(new JLabel("ScriptFile: "));
+		scriptpanel.add(pause);
 		scriptpanel.add(openButton);
 		scriptpanel.add(start);
 		// scriptpanel.add(restart);
