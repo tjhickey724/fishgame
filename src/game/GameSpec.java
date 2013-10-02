@@ -17,6 +17,11 @@ public class GameSpec {
 	public boolean requireGameViewUpdate = true;
 
 	public boolean stereo = true;
+	
+	// this represents the type of experiment being
+	// run, whether the correct response is tied to the 
+	// visual rate or the auditory rate. 0=visual, 1=auditory
+	public int mode=0;
 
 	public boolean hasAvatar = true;
 
@@ -42,7 +47,7 @@ public class GameSpec {
 	 */
 
 	public int minFishRelease = 30, maxFishRelease = 60;
-
+	
 	public int minThrobSize = 100, maxThrobSize = 125;
 	public int interval[] = {35, 45, 55};
 	public int minBrightness = 10;
@@ -75,7 +80,7 @@ public class GameSpec {
 		s += scriptLine("totalTrials", "" + totalTrials);
 
 		s += scriptLine("hasAvatar", "" + hasAvatar);
-
+		s += scriptLine("mode", ""+mode);
 		return (s);
 
 	}
@@ -117,7 +122,8 @@ public class GameSpec {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value.contains("true") ? true : false);
-
+		} else if (prop.equals("mode")){
+			this.mode = Integer.parseInt(value);
 		} else
 			return false;
 		return true;

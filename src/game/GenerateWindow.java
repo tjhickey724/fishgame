@@ -42,7 +42,7 @@ public class GenerateWindow extends JFrame {
 			minBrightnessTF = new JTextField("0"),
 			numActors = new JTextField("50");
 
-	JComboBox soundtype, vol;
+	JComboBox soundtype, vol, tiedto;
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
@@ -91,6 +91,9 @@ public class GenerateWindow extends JFrame {
 
 		String[] volumes = new String[] { "low", "med", "hi" };
 		vol = new JComboBox(volumes);
+		
+		String[] modes = new String[] { "Visual", "Auditory"};
+		tiedto = new JComboBox(modes);
 
 		JButton gdone = new JButton("Done");
 		JButton gen = new JButton("Generate");
@@ -120,7 +123,7 @@ public class GenerateWindow extends JFrame {
 						.getText());
 				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF
 						.getText());
-				
+				gs.mode= (tiedto.getSelectedItem().toString().equals("Visual")? 0 : 1);
 				gs.hasAvatar = hasAvatar.getState();
 
 				String volumeLevel = (vol.getSelectedItem()).toString();
@@ -195,7 +198,7 @@ public class GenerateWindow extends JFrame {
 		matrix1 = new JPanel();
 		matrix1.setLayout(new GridLayout(3, 3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(5, 2));
+		matrix2.setLayout(new GridLayout(6, 2));
 
 		matrix3 = new JPanel();
 
@@ -220,6 +223,8 @@ public class GenerateWindow extends JFrame {
 
 		matrix2.add(new JLabel("Sound Type: "));
 		matrix2.add(soundtype);
+		matrix2.add(new JLabel("Tied to"));
+		matrix2.add(tiedto);
 
 
 		matrix2.add(volLabel);
