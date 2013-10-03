@@ -399,7 +399,11 @@ public class GameModel {
 		else
 			a.ct = a.ctR;
 		//if fish is not silent play sound
-		if (a.congruent != 2) {
+		if (a.congruent != 2 && gameSpec.mode != 1) {
+			a.ct.loop();
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+		} else if (gameSpec.mode == 1){
 			a.ct.loop();
 			soundflash=true;
 			soundIndicatorUpdate=System.nanoTime()+50000000l;

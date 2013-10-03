@@ -400,7 +400,8 @@ public class GameView extends JPanel {
 		int x = toXViewCoords(a.x);
 		int y = toYViewCoords(a.y);
 		int visualHz = 1;
-
+		
+		
 		switch (a.species) {
 		case good:
 			visualHz = gm.gameSpec.good.throbRate;
@@ -408,6 +409,20 @@ public class GameView extends JPanel {
 		case bad:
 			visualHz = gm.gameSpec.bad.throbRate;
 			break;
+		}
+		if (gm.gameSpec.mode == 1){
+			if (a.congruent==1){
+				switch (a.species) {
+				case bad:
+					visualHz = gm.gameSpec.good.throbRate;
+					break;
+				case good:
+					visualHz = gm.gameSpec.bad.throbRate;
+					break;
+				}
+			} else if (a.congruent == 2){
+				visualHz = 0 ;
+			}
 		}
 
 		int theSize = gm.interpolateSize(gm.gameSpec.minThrobSize,
@@ -426,7 +441,7 @@ public class GameView extends JPanel {
 																				// ((theSize
 																				// *
 																				// aspectRatio)/100);
-		// here we send a 'flash' to the corner indicator
+		
 
 		if (a.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
