@@ -21,7 +21,7 @@ public class GameSpec {
 	// this represents the type of experiment being
 	// run, whether the correct response is tied to the 
 	// visual rate or the auditory rate. 0=visual, 1=auditory
-	public int mode=0;
+	public int avmode=0;
 
 	public boolean hasAvatar = true;
 
@@ -80,7 +80,7 @@ public class GameSpec {
 		s += scriptLine("totalTrials", "" + totalTrials);
 
 		s += scriptLine("hasAvatar", "" + hasAvatar);
-		s += scriptLine("mode", ""+mode);
+		s += scriptLine("avmode", ""+avmode);
 		return (s);
 
 	}
@@ -122,8 +122,8 @@ public class GameSpec {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value.contains("true") ? true : false);
-		} else if (prop.equals("mode")){
-			this.mode = Integer.parseInt(value);
+		} else if (prop.equals("avmode")){
+			this.avmode = Integer.parseInt(value);
 		} else
 			return false;
 		return true;

@@ -103,6 +103,7 @@ public class GameView extends JPanel {
 				GameActor lastFish = gm.removeLastFish();
 
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
+				//gm.setNextFishTime();
 
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
@@ -401,7 +402,7 @@ public class GameView extends JPanel {
 		int y = toYViewCoords(a.y);
 		int visualHz = 1;
 		
-		
+		// set the default visual hertz for the fish
 		switch (a.species) {
 		case good:
 			visualHz = gm.gameSpec.good.throbRate;
@@ -410,7 +411,9 @@ public class GameView extends JPanel {
 			visualHz = gm.gameSpec.bad.throbRate;
 			break;
 		}
-		if (gm.gameSpec.mode == 1){
+		
+		// handle the exception conditions...
+		if (gm.gameSpec.avmode == 1){ // auditory determines good/bad, so switch the visual hertz in incongruent case
 			if (a.congruent==1){
 				switch (a.species) {
 				case bad:

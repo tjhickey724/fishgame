@@ -57,6 +57,9 @@ public class GameModel {
 	// we need to add a timer to end the session, or have the
 	// experimenter end the session ...
 	private boolean gameOver = false;
+	
+	// next interfish interval time in milliseconds
+	long nextFishInterval=0; 
 
 	// this checks if the game is over.
 	public boolean isGameOver() {
@@ -96,6 +99,11 @@ public class GameModel {
 
 	private GameActor nextFish = null;
 	private long gameStart = startTime;
+	
+	//sets the next fishtime using the interfish interval it reads from the file ...
+	public void setNextFishTime(){
+		nextFishTime = updateNextFishTime();
+	}
 
 	public int score;
 
@@ -287,8 +295,9 @@ public class GameModel {
 		scan.nextLine(); // skip over the rest of the line
 
 		// create the next Fish to be launched
-		GameActor a = new GameActor();
+		GameActor a = new GameActor(gameSpec.avmode);
 
+		//a.avmode = this.gameSpec.avmode;
 		a.fromLeft = fromLeft.equals("left");
 		a.setCongruent(congruent);
 		a.setTrial(trialnum);
@@ -380,7 +389,9 @@ public class GameModel {
 
 		// then make an actor with that position
 		GameActor a = new GameActor(x, y, true, s, gameSpec.stereo,
-				gameSpec.good.soundFile, gameSpec.bad.soundFile);
+				gameSpec.good.soundFile, gameSpec.bad.soundFile,gameSpec.avmode,nextFish.congruent);
+		
+		
 		// and fill in all the needed fields...
 		// we don't need both fromLeft and origin .... eliminate fromLeft...
 		a.fromLeft = (side == Side.left);
@@ -399,11 +410,11 @@ public class GameModel {
 		else
 			a.ct = a.ctR;
 		//if fish is not silent play sound
-		if (a.congruent != 2 && gameSpec.mode != 1) {
+		if (a.congruent != 2 && gameSpec.avmode != 1) {
 			a.ct.loop();
 			soundflash=true;
 			soundIndicatorUpdate=System.nanoTime()+50000000l;
-		} else if (gameSpec.mode == 1){
+		} else if (gameSpec.avmode == 1){
 			a.ct.loop();
 			soundflash=true;
 			soundIndicatorUpdate=System.nanoTime()+50000000l;
@@ -502,8 +513,7 @@ public class GameModel {
 	public GameActor removeLastFish() {
 		if (this.actors.size() > 0) {
 			GameActor lastFish = this.actors.get(0);
-			if(lastFish.congruent != 2)
-				lastFish.ct.stop();
+			lastFish.ct.stop();  // fixed bug 10/3/2013
 			lastFish.active = false;
 			this.actors.clear();
 			return lastFish;
@@ -589,12 +599,12 @@ public class GameModel {
 
 				this.writeToLog(new GameEvent(lastFish));
 
-			}
+			} else {
 
 			// we now spawn the next fish
 			spawnFish();
 			// this.lastEventTime = System.nanoTime();
-
+			}
 		}
 		/*
 		 * // Finally, we update all of the fish (should only be one now!)

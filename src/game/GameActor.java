@@ -51,6 +51,9 @@ public class GameActor {
 	AudioClip ct, ctL, ctR;
 	// AudioClip bt;
 	Species species;
+	
+	/** determines whether visual(0) or audio(1) specifies good or bad  **/
+	public int avmode=0;
 
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
@@ -58,12 +61,15 @@ public class GameActor {
 
 	private java.util.Random rand = new java.util.Random();
 
-	public GameActor(double x, double y, boolean active, Species spec) {
-		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p");
+	public GameActor(double x, double y, boolean active, Species spec, int avmode) {
+		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p",avmode,0);
 	}
 
 	public GameActor(double x, double y, boolean active, Species spec,
-			boolean stereo, String goodFishSounds, String badFishSounds) {
+			boolean stereo, String goodFishSounds, String badFishSounds,
+			int avmode, int congruent) {
+		this.congruent = congruent;
+		this.avmode = avmode;
 		this.x = x;
 		this.y = y;
 		this.active = active;
@@ -75,17 +81,36 @@ public class GameActor {
 		this.gameStart = GameActor.GAME_START;
 		this.species = spec;
 		String fishSounds;
-		// handles congruence
+		// handles congruence, i.e. if sounds and visuals agree...
+		// for incongruence the one the changes depends on the avmode
+		// so in avmode=0 the sound is flipped
+		// in avmode=1 the visuals are flipped
+		System.out.println("******* Congruent=" + congruent+ " avmode="+avmode);
+		// first we give default values for the fishsounds
+		if (species.equals(Species.good))
+			fishSounds = goodFishSounds;
+		else
+			fishSounds = badFishSounds;
+		
 		if (congruent == 0) {
-			if (species.equals(Species.good))
-				fishSounds = goodFishSounds;
-			else
-				fishSounds = badFishSounds;
-		} else {
-			if (species.equals(Species.good))
-				fishSounds = badFishSounds;
-			else
-				fishSounds = goodFishSounds;
+			; // use the default values in all avmodes
+		} else if (congruent == 1){
+			if (avmode==0){
+				System.out.println("\n\n****** Switching sounds for cong=1, avmode=0\n\n");
+				if (species.equals(Species.good))
+					fishSounds = badFishSounds;
+				else
+					fishSounds = goodFishSounds;
+			} else {
+				; // we should switch the visual hz but that will be done in GameView ...
+				
+			}
+		} else{ // congruent = 2 so 
+			if (avmode == 0){ // visual mode so the sound is silent, so no change
+			   ;}
+			else { // avmode == 1, auditory mode so the visual is non-oscillating, and use default sounds
+				;
+			}
 		}
 
 		try {
@@ -108,13 +133,14 @@ public class GameActor {
 											// UnsupportedAudioFileException,
 											// IOException,
 											// LineUnavailableException {
-		this(x, y, true, Species.good);
+		this(x, y, true, Species.good,0);
 	}
 
-	public GameActor() { // throws UnsupportedAudioFileException, IOException,
+	public GameActor(int avmode) { // throws UnsupportedAudioFileException, IOException,
 							// LineUnavailableException {
-		this(0, 0, true, Species.good);
+		this(0, 0, true, Species.good, avmode);
 	}
+	
 
 	/**
 	 * actors change their velocity slightly at every step but their speed

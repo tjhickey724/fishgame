@@ -123,7 +123,7 @@ public class GenerateWindow extends JFrame {
 						.getText());
 				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF
 						.getText());
-				gs.mode= (tiedto.getSelectedItem().toString().equals("Visual")? 0 : 1);
+				gs.avmode= (tiedto.getSelectedItem().toString().equals("Visual")? 0 : 1);
 				gs.hasAvatar = hasAvatar.getState();
 
 				String volumeLevel = (vol.getSelectedItem()).toString();

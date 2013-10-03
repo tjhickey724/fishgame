@@ -71,7 +71,7 @@ public class ScriptGenerator {
 
 			scriptFile.write(g.toScript());
 			int sixthTrials;
-			mode=g.mode;
+			mode=g.avmode;
 			sixthTrials = (int) Math.floor(g.totalTrials / 6);
 			
 			int i = 0;
