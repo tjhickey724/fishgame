@@ -108,7 +108,7 @@ public class GenerateWindow extends JFrame {
 				interval[1]= Integer.parseInt(int2.getText());
 				interval[2]= Integer.parseInt(int3.getText());
 				gs.interval=interval;
-				gs.totalTrials = Integer.parseInt(numActors.getText());
+				//gs.totalTrials = Integer.parseInt(numActors.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
 				gs.bad.update("soundFile",  badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
@@ -143,7 +143,7 @@ public class GenerateWindow extends JFrame {
 				// here we generate a report for the user, so they know what's
 				// happening
 				jtextarea.append(gs.toScript());
-				jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
+				//jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
 
 			}
 		});

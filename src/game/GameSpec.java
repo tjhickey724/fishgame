@@ -31,8 +31,9 @@ public class GameSpec {
 
 	public String backgroundImage = "images/streamB.jpg";
 
-	public int totalTrials=50;
-
+	public int numCon = 10;
+	public int numIncon = 10;
+	public int numMissing = 10;
 	
 
 	public String goodResponseSound = "sounds/good.wav";
@@ -77,8 +78,9 @@ public class GameSpec {
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
 
-		s += scriptLine("totalTrials", "" + totalTrials);
-
+		s += scriptLine("totalCongruentTrials", "" + numCon);
+		s += scriptLine("totalInCongruentTrials", "" + numIncon);
+		s += scriptLine("totalmissingTrials", "" + numMissing);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 		s += scriptLine("avmode", ""+avmode);
 		return (s);

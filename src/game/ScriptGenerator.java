@@ -72,60 +72,55 @@ public class ScriptGenerator {
 			scriptFile.write(g.toScript());
 			int sixthTrials;
 			mode=g.avmode;
-			sixthTrials = (int) Math.floor(g.totalTrials / 6);
 			
-			int i = 0;
+			
+			
 			// generate good, congruent trials
-			while (i < sixthTrials) {
+			for(int i = 0; i < g.numCon / 2; i++) {
 
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
+				trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.good));
 
-				i++;
 			}
 			// congruent bad fishes
-			while (i < sixthTrials * 2) {
+			for(int i = 0; i < g.numCon / 2; i++) {
 
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+				trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.bad));
 
-				i++;
 			}
 			// incongruent bad fishes
-			while (i < sixthTrials * 3) {
+			for (int i = 0; i < g.numIncon / 2; i++) {
 				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
+				trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
 						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.bad));
 				}
 				else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+					trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
 							g.good.throbRate, 1, (rand.nextInt(2) == 1),
 							Species.bad));
 				}
-				i++;
 			}
 			// incongruent good fishes
 			
-			while (i < sixthTrials * 4) {
+			for (int i = 0; i < g.numIncon / 2; i++){
 				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+				trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.good.throbRate, 1, (rand.nextInt(2) == 1),
 						Species.good));
 				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
+					trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
 							g.bad.throbRate, 1, (rand.nextInt(2) == 1),
 							Species.good));
 				}
-
-				i++;
 			}
 			//good silent fish
-			while (i < sixthTrials * 5) {
+			for (int i = 0; i < g.numMissing / 2; i++){
 				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
+				trials.add(new Trial(getInterval(g.interval), g.silentResponseSound,
 						g.good.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.good));
 				} else if (mode==1){
@@ -133,12 +128,11 @@ public class ScriptGenerator {
 							0, 2, (rand.nextInt(2) == 1),
 							Species.good));
 				}
-				i++;
 			}
 			//bad silent fish
-			while (i < sixthTrials * 6) {
+			for (int i = 0; i < g.numMissing / 2; i++){
 				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
+				trials.add(new Trial(getInterval(g.interval), g.silentResponseSound,
 						g.bad.throbRate, 2, (rand.nextInt(2) == 1),
 						Species.bad));
 				} else if (mode==1){
@@ -146,141 +140,8 @@ public class ScriptGenerator {
 							0, 2, (rand.nextInt(2) == 1),
 							Species.bad));
 				}
-				i++;
 			}
 			
-			//here we solve the issue of the remainder by distributing it among the different conditions.
-			if(g.totalTrials%6==1){
-				//good cong
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.good.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-			} else if(g.totalTrials%6==2){
-				//good cong
-
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.good.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-				//bad cong
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.bad));
-				i++;
-			} else if(g.totalTrials%6==3){
-				//good cong
-
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.good.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-				//bad cong
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.bad));
-
-				i++;
-				//bad incong
-				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.bad));
-				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.bad));
-				}
-				i++;
-
-			} else if(g.totalTrials%6==4){
-				//good cong
-
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.good.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-				//bad cong
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.bad));
-
-				i++;
-				//bad incong
-				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.bad));
-				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.bad));
-				}
-				i++;
-				//good incong
-				if (mode==0){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.good));
-					} else if (mode==1){
-						trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-								g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-								Species.good));
-					}
-
-				i++;
-			} else if(g.totalTrials%6==5){
-				//good cong
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.good.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.good));
-
-				i++;
-				//bad cong
-				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.bad));
-
-				i++;
-				//bad incong
-				if (mode==0){
-				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.bad));
-				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.bad));
-				}
-				i++;
-				//good incong
-				if (mode==0){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.good));
-					} else if (mode==1){
-						trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-								g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-								Species.bad));
-					}
-
-				i++;
-				//good silent
-				if (mode==0){
-					trials.add(i, new Trial(getInterval(g.interval), g.silentResponseSound,
-							g.good.throbRate, 2, (rand.nextInt(2) == 1),
-							Species.good));
-					} else if (mode==1){
-						trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-								0, 2, (rand.nextInt(2) == 1),
-								Species.good));
-					}
-				i++;
-			}
 			// shuffle
 
 			Collections.shuffle(trials);
