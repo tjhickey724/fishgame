@@ -37,7 +37,8 @@ public class GameActor {
 	public int trial;
 	long birthTime;
 	long lastUpdate;
-	// this is the time it stays on screen, in tenths of a second
+	
+	/** the max time the fish stays on screen if no key is pressed **/
 	public static double timeOnScreen = 20;
 	long lifeSpan;
 
