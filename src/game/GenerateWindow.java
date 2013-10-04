@@ -40,7 +40,9 @@ public class GenerateWindow extends JFrame {
 			int2 = new JTextField(""+interval[1]),
 			maxBrightnessTF = new JTextField("24"),
 			minBrightnessTF = new JTextField("0"),
-			numActors = new JTextField("50");
+			numCongruent = new JTextField("10"),
+			numInCongruent = new JTextField("10"),
+			numMissingStimulus = new JTextField("10");
 
 	JComboBox soundtype, vol, tiedto;
 	JTextArea jtextarea = new JTextArea(5, 20);
@@ -66,7 +68,7 @@ public class GenerateWindow extends JFrame {
 	public GenerateWindow() {
 		super("Generate Window");
 		setLayout(new GridLayout(4, 1));
-		setSize(300, 600);
+		setSize(300, 800);
 
 		JPanel matrix1, matrix2, matrix3;
 
@@ -108,7 +110,9 @@ public class GenerateWindow extends JFrame {
 				interval[1]= Integer.parseInt(int2.getText());
 				interval[2]= Integer.parseInt(int3.getText());
 				gs.interval=interval;
-				//gs.totalTrials = Integer.parseInt(numActors.getText());
+				gs.numCon = Integer.parseInt(numCongruent.getText());
+				gs.numIncon = Integer.parseInt(numInCongruent.getText());
+				gs.numMissing = Integer.parseInt(numMissingStimulus.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
 				gs.bad.update("soundFile",  badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
@@ -202,7 +206,7 @@ public class GenerateWindow extends JFrame {
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(7, 2));
+		matrix3.setLayout(new GridLayout(9, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -248,8 +252,12 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(minSizeTF);
 		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
-		matrix3.add(new JLabel("Number of trials"));
-		matrix3.add(numActors);
+		matrix3.add(new JLabel("NumCongruent"));
+		matrix3.add(numCongruent);
+		matrix3.add(new JLabel("NumIncongruent"));
+		matrix3.add(this.numInCongruent);
+		matrix3.add(new JLabel("NumMissing"));
+		matrix3.add(this.numMissingStimulus);
 
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);
