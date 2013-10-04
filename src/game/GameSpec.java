@@ -43,7 +43,10 @@ public class GameSpec {
 	 */
 
 	public int minFishRelease = 30, maxFishRelease = 60;
-	public int trialLength = 60;
+	
+	/**  length of a trial in milliseconds **/
+	public int trialLength = 6000;
+	
 	public int minThrobSize = 100, maxThrobSize = 125;
 	public int interval[] = {25, 35, 45};
 	public int minBrightness = 10;

@@ -33,6 +33,9 @@ public class GameModel {
 	public double width;
 	public double height;
 	public double size;
+	
+	// this is the number of trials so far ...
+	private int numTrials = 0;
 
 	private long lastLogEventTimeNano1 = 0;
 	// time per trial is represented as tenths of seconds
@@ -243,7 +246,7 @@ public class GameModel {
 		if (!scan.hasNext()) {
 			this.setGameOver(true);
 
-			return this.nextFishTime + 10 * 1000000000L;
+			return this.nextFishTime + 10 * 1000000000L; // kind of a hack ....
 
 		}
 		long interval = -1;
@@ -282,9 +285,14 @@ public class GameModel {
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
 		int block = scan.nextInt();
-		//long nexttrial = gameSpec.trialLength * (trialnum - 1) * 100;
-		//nexttrial = nexttrial - this.nextFishTime;
-		nextFishTime = (interval +  gameSpec.trialLength) * 1000000 + this.nextFishTime;
+		
+		nextFishTime = numTrials * gameSpec.trialLength*100000000L + interval*1000000L + this.gameStart;
+
+		System.out.println((numTrials * gameSpec.trialLength*100000000L)/1000000000.0+": beginning of trial");
+		System.out.println(this.gameStart + ": gamestart\n"+ (nextFishTime-gameStart)/1000000000.0 +": nft\n"+ interval+"  int\n"+ System.nanoTime())
+		;
+		numTrials++;
+		
 		boolean fromLeft = (scan.next().equals("left"));
 
 		String species = scan.next();
@@ -435,7 +443,7 @@ public class GameModel {
 		this.nextFishTime = updateNextFishTime();
 		this.started = true;
 
-		spawnFish();
+		//spawnFish();
 	}
 	
 
