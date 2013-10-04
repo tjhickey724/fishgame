@@ -101,6 +101,7 @@ public class GameView extends JPanel {
 				}
 				// otherwise, remove the last fish (should only be one!)
 				GameActor lastFish = gm.removeLastFish();
+				gm.updateNextFishTime();
 
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
 				//gm.setNextFishTime();
@@ -389,21 +390,21 @@ public class GameView extends JPanel {
 	 * 
 	 * @param g
 	 *            - the Graphics object used for drawing
-	 * @param a
+	 * @param aFish
 	 *            - the Actor to be drawn
 	 * @param c
 	 *            - the default color for actors of unknown species
 	 */
-	private void drawActor(Graphics g, GameActor a, Color c) {
-		if (!a.active)
+	private void drawActor(Graphics g, GameActor aFish, Color c) {
+		if (!aFish.active)
 			return;
-		int theRadius = toViewCoords(a.radius);
-		int x = toXViewCoords(a.x);
-		int y = toYViewCoords(a.y);
+		int theRadius = toViewCoords(aFish.radius);
+		int x = toXViewCoords(aFish.x);
+		int y = toYViewCoords(aFish.y);
 		int visualHz = 1;
 		
 		// set the default visual hertz for the fish
-		switch (a.species) {
+		switch (aFish.species) {
 		case good:
 			visualHz = gm.gameSpec.good.throbRate;
 			break;
@@ -414,8 +415,8 @@ public class GameView extends JPanel {
 		
 		// handle the exception conditions...
 		if (gm.gameSpec.avmode == 1){ // auditory determines good/bad, so switch the visual hertz in incongruent case
-			if (a.congruent==1){
-				switch (a.species) {
+			if (aFish.congruent==1){
+				switch (aFish.species) {
 				case bad:
 					visualHz = gm.gameSpec.good.throbRate;
 					break;
@@ -423,17 +424,17 @@ public class GameView extends JPanel {
 					visualHz = gm.gameSpec.bad.throbRate;
 					break;
 				}
-			} else if (a.congruent == 2){
+			} else if (aFish.congruent == 2){
 				visualHz = 0 ;
 			}
 		}
 
 		int theSize = gm.interpolateSize(gm.gameSpec.minThrobSize,
-				gm.gameSpec.maxThrobSize, a.birthTime, System.nanoTime(),
+				gm.gameSpec.maxThrobSize, aFish.birthTime, System.nanoTime(),
 				visualHz);
 
 		thisFrame = interpolateBrightness(gm.gameSpec.minBrightness,
-				gm.gameSpec.maxBrightness, a.birthTime, System.nanoTime(),
+				gm.gameSpec.maxBrightness, aFish.birthTime, System.nanoTime(),
 				visualHz);
 
 		double aspectRatio = fishL[12].getHeight()
@@ -446,7 +447,7 @@ public class GameView extends JPanel {
 																				// aspectRatio)/100);
 		
 
-		if (a.fromLeft) {
+		if (aFish.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
 					theWidth, theHeight, null);
 		} else {

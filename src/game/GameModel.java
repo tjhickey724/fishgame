@@ -230,7 +230,7 @@ public class GameModel {
 	 * @return
 	 */
 
-	private long updateNextFishTime() {
+	public long updateNextFishTime() {
 
 		// initialize the scanner if its the first time we're reading a line
 		if (scan == null) {
@@ -283,7 +283,7 @@ public class GameModel {
 			setGameOver(true);
 			return 0;
 		}
-		nextFishTime = interval *1000000 + this.nextFishTime;
+		nextFishTime = interval *1000000 + System.nanoTime();
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
@@ -621,6 +621,7 @@ public class GameModel {
 
 				if (!a.active) {
 					a.ct.stop();
+					this.updateNextFishTime();
 					previousActorTime += a.lifeSpan;
 					currentActorTime = 0;
 					this.setNoKeyPress(this.getNoKeyPress() + 1);
