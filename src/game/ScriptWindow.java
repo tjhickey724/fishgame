@@ -94,7 +94,7 @@ public class ScriptWindow extends JFrame {
 				// we use the static variable GAME_START of GameActor
 				// to record when the game has begun, this is used to print out
 				// time stamps in the log files
-				GameActor.GAME_START = System.nanoTime();
+				
 
 				// the GameModel is the object that reads the script
 

@@ -82,6 +82,9 @@ public class GameView extends JPanel {
 				} else if (e.getKeyChar() == 'b') {
 					badclip.play();
 					return;
+				} else if ((e.getKeyChar()=='=') && (!gm.started)){
+					gm.startFish();
+					return;
 				}
 
 				// first check to see if they pressed

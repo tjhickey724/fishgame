@@ -57,7 +57,11 @@ public class GameModel {
 	// we need to add a timer to end the session, or have the
 	// experimenter end the session ...
 	private boolean gameOver = false;
-	public boolean started;
+	
+	/** this is true when the fMRI sends an "=" sign to the game **/
+	public boolean started = false;
+	
+	
 	// this checks if the game is over.
 	public boolean isGameOver() {
 		return gameOver;
@@ -419,23 +423,21 @@ public class GameModel {
 		this.setPaused(false);
 		this.setGameOver(false);
 		
-		this.nextFishTime = System.nanoTime();
-		this.gameStart = nextFishTime;
-		this.nextFishTime = updateNextFishTime();
-
-		spawnFish();
-
 	}
 	
-	public void startGame(){
-		this.setPaused(false);
-		this.setGameOver(false);
-		this.nextFishTime = System.nanoTime();
-		this.gameStart = nextFishTime;
+	/**
+	 * this is called when the fMRI "=" is received and the experiment should start
+	 */
+	public void startFish(){
+		GameActor.GAME_START = System.nanoTime();
+		this.nextFishTime = GameActor.GAME_START;
+		this.gameStart = GameActor.GAME_START;
 		this.nextFishTime = updateNextFishTime();
+		this.started = true;
 
 		spawnFish();
 	}
+	
 
 	public void stop() {
 		this.setPaused(true);
@@ -532,7 +534,7 @@ public class GameModel {
 	 */
 	public void update() { // throws UnsupportedAudioFileException, IOException,
 							// LineUnavailableException {
-		if (isPaused() || isGameOver())
+		if (isPaused() || isGameOver() || !started)
 			return;
 
 		// here is where we decide whether to spawn a fish
