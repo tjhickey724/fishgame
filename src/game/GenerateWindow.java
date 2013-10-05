@@ -259,7 +259,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(new JLabel("Congruent Trials"));
 		matrix3.add(numcongruent);
 		matrix3.add(new JLabel("InCongruent Trials"));
-		matrix3.add(numcongruent);
+		matrix3.add(numincongruent);
 		matrix3.add(new JLabel("Missing Trials"));
 		matrix3.add(numMissing);
 
