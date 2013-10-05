@@ -56,7 +56,9 @@ public class GenerateWindow extends JFrame {
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
 
-	JTextField numTrials = new JTextField("7");
+	JTextField numcongruent = new JTextField("10");
+	JTextField numincongruent = new JTextField("10");
+	JTextField numMissing = new JTextField("10");
 
 	ScriptGenerator sgen = new ScriptGenerator();
 
@@ -65,7 +67,7 @@ public class GenerateWindow extends JFrame {
 	public GenerateWindow() {
 		super("Generate Window");
 		setLayout(new GridLayout(4, 1));
-		setSize(300, 600);
+		setSize(300, 800);
 
 		JPanel matrix1, matrix2, matrix3;
 
@@ -118,7 +120,9 @@ public class GenerateWindow extends JFrame {
 
 				gs.hasAvatar = hasAvatar.getState();
 				gs.trialLength= Integer.parseInt(trialLen.getText());
-				gs.totalTrials= Integer.parseInt(numTrials.getText());
+				gs.numcongruent= Integer.parseInt(numcongruent.getText());
+				gs.numincongruent= Integer.parseInt(numincongruent.getText());
+				gs.numMissing= Integer.parseInt(numMissing.getText());
 				String volumeLevel = (vol.getSelectedItem()).toString();
 				gs.interval[0]=Integer.parseInt(int1.getText());
 				gs.interval[1]=Integer.parseInt(int2.getText());
@@ -146,7 +150,7 @@ public class GenerateWindow extends JFrame {
 				// here we generate a report for the user, so they know what's
 				// happening
 				jtextarea.append(gs.toScript());
-				jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
+				jtextarea.append("GENERATE " + gs.numcongruent + gs.numincongruent + gs.numMissing + " events\n");
 
 			}
 		});
@@ -205,7 +209,7 @@ public class GenerateWindow extends JFrame {
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(8, 2));
+		matrix3.setLayout(new GridLayout(11, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -252,8 +256,12 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(minSizeTF);
 		matrix3.add(new JLabel("Max Size(%)"));
 		matrix3.add(maxSizeTF);
-		matrix3.add(new JLabel("Number of Trials"));
-		matrix3.add(numTrials);
+		matrix3.add(new JLabel("Congruent Trials"));
+		matrix3.add(numcongruent);
+		matrix3.add(new JLabel("InCongruent Trials"));
+		matrix3.add(numcongruent);
+		matrix3.add(new JLabel("Missing Trials"));
+		matrix3.add(numMissing);
 
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);

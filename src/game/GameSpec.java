@@ -26,7 +26,9 @@ public class GameSpec {
 
 	public String backgroundImage = "images/streamB.jpg";
 
-	public int totalTrials = 50;
+	public int numcongruent = 10;
+	public int numincongruent = 10;
+	public int numMissing = 10;
 	public int blocks = 5;
 	
 
@@ -76,7 +78,9 @@ public class GameSpec {
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
 
-		s += scriptLine("totalTrials", "" + totalTrials);
+		s += scriptLine("Congruent Trials", "" + numcongruent);
+		s += scriptLine("Incongruent Trials", "" + numincongruent);
+		s += scriptLine("Missing Stimulus Trials", "" + numMissing);
 		s += scriptLine("trialLength", "" + trialLength);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 		s += scriptLine("mode", "" + mode);
@@ -121,9 +125,16 @@ public class GameSpec {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value == "true" ? true : false);
-		} else if (prop.equals("totalTrials")){
-			this.totalTrials = Integer.parseInt(value);
-		}else if(prop.equals("trialLength")){
+		} else if (prop.equals("congruentTrials")){
+			this.numcongruent = Integer.parseInt(value);
+		}
+		else if (prop.equals("incongruentTrials")){
+			this.numincongruent = Integer.parseInt(value);
+		}
+		else if (prop.equals("missingTrials")){
+			this.numMissing = Integer.parseInt(value);
+		}
+		else if(prop.equals("trialLength")){
 			this.trialLength = Integer.parseInt(value);
 		} else if (prop.equals("mode")){
 			this.mode = Integer.parseInt(value);

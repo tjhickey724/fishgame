@@ -70,32 +70,57 @@ public class ScriptGenerator {
 
 			scriptFile.write(g.toScript());
 
-			int sixthTrials = (int) Math.floor(g.totalTrials / 2);
 
-			int i = 0;
 			// generate good, congruent trials
-			while (i <= sixthTrials) {
+			for (int i = 0; i < g.numcongruent / 2; i++){
 
 				trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.good));
 
-				i++;
 			}
 			// congruent bad fishes
-			while (i <= sixthTrials * 2) {
+			 for(int i = 0; i < g.numcongruent / 2; i++){
 
 				trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
 						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
 						Species.bad));
-
-				i++;
 			}
+			// generate good, incongruent trials
+				for (int i = 0; i < g.numincongruent / 2; i++){
+
+					trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
+							g.good.throbRate, 0, (rand.nextInt(2) == 1),
+							Species.good));
+
+				}
+				// incongruent bad fishes
+				 for(int i = 0; i < g.numincongruent / 2; i++){
+
+					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+							g.bad.throbRate, 0, (rand.nextInt(2) == 1),
+							Species.bad));
+				}
+				// generate good, congruent trials
+					for (int i = 0; i < g.numMissing / 2; i++){
+
+						trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
+								g.good.throbRate, 0, (rand.nextInt(2) == 1),
+								Species.good));
+
+					}
+					// congruent bad fishes
+					 for(int i = 0; i < g.numMissing / 2; i++){
+
+						trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
+								g.bad.throbRate, 0, (rand.nextInt(2) == 1),
+								Species.bad));
+					}
 
 			// shuffle
 			Collections.shuffle(trials);
 			
-			int trialsperblock = g.totalTrials / g.blocks;
+			int trialsperblock = (g.numcongruent + g.numincongruent + g.numMissing) / g.blocks;
 			for (int j = 0; j < trials.size(); j++) {
 				trials.get(j).trial = j + 1;
 				trials.get(j).block = trials.get(j).trial / (trialsperblock + 1) + 1;
