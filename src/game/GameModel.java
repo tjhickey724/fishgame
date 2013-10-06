@@ -303,7 +303,6 @@ public class GameModel {
 		a.setTrial(trialnum);
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
 		this.nextFish = a;
-
 		return nextFishTime;
 
 	}
@@ -553,21 +552,7 @@ public class GameModel {
 		long millisecond = 1000 * 1000L;
 		int delay = 0;
 
-		if ((this.actors.size() > 0)
-
-		&& (now > this.nextFishTime - delay * millisecond)) {
-
-			// this is the case where we didn't press a key to kill or eat the
-			// fish
-			this.setNoKeyPress(this.getNoKeyPress() + 1);
-			GameActor lastFish = this.actors.get(this.actors.size() - 1);
-			if(lastFish.congruent != 2)
-				lastFish.ct.stop();
-
-			this.actors.clear();
-			this.writeToLog(new GameEvent(lastFish));
-		}
-
+		
 		if (now > this.nextFishTime) {
 			
 			// time to launch the next fish!
@@ -580,37 +565,13 @@ public class GameModel {
 				return;
 
 			previousActorTime += currentActorTime;
-			currentActorTime = 0;
-
-			if (this.actors.size() > 0) {
-
-				// this is the case where we didn't press a key to kill or eat
-				// the fish
-				this.setNoKeyPress(this.getNoKeyPress() + 1);
-				GameActor lastFish = this.actors.get(this.actors.size() - 1);
-				// lastFish.update();
-				lastFish.active = false;
-				previousActorTime += lastFish.lifeSpan;
-				currentActorTime = 0;
-				if(lastFish.congruent != 2)
-					lastFish.ct.stop();
-
-				this.actors.clear();
-
-				this.writeToLog(new GameEvent(lastFish));
-
-			} else {
-
+			currentActorTime = 0;		
 			// we now spawn the next fish
 			spawnFish();
-			// this.lastEventTime = System.nanoTime();
-			}
+
 		}
 		/*
-		 * // Finally, we update all of the fish (should only be one now!)
-		 * java.util.Iterator<GameActor> iter =this.actors.iterator(); while
-		 * (iter.hasNext()){ GameActor a = (GameActor) iter.next(); a.update();
-		 * keepOnBoard(a); }
+		 *  Finally, we update all of the fish (should only be one now!)
 		 */
 		// update the only fish!
 		try {
@@ -619,7 +580,7 @@ public class GameModel {
 				a.update();
 				keepOnBoard(a);
 
-				if (!a.active) {
+				if (!a.active) { // this is where we remove the fish if the user didn't press a key and the lifespan has been reached...
 					a.ct.stop();
 					this.updateNextFishTime();
 					previousActorTime += a.lifeSpan;

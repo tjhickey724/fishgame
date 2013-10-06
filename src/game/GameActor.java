@@ -37,6 +37,7 @@ public class GameActor {
 	public int trial;
 	long birthTime;
 	long lastUpdate;
+	long deathTime;
 	// this is the time it stays on screen, in tenths of a second
 	public static double timeOnScreen = 20;
 	long lifeSpan;
@@ -85,7 +86,6 @@ public class GameActor {
 		// for incongruence the one the changes depends on the avmode
 		// so in avmode=0 the sound is flipped
 		// in avmode=1 the visuals are flipped
-		System.out.println("******* Congruent=" + congruent+ " avmode="+avmode);
 		// first we give default values for the fishsounds
 		if (species.equals(Species.good))
 			fishSounds = goodFishSounds;
@@ -96,7 +96,6 @@ public class GameActor {
 			; // use the default values in all avmodes
 		} else if (congruent == 1){
 			if (avmode==0){
-				System.out.println("\n\n****** Switching sounds for cong=1, avmode=0\n\n");
 				if (species.equals(Species.good))
 					fishSounds = badFishSounds;
 				else
@@ -119,7 +118,6 @@ public class GameActor {
 				this.ctR = new AudioClip(fishSounds + "/fishR.wav");
 				this.ctL = new AudioClip(fishSounds + "/fishL.wav");
 				// (fishSounds+"/fishR.wav");
-				// System.out.println(fishSounds+"/fishL.wav");
 			} else {
 				this.ctR = this.ct;
 				this.ctL = this.ct;
@@ -142,7 +140,7 @@ public class GameActor {
 	}
 	
 
-	/**
+	/** 
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that
 	 * to compute their new position. Note that velocity is in units per update.
