@@ -101,10 +101,10 @@ public class GameView extends JPanel {
 				}
 				// otherwise, remove the last fish (should only be one!)
 				GameActor lastFish = gm.removeLastFish();
-				gm.updateNextFishTime();
+
 
 				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
-				//gm.setNextFishTime();
+				gm.updateNextFishTime(ge.when);
 
 				// get the response time and write it to the log
 				long keyPressTime = System.nanoTime();
