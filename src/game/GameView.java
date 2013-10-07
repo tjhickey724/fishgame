@@ -107,7 +107,7 @@ public class GameView extends JPanel {
 				gm.updateNextFishTime(ge.when);
 
 				// get the response time and write it to the log
-				long keyPressTime = System.nanoTime();
+				long keyPressTime = ge.when;
 				long responseTime = keyPressTime - lastFish.birthTime;
 
 				String log = e.getKeyChar() + " " + responseTime / 1000000.0

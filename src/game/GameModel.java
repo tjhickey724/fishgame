@@ -294,7 +294,7 @@ public class GameModel {
 
 		// create the next Fish to be launched
 		GameActor a = new GameActor(gameSpec.avmode);
-		System.out.println("launching new fish: "+a+" interval:"+interval+" nFT:"+ (nextFishTime-System.nanoTime())/1000000.0+" trial:"+trialnum);
+		//System.out.println("launching new fish: "+a+" interval:"+interval+" nFT:"+ (nextFishTime-System.nanoTime())/1000000.0+" trial:"+trialnum);
 
 		//a.avmode = this.gameSpec.avmode;
 		a.fromLeft = fromLeft.equals("left");
@@ -302,7 +302,7 @@ public class GameModel {
 		a.setTrial(trialnum);
 		a.species = (species.equals("good")) ? Species.good : Species.bad;
 		this.nextFish = a;
-		System.out.println("nextFishTime - gameStart="+(nextFishTime-this.gameStart)/1000000000.0);
+		//System.out.println("nextFishTime - gameStart="+(nextFishTime-this.gameStart)/1000000000.0);
 		this.nextFishTime = nextFishTime;
 
 	}
@@ -559,11 +559,12 @@ public class GameModel {
 
 				if (!a.active) { // this is where we remove the fish if the user didn't press a key and the lifespan has been reached...
 					a.ct.stop();
-					updateNextFishTime(now);
 					previousActorTime += a.lifeSpan;
 					currentActorTime = 0;
 					this.setNoKeyPress(this.getNoKeyPress() + 1);
-					this.writeToLog(new GameEvent(a));
+					GameEvent missedFishEvent = new GameEvent(a);
+					updateNextFishTime(missedFishEvent.when);
+					this.writeToLog(missedFishEvent);
 					this.actors.clear();
 				} else {
 					this.currentActorTime = a.lifeSpan;
