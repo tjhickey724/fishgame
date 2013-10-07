@@ -209,7 +209,7 @@ public class GenerateWindow extends JFrame {
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(11, 2));
+		matrix3.setLayout(new GridLayout(10, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
