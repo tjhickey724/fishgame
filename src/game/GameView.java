@@ -22,6 +22,12 @@ import java.util.ArrayList;
  * GameModel to the Viewing window. Calling repaint() on the GameView will cause
  * it to render the current state of the Model to the JPanel canvas...
  * 
+ * The keyListener created for the GameView will be called when ever the user hits a key
+ * This code will be run in parallel with the GameLoop, so you have to be careful in the
+ * update method of GameModel to assume that a key could be pressed anytime while the update
+ * is being modified.... This means we really should be synchronizing on the model when it
+ * is modified from the key listener.
+ * 
  * @author tim
  * 
  */
@@ -77,64 +83,30 @@ public class GameView extends JPanel {
 				flash=true;
 				// we set the update time to be 50 ms after the keypress, so the indicator stays lit for 50 ms
 				indicatorUpdate=System.nanoTime()+50000000l;
-				// play good/bad sounds alone by key press for demo purpose
-				if (e.getKeyChar() == 'g') {
-					goodclip.play();
-					soundflash=true;
-					soundIndicatorUpdate=System.nanoTime()+50000000l;
-					return;
-				} else if (e.getKeyChar() == 'b') {
-					badclip.play();
-					soundflash=true;
-					soundIndicatorUpdate=System.nanoTime()+50000000l;
-					return;
-				}
+
 
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.getNumFish() == 0) {
-					String log = "KeyPress for no fish!";
-					// gm.writeToLog(log);
 					gm.writeToLog(new GameEvent(e.getKeyChar()));
 					badclip.play();
 					return;
 				}
-				// otherwise, remove the last fish (should only be one!)
-				GameActor lastFish = gm.removeLastFish();
-
-
-				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
-				gm.updateNextFishTime(ge.when);
-
-				// get the response time and write it to the log
-				long keyPressTime = ge.when;
-				long responseTime = keyPressTime - lastFish.birthTime;
-
-				String log = e.getKeyChar() + " " + responseTime / 1000000.0
-						+ " " + ge.correctResponse + " " + lastFish;
-
-				System.out.println(log);
-
-				gm.writeToLog(ge);
-
-				// play the appropriate sound and modify the score
-
-				if (ge.correctResponse) {
-
+				
+				// this is a synchronized call to the GameModel
+				// and will delay if gm.update is being called from the GameLoop
+				// Also, once it is called here, gm.update must delay if called from the GameLoop
+				boolean correctResponse = gm.handleKeyPress(e);
+				
+				if (correctResponse) {
 					goodclip.play();
-					soundflash=true;
-					soundIndicatorUpdate=System.nanoTime()+50000000l;
-					gm.wealth++;
-					gm.setHits(gm.getHits() + 1);
 				} else {
 					badclip.play();
-					soundflash=true;
-					soundIndicatorUpdate=System.nanoTime()+50000000l;
-					gm.wealth--;
-					gm.setMisses(gm.getMisses() + 1);
 				}
 
 			}
+
+			
 		};
 		this.addKeyListener(kl);
 	}

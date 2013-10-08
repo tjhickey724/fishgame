@@ -1,6 +1,7 @@
 package game;
 
 import java.util.*;
+import java.awt.event.KeyEvent;
 import java.io.*;
 
 /**
@@ -505,29 +506,89 @@ public class GameModel {
 	 * 
 	 * @return
 	 */
-	public GameActor removeLastFish() {
+	public void removeLastFish() {
 		if (this.actors.size() > 0) {
 			GameActor lastFish = this.actors.get(0);
 			lastFish.ct.stop();  // fixed bug 10/3/2013
 			lastFish.active = false;
 			this.actors.clear();
-			return lastFish;
+			return;
 		} else {
 			System.out.println("trying to get last fish with an empty list!!!");
-			return null;
+			return;
 		}
+	}
+	
+	public GameActor getCurrentFish(){
+		if (this.actors.size()>0) {
+			return this.actors.get(0);
+		} else return null;
 	}
 
 	public List<GameActor> getActorList() {
 		return new ArrayList<GameActor>(this.actors);
 	}
+	
+	/**
+	 * This method is called from GameView when a clip needs to be handled 
+	 * @param e
+	 * @param goodclip
+	 * @param badclip
+	 */
+	public synchronized boolean handleKeyPress(KeyEvent e) {
+		// ALL OF THIS CODE SHOULD GO INTO A SYNCHRONIZED METHOD IN GameModel ...
+		// now we will create the GameEvent for killing the last fish
+		// first we need to get the current fish to see if the response was correct ...
+		GameActor lastFish = this.getCurrentFish();
+
+		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
+		
+		// then we update the NextFishTime which means reading in another line and 
+		// storing the info about that fish in gm.nextFish
+		
+		// THIS MODIFIES gm and needs to be synchronized
+		this.updateNextFishTime(ge.when);
+
+		// get the response time and write it to the log
+		long keyPressTime = ge.when;
+		long responseTime = keyPressTime - lastFish.birthTime;
+
+		String log = e.getKeyChar() + " " + responseTime / 1000000.0
+				+ " " + ge.correctResponse + " " + lastFish;
+
+		System.out.println(log);
+
+		// THIS NEEDS TO BE SYNCHRONIZED
+		this.writeToLog(ge);
+
+		// play the appropriate sound and modify the score
+
+		if (ge.correctResponse) {
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+			this.wealth++;
+			this.setHits(this.getHits() + 1);
+		} else {
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+			this.wealth--;
+			this.setMisses(this.getMisses() + 1);
+		}
+		
+		// Finally, remove the last fish (should only be one!)
+		// but don't remove until the end as update could be called as we are pressing the key!!!
+		// THIS NEEDS TO BE SYNCHRONIZED
+		this.removeLastFish();
+		return ge.correctResponse;
+	}
+	
 
 	/**
 	 * update moves all actors one step update will check if the difference
 	 * between the lastUpdate and the current time is greater than the sRate
 	 * plus a random number from 1 to 4, and spawn a fish if so.
 	 */
-	public void update() { 
+	public synchronized void update() { 
 		long now = System.nanoTime(); 
 		
 		if (isPaused() || isGameOver())
