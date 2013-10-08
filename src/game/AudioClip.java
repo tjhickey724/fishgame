@@ -84,8 +84,8 @@ public class AudioClip {
 		if (clip != null) {
 			if (clip.isRunning())
 				clip.stop();
-		} else
-			System.out.println("Trying to stop a null clip!!");
+		} //else
+			//System.out.println("Trying to stop a null clip!!");
 	}
 
 	public void loadClip(String path) throws UnsupportedAudioFileException,

@@ -85,7 +85,7 @@ public class GameEvent {
 	 */
 	public GameEvent(GameActor fish) {
 		this.eventType = "missedfish";
-		this.when = System.nanoTime();
+		this.when = fish.lastUpdate;
 		this.keyPressed = 0;
 		this.responseTime = 0;
 		this.fish = fish;
