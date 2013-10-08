@@ -1,6 +1,7 @@
 package game;
 
 import java.util.*;
+import java.awt.event.KeyEvent;
 import java.io.*;
 
 /**
@@ -37,7 +38,6 @@ public class GameModel {
 	// this is the number of trials so far ...
 	private int numTrials = 0;
 
-	private long lastLogEventTimeNano1 = 0;
 	// time per trial is represented as tenths of seconds
 	public double timePerTrial = 20;
 	// time remaining is represented as a percentage
@@ -45,7 +45,6 @@ public class GameModel {
 	// total actor time is the
 	public double totalActorTime = 0;
 	public double currentActorTime = 0;
-	public double previousActorTime = 0;
 
 	public int health = 10;
 	public int wealth = 0;
@@ -98,11 +97,9 @@ public class GameModel {
 
 	private long nextFishTime = 0;
 
-	private long nextEventTime = 0;
-	private long lastEventTime = 0;
 
 	private GameActor nextFish = null;
-	private long gameStart = startTime;
+	private long gameStart;
 
 	public int score;
 
@@ -217,101 +214,6 @@ public class GameModel {
 
 	// private long lastEventTime = System.nanoTime();
 
-	/**
-	 * this reads the next line in the Script file property/value lines cause
-	 * the system to update the GameSpec fish launches read the interval and use
-	 * it to compute nextFishTime and read the species and side and store it in
-	 * this.nextFish
-	 * 
-	 * We should read this right after launching a fish, so we can know when its
-	 * time to launch the next fish!
-	 * 
-	 * @return
-	 */
-
-	private long updateNextFishTime() {
-
-		// initialize the scanner if its the first time we're reading a line
-		if (scan == null) {
-			try {
-				scan = new Scanner(new File(this.inputScriptFileName));
-			} catch (FileNotFoundException e) {
-				System.out.println("Error in reading inputScriptFile:"
-						+ this.inputScriptFileName + " " + e);
-				e.printStackTrace();
-				this.stop();
-				return 0;
-			}
-		}
-		if (!scan.hasNext()) {
-			this.setGameOver(true);
-
-			return this.nextFishTime + 10 * 1000000000L; // kind of a hack ....
-
-		}
-		long interval = -1;
-		try {
-			interval = scan.nextLong();
-		} catch (Exception e) {
-			System.out.println("error with " + scan
-					+ " scanning for the first long on a line" + e);
-			e.printStackTrace();
-		}
-		// process all the 0 interval commands (which set game properties)
-
-		while (interval == -1) {
-
-			String prop = scan.next();
-			String value = scan.next();
-			scan.nextLine(); // skip over the rest of the line
-			writeToLog("0\t" + prop + "\t" + value);
-			if (prop.equals("gameover")) {
-				this.stop();
-				this.setGameOver(true);
-				return 1000000000000L;
-			}
-			// System.out.println("interval="+interval+" prop="+prop+" value="+value);
-			interval = scan.nextLong();
-
-			gameSpec.update(prop, value);
-		}
-
-		// calculate the next FishTime and the basic characteristics of the
-		// nextFish (species and side)
-
-		//nextFishTime = interval *1000000 + this.nextFishTime;
-		String sound = scan.next();
-		int visualhz = scan.nextInt();
-		int congruent = scan.nextInt();
-		int trialnum = scan.nextInt();
-		int block = scan.nextInt();
-		
-		nextFishTime = numTrials * gameSpec.trialLength*100000000L + interval*1000000L + this.gameStart;
-
-		System.out.println((numTrials * gameSpec.trialLength*100000000L)/1000000000.0+": beginning of trial");
-		System.out.println(this.gameStart + ": gamestart\n"+ (nextFishTime-gameStart)/1000000000.0 +": nft\n"+ interval+"  int\n"+ System.nanoTime())
-		;
-		numTrials++;
-		
-		boolean fromLeft = (scan.next().equals("left"));
-
-		String species = scan.next();
-
-		scan.nextLine(); // skip over the rest of the line
-
-		// create the next Fish to be launched
-		GameActor a = new GameActor();
-
-		a.fromLeft = fromLeft;
-		a.setCongruent(congruent);
-		a.setTrial(trialnum);
-		a.block = block;
-		a.species = (species.equals("good")) ? Species.good : Species.bad;
-		this.nextFish = a;
-
-		return nextFishTime;
-
-	}
 
 	public void writeToLog(GameActor f) {
 
@@ -440,10 +342,10 @@ public class GameModel {
 		GameActor.GAME_START = System.nanoTime();
 		this.nextFishTime = GameActor.GAME_START;
 		this.gameStart = GameActor.GAME_START;
-		this.nextFishTime = updateNextFishTime();
 		this.started = true;
+		updateNextFishTime();
 
-		//spawnFish();
+
 	}
 	
 
@@ -534,121 +436,239 @@ public class GameModel {
 	public List<GameActor> getActorList() {
 		return new ArrayList<GameActor>(this.actors);
 	}
+	
+	
+	public synchronized void handleKeyPress(KeyEvent e,AudioClip goodclip, AudioClip badclip) {
+		if (isGameOver())
+			return;
+		
+		// when a key is pressed, we send a 'flash' to the indicator in the corner
+		flash=true;
+		
+		// we set the update time to be 50 ms after the keypress, so the indicator stays lit for 50 ms
+		indicatorUpdate=System.nanoTime()+50000000l;
+
+		if ((e.getKeyChar()=='=') && (!started)){
+			startFish();
+			return;
+		}
+
+		// first check to see if they pressed
+		// when there are no fish!!
+		if (getNumFish() == 0) {
+			writeToLog(new GameEvent(e.getKeyChar()));
+			badclip.play();
+			return;
+		}
+		// otherwise, see if we've responded already and if so, ignore the keypress???
+		GameActor lastFish = getActorList().get(0);
+		if (lastFish.responded==true){
+			return;
+		}
+		lastFish.responded=true;
+		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
+
+		// get the response time and write it to the log
+		long keyPressTime = ge.when;
+		long responseTime = keyPressTime - lastFish.birthTime;
+
+		String log = e.getKeyChar() + " " + responseTime / 1000000.0
+				+ " " + ge.correctResponse + " " + lastFish;
+
+		System.out.println(log);
+
+		writeToLog(ge);
+
+		// play the appropriate sound and modify the score
+
+		if (ge.correctResponse) {
+
+			goodclip.play();
+			wealth++;
+			setHits(getHits() + 1);
+		} else {
+			badclip.play();
+			wealth--;
+			setMisses(getMisses() + 1);
+		}
+		
+		return;
+	}
+	
 
 	/**
-	 * update moves all actors one step update will check if the difference
-	 * between the lastUpdate and the current time is greater than the sRate
-	 * plus a random number from 1 to 4, and spawn a fish if so.
+	 * update moves all actors one step update
 	 */
-	public void update() { // throws UnsupportedAudioFileException, IOException,
+	public synchronized void update() { // throws UnsupportedAudioFileException, IOException,
 							// LineUnavailableException {
 		if (isPaused() || isGameOver() || !started)
 			return;
 
-		// here is where we decide whether to spawn a fish
-		// I'm changing this to not use an input script ...
-		// but instead to randomly generate new fish
-		// using a nextFishTime variable
-
-		// we need to write the code to generate a script from this session
-		// so we can randomly generate one script and then use it many times...
-
 		long now = System.nanoTime();
 
+		// these two variables are used for the GUI bar
 		totalActorTime = (currentActorTime) / 1000000;
 		timeRemaining = 100 - (totalActorTime / timePerTrial);
 
-		long millisecond = 1000 * 1000L;
-		int delay = 0;
 
-		if ((this.actors.size() > 0)
-
-		&& (now > this.nextFishTime - delay * millisecond) && actors.get(0).responded!=true) {
+		/*
+		 * I don't think this case will ever happen.
+		 * If now > NFT then we can't hve actors.size()>0
+		 
+		if (       (this.actors.size() > 0)
+				&& (now > this.nextFishTime) 
+				&& actors.get(0).responded!=true) {
 
 			// this is the case where we didn't press a key to kill or eat the
 			// fish
 			this.setNoKeyPress(this.getNoKeyPress() + 1);
 			GameActor lastFish = this.actors.get(this.actors.size() - 1);
-			if(lastFish.congruent != 2)
-				lastFish.ct.stop();
-
+			lastFish.ct.stop();
 			this.actors.clear();
 			this.writeToLog(new GameEvent(lastFish));
 		}
+		*/
 
-		if (now > this.nextFishTime) {
-			
-			// time to launch the next fish!
-			// System.out.println("newfish "+(now-this.gameStart)/1000000 + " "+
-			// (this.nextFishTime-this.gameStart)/1000000);
-
-			this.lastEventTime = this.nextFishTime;
-			this.nextFishTime = this.updateNextFishTime();
-			if (this.isGameOver())
-				return;
-
-			previousActorTime += currentActorTime;
-			currentActorTime = 0;
-
-	/*		if (this.actors.size() > 0) {
-
-				// this is the case where we didn't press a key to kill or eat
-				// the fish
-				this.setNoKeyPress(this.getNoKeyPress() + 1);
-				GameActor lastFish = this.actors.get(this.actors.size() - 1);
-				// lastFish.update();
-				lastFish.active = false;
-				previousActorTime += lastFish.lifeSpan;
-				currentActorTime = 0;
-				if(lastFish.congruent != 2)
-					lastFish.ct.stop();
-
-				this.actors.clear();
-
-				this.writeToLog(new GameEvent(lastFish));
-
-			}*/
-
-			// we now spawn the next fish
+		if ((now > this.nextFishTime) && (this.actors.size()==0)) {
+			// here is where we need to spawn a fish and update the nextFishTime variable ...
+			// note: spawnFish uses the value of nextFish computed in the last call to updateNextFishTime 
+			// to determine which fish to spawn!!
 			spawnFish();
-			// this.lastEventTime = System.nanoTime();
+			// now we calculate the nextFish to spawn and store that value in this.nextFish....
+			this.updateNextFishTime();
+			currentActorTime = 0;  // this is for the User Interface
 
 		}
-		/*
-		 * // Finally, we update all of the fish (should only be one now!)
-		 * java.util.Iterator<GameActor> iter =this.actors.iterator(); while
-		 * (iter.hasNext()){ GameActor a = (GameActor) iter.next(); a.update();
-		 * keepOnBoard(a); }
-		 */
-		// update the only fish!
-		try {
-			if (actors.size() > 0) {
+
+
+		if (actors.size() > 0) {
+			// first we update the fishes position and state
 				GameActor a = (GameActor) actors.get(0);
 				a.update();
 				keepOnBoard(a);
 
-				if (!a.active && !a.responded) {
+				// then we check to see if it is inactive (i.e. its lifespan has been reached)
+				// if so, then we remove it from the screen
+				if (!a.active){
 					a.ct.stop();
-					previousActorTime += a.lifeSpan;
-					currentActorTime = 0;
-					this.setNoKeyPress(this.getNoKeyPress() + 1);
-					this.writeToLog(new GameEvent(a));
-					this.actors.clear();
-				} else if (!a.active && a.responded){
-					a.ct.stop();
-					previousActorTime += a.lifeSpan;
 					currentActorTime = 0;
 					this.actors.clear();
-				}else {
-					this.currentActorTime = a.lifeSpan;
+					
+					if(!a.responded) {
+						System.out.println("nonresponse:"+a);
+						this.writeToLog(new GameEvent(a));
+						this.setNoKeyPress(this.getNoKeyPress() + 1);
+					} else {
+						System.out.println("already responded:"+a);
+						// it has been responded to earlier ...
+					}
 				}
-
-			}
-		} catch (Exception e) {
-			System.out.println("Exception on update: " + e);
+				else {
+					this.currentActorTime = a.lifeSpan;
+				}	
 		}
 
+
 	}
+	
+	/**
+	 * this reads the next line in the Script file property/value lines cause
+	 * the system to update the GameSpec fish launches read the interval and use
+	 * it to compute nextFishTime and read the species and side and store it in
+	 * this.nextFish
+	 * 
+	 * We should read this right after launching a fish, so we can know when its
+	 * time to launch the next fish!
+	 * 
+	 * @return
+	 */
+
+	private void updateNextFishTime() {
+
+		// initialize the scanner if its the first time we're reading a line
+		if (scan == null) {
+			try {
+				scan = new Scanner(new File(this.inputScriptFileName));
+			} catch (FileNotFoundException e) {
+				System.out.println("Error in reading inputScriptFile:"
+						+ this.inputScriptFileName + " " + e);
+				e.printStackTrace();
+				this.stop();
+				return;
+			}
+		}
+		if (!scan.hasNext()) {
+			this.setGameOver(true);
+
+			this.nextFishTime += 10 * 1000000000L; // kind of a hack ....
+			return;
+
+		}
+		long interval = -1;
+		try {
+			interval = scan.nextLong();
+		} catch (Exception e) {
+			System.out.println("error with " + scan
+					+ " scanning for the first long on a line" + e);
+			e.printStackTrace();
+		}
+		// process all the 0 interval commands (which set game properties)
+
+		while (interval == -1) {
+
+			String prop = scan.next();
+			String value = scan.next();
+			scan.nextLine(); // skip over the rest of the line
+			writeToLog("0\t" + prop + "\t" + value);
+			if (prop.equals("gameover")) {
+				this.stop();
+				this.setGameOver(true);
+				this.nextFishTime += 1000000000000L;
+				return;
+			}
+			// System.out.println("interval="+interval+" prop="+prop+" value="+value);
+			interval = scan.nextLong();
+
+			gameSpec.update(prop, value);
+		}
+
+		// calculate the next FishTime and the basic characteristics of the
+		// nextFish (species and side)
+
+		//nextFishTime = interval *1000000 + this.nextFishTime;
+		// these next two variables are read from the script file but are not used!!
+		String sound = scan.next();
+		int visualhz = scan.nextInt();
+		int congruent = scan.nextInt();
+		int trialnum = scan.nextInt();
+		int block = scan.nextInt();
+		
+		this.nextFishTime = numTrials * gameSpec.trialLength*100000000L + interval*1000000L + this.gameStart;
+
+		System.out.println("trialnum="+trialnum+ " block="+block+ "  numTrials="+numTrials+" .. "+ (numTrials * gameSpec.trialLength*100000000L)/1000000000.0+": beginning of trial");
+		System.out.println((this.nextFishTime-gameStart)/1000000000.0 +": nft\n"+ interval+"  int\n"+ System.nanoTime())
+		;
+		System.out.println("now="+(System.nanoTime()-this.gameStart)/1000000.0+" ms");
+		numTrials++;
+		
+		boolean fromLeft = (scan.next().equals("left"));
+
+		String species = scan.next();
+
+		scan.nextLine(); // skip over the rest of the line
+
+		// create the next Fish to be launched
+		GameActor a = new GameActor();
+
+		a.fromLeft = fromLeft;
+		a.setCongruent(congruent);
+		a.setTrial(trialnum);
+		a.block = block;
+		a.species = (species.equals("good")) ? Species.good : Species.bad;
+		this.nextFish = a;
+
+	}
+
 
 	public int interpolateSize(double min, double max, long birth, long now,
 			double freq) {

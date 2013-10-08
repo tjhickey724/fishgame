@@ -69,66 +69,13 @@ public class GameView extends JPanel {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (gm.isGameOver())
-					return;
-				// when a key is pressed, we send a 'flash' to the indicator in the corner
-				flash=true;
-				// we set the update time to be 50 ms after the keypress, so the indicator stays lit for 50 ms
-				indicatorUpdate=System.nanoTime()+50000000l;
-				// play good/bad sounds alone by key press for demo purpose
-				if (e.getKeyChar() == 'g') {
-					goodclip.play();
-					return;
-				} else if (e.getKeyChar() == 'b') {
-					badclip.play();
-					return;
-				} else if ((e.getKeyChar()=='=') && (!gm.started)){
-					gm.startFish();
-					return;
-				}
-
-				// first check to see if they pressed
-				// when there are no fish!!
-				if (gm.getNumFish() == 0) {
-					String log = "KeyPress for no fish!";
-					// gm.writeToLog(log);
-					gm.writeToLog(new GameEvent(e.getKeyChar()));
-					badclip.play();
-					return;
-				}
-				// otherwise, remove the last fish (should only be one!)
-				GameActor lastFish = gm.getActorList().get(0);
-				if (lastFish.responded==true){
-					return;
-				}
-				lastFish.responded=true;
-				GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
-
-				// get the response time and write it to the log
-				long keyPressTime = System.nanoTime();
-				long responseTime = keyPressTime - lastFish.birthTime;
-
-				String log = e.getKeyChar() + " " + responseTime / 1000000.0
-						+ " " + ge.correctResponse + " " + lastFish;
-
-				System.out.println(log);
-
-				gm.writeToLog(ge);
-
-				// play the appropriate sound and modify the score
-
-				if (ge.correctResponse) {
-
-					goodclip.play();
-					gm.wealth++;
-					gm.setHits(gm.getHits() + 1);
-				} else {
-					badclip.play();
-					gm.wealth--;
-					gm.setMisses(gm.getMisses() + 1);
-				}
+				// to avoid thread conflicts we call a synchronized method in
+				// the GameModel class to handle the keypress and play the sounds ...
+				gm.handleKeyPress(e,goodclip,badclip);
 
 			}
+
+			
 		};
 		this.addKeyListener(kl);
 	}

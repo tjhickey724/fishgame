@@ -127,6 +127,14 @@ public class GenerateWindow extends JFrame {
 				gs.interval[0]=Integer.parseInt(int1.getText());
 				gs.interval[1]=Integer.parseInt(int2.getText());
 				gs.interval[2]=Integer.parseInt(int3.getText());
+				
+				/*
+				 * NOTE:  the trialLength has to be bigger that the three intervals by at least 2 seconds ...
+				 */
+				int maxint = Math.max(gs.interval[0], Math.max(gs.interval[1],gs.interval[2]));
+				if (gs.trialLength < maxint+20) {
+					gs.trialLength = maxint + 20;
+				}
 				if (mode.getSelectedItem().equals("Regular")){
 					gs.mode =0;
 				}else if (mode.getSelectedItem().equals("Single Tone")){

@@ -139,8 +139,7 @@ public class GameActor {
 			y += vy *5 * speed * dt;
 		} else {
 			this.active = false;
-			if(congruent != 2)
-				this.ct.stop();
+			this.ct.stop();
 		}
 
 	}
