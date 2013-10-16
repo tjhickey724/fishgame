@@ -8,7 +8,7 @@ import java.net.Socket;
  * @author tim
  *
  */
-class NetStationError extends java.lang.Exception {
+public class NetStationError extends java.lang.Exception {
 
 	/**
 	 * 
