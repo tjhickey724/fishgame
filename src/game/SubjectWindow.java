@@ -41,7 +41,7 @@ public class SubjectWindow extends JFrame {
 		status = new JLabel("");
 		pause=new JButton("Pause");
 		// put the frame components together with a border layout
-		frame.add(pause, BorderLayout.NORTH);
+		//frame.add(pause, BorderLayout.NORTH);
 		gameboard.header.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.add(gameboard, BorderLayout.CENTER);
 		frame.add(status, BorderLayout.SOUTH);

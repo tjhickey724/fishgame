@@ -29,6 +29,9 @@ public class ScriptWindow extends JFrame {
 	ScriptWindow thisSW;
 	JButton openButton;
 	JTextField scr, subId, expId;
+	JButton start = new JButton("Start");
+	JButton pause = new JButton("pause");
+	JButton sdone = new JButton("Done");
 
 	JFileChooser fc;
 
@@ -53,11 +56,7 @@ public class ScriptWindow extends JFrame {
 		expId = new JTextField("Experimenter");
 		subId = new JTextField("Subject");
 		scr = new JTextField("scripts/demoscriptv1.txt");
-		JButton start = new JButton("start");
 
-		JButton restart = new JButton("Restart");
-		// stop = new JButton("Stop");
-		JButton sdone = new JButton("Done");
 
 		fc = new JFileChooser(System.getProperty("user.dir") + "/scripts");
 
@@ -132,6 +131,20 @@ public class ScriptWindow extends JFrame {
 
 			}
 		});
+		
+		pause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (pause.getText().equals("pause")) {
+					gm.pause();
+					pause.setText("resume");
+				} else {
+					gm.restart();
+					pause.setText("pause");
+				}
+
+			}
+		});
 
 		// this pauses or resumes the game so the subject can take a break if
 		// needed
@@ -145,6 +158,7 @@ public class ScriptWindow extends JFrame {
 
 		scriptpanel.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Main Control"));
+		scriptpanel.add(pause);
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
 		scriptpanel.add(new JLabel("ScriptFile: "));
@@ -153,7 +167,7 @@ public class ScriptWindow extends JFrame {
 		// scriptpanel.add(restart);
 		// scriptpanel.add(stop);
 		scriptpanel.add(sdone);
-		// scriptpanel.add(openButton);
+
 		// scriptpanel.add(new JLabel("Script File"));
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);

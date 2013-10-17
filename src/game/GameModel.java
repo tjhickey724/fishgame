@@ -84,11 +84,12 @@ public class GameModel {
 		return paused;
 	}
 
+	
 	/**
 	 * @param paused
 	 *            the paused to set
 	 */
-	public void setPaused(boolean paused) {
+	private void setPaused(boolean paused) {
 		this.paused = paused;
 	}
 
@@ -259,17 +260,21 @@ public class GameModel {
 	public long indicatorUpdate;
 
 
+	private long pauseStart = 0;
 
 	public void pause() {
-
-		this.nextFishTime = Long.MAX_VALUE;
+		this.pauseStart = System.nanoTime();
+		//this.nextFishTime = Long.MAX_VALUE;
 		setPaused(true);
 		this.writeToLog("PAUSE");
 	}
 
+	private long pauseRestart = 0;
 	public void restart() {
-
-		this.nextFishTime = System.nanoTime() + 2 * 1000000000L;
+		this.pauseRestart = System.nanoTime();
+		long pauseDuration = pauseRestart-pauseStart;
+		this.gameStart += pauseDuration;
+		this.nextFishTime += pauseDuration;
 		setPaused(false);
 		this.writeToLog("RESTART");
 	}
