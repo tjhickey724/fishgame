@@ -384,9 +384,15 @@ public class GameModel {
 
 		if (currentFish == null) {
 			if (now > this.nextFishTime) {
-				// here is where we need to spawn a fish and update the nextFishTime variable ...
-				spawnFish();
-				this.createNextFish();
+				if (this.nextFish==null){
+					// no more fish, so the game is over!
+					this.gameOver = true;
+					return;
+				}
+				else {
+				    spawnFish(now);
+				    createNextFish();
+				}
 			}
 		} else  {
 			// first we update the fishes position and state
@@ -448,10 +454,12 @@ public class GameModel {
 			interval = updateGameSpec();
 		}
 		
-		if (this.gameOver) return;  // the gamespec could correspond to the end of the game
-
-		storeNextFishInfo(interval);
-
+		if (interval==0){
+			this.nextFish = null;
+			this.nextFishTime = System.nanoTime() + gameSpec.trialLength*100L*1000L*1000L;
+		} else {
+			storeNextFishInfo(interval);
+		}
 	}
 
 
@@ -478,10 +486,13 @@ public class GameModel {
 		
 		this.nextFishTime = numTrials * gameSpec.trialLength*100000000L + interval*1000000L + this.gameStart;
 
+		/*
 		System.out.println("trialnum="+trialnum+ " block="+block+ "  numTrials="+numTrials+" .. "+ (numTrials * gameSpec.trialLength*100000000L)/1000000000.0+": beginning of trial");
 		System.out.println((this.nextFishTime-gameStart)/1000000000.0 +": nft\n"+ interval+"  int\n"+ System.nanoTime())
 		;
 		System.out.println("now="+(System.nanoTime()-this.gameStart)/1000000.0+" ms");
+		*/
+		
 		numTrials++;
 		
 		boolean fromLeft = (scan.next().equals("left"));
@@ -550,9 +561,11 @@ public class GameModel {
 		 * randomly spawns a new fish,based on the script and resets the time for
 		 * the next fish to be spawned...
 		 */
-		public void spawnFish() {
-			if (this.isGameOver())
+		public void spawnFish(long now) {
+			if (this.nextFish == null){
+				this.gameOver=true;
 				return;
+			}
 			
 			Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
 			Species s = this.nextFish.species;
@@ -589,9 +602,14 @@ public class GameModel {
 				a.ct.loop();
 			
 			a.vx = (side == Side.left) ? 1 : -1;
+			nextFish = a;
+	
+			
 
-			// add the fish to the list of 
-			currentFish = a;
+			nextFish.birthTime = now;
+			// launch the fish
+			currentFish = nextFish;
+			//nextFish = null;
 
 
 			writeToLog(a); // indicate that a was spawned
