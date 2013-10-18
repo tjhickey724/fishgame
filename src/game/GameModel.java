@@ -502,14 +502,54 @@ public class GameModel {
 		scan.nextLine(); // skip over the rest of the line
 
 		// create the next Fish to be launched
-		Fish a = new Fish();
+		Fish a1 = new Fish();
 
-		a.fromLeft = fromLeft;
-		a.setCongruent(congruent);
-		a.setTrial(trialnum);
-		a.block = block;
-		a.species = (species.equals("good")) ? Species.good : Species.bad;
-		this.nextFish = a;
+		a1.fromLeft = fromLeft;
+		a1.setCongruent(congruent);
+		a1.setTrial(trialnum);
+		a1.block = block;
+		a1.species = (species.equals("good")) ? Species.good : Species.bad;
+		this.nextFish = a1;
+		
+		
+		Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
+		Species s = this.nextFish.species;
+		// System.out.println("spawning "+s+" "+side);
+
+		// pick starting location and velocity
+		double y = this.modelHeight / 2;
+
+		double x = (side == Side.left) ? 1 : this.modelWidth - 1;
+
+		// then make an actor with that position
+		Fish a = new Fish(x, y, true, s, gameSpec.stereo,
+				gameSpec.good.soundFile, gameSpec.bad.soundFile);
+		// and fill in all the needed fields...
+		// we don't need both fromLeft and origin .... eliminate fromLeft...
+		a.fromLeft = (side == Side.left);
+		a.origin = (side == Side.left) ? 0 : 1; // we'll convert origin to Side
+												// later
+
+		a.setCongruent(nextFish.congruent);
+		a.setTrial(nextFish.trial);
+		a.block = nextFish.block;
+		// make sure it is moving inward if it comes from the right
+		if (!a.fromLeft)
+			a.vy = -a.vy;
+		// a.radius=4;
+		// start playing the music for the fish
+		if (a.fromLeft)
+			a.ct = a.ctL;
+		else
+			a.ct = a.ctR;
+		//if fish is not silent play sound
+		//if (a.congruent != 2) 
+		//	a.ct.loop();
+		
+		a.vx = (side == Side.left) ? 1 : -1;
+		nextFish = a;
+	
+		
 	}
 
 
@@ -562,57 +602,13 @@ public class GameModel {
 		 * the next fish to be spawned...
 		 */
 		public void spawnFish(long now) {
-			if (this.nextFish == null){
-				this.gameOver=true;
-				return;
-			}
-			
-			Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
-			Species s = this.nextFish.species;
-			// System.out.println("spawning "+s+" "+side);
-
-			// pick starting location and velocity
-			double y = this.modelHeight / 2;
-
-			double x = (side == Side.left) ? 1 : this.modelWidth - 1;
-
-			// then make an actor with that position
-			Fish a = new Fish(x, y, true, s, gameSpec.stereo,
-					gameSpec.good.soundFile, gameSpec.bad.soundFile);
-			// and fill in all the needed fields...
-			// we don't need both fromLeft and origin .... eliminate fromLeft...
-			a.fromLeft = (side == Side.left);
-			a.origin = (side == Side.left) ? 0 : 1; // we'll convert origin to Side
-													// later
-
-			a.setCongruent(nextFish.congruent);
-			a.setTrial(nextFish.trial);
-			a.block = nextFish.block;
-			// make sure it is moving inward if it comes from the right
-			if (!a.fromLeft)
-				a.vy = -a.vy;
-			// a.radius=4;
-			// start playing the music for the fish
-			if (a.fromLeft)
-				a.ct = a.ctL;
-			else
-				a.ct = a.ctR;
-			//if fish is not silent play sound
-			if (a.congruent != 2) 
-				a.ct.loop();
-			
-			a.vx = (side == Side.left) ? 1 : -1;
-			nextFish = a;
-	
-			
 
 			nextFish.birthTime = now;
-			// launch the fish
 			currentFish = nextFish;
+			if (currentFish.congruent != 2)
+				currentFish.ct.loop();
 			//nextFish = null;
-
-
-			writeToLog(a); // indicate that a was spawned
+			writeToLog(currentFish); 
 		}
 
 
