@@ -150,21 +150,21 @@ public class GameView extends JPanel {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * viewSize);
+		return (int) Math.round(x / gm.getSize() * viewSize);
 	}
 
 	public int toXViewCoords(double x) {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * width);
+		return (int) Math.round(x / gm.getSize() * width);
 	}
 
 	public int toYViewCoords(double x) {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * height);
+		return (int) Math.round(x / gm.getSize() * height);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class GameView extends JPanel {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return x * gm.size / viewSize;
+		return x * gm.getSize() / viewSize;
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class GameView extends JPanel {
 
 		drawBackground(g);
 
-		drawTimeBar(g);
+		//drawTimeBar(g);
 
 		//drawHud(g);
 
@@ -217,48 +217,11 @@ public class GameView extends JPanel {
 		if (hasAvatar)
 			drawAvatar(g);
 		
-		drawIndicator(g);
-
-		//updateScore(g);
 
 	}
 
-	private void drawIndicator(Graphics g) {
-		if (flash){
-			g.setColor(Color.white);
-			
-			if (indicatorUpdate<System.nanoTime())flash=false;
-		} else if (gm.flash){
-			g.setColor(Color.white);
-			if (gm.indicatorUpdate<System.nanoTime())gm.flash=false;
-		} else {
-			g.setColor(Color.black);
-		}
-		
-		g.fillRect(0, getHeight()-60, 60, 60);
-		
-		
-	}
+	
 
-	private void drawTimeBar(Graphics g) {
-		// TODO Auto-generated method stub
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, getWidth(), 20);
-		g.setColor(Color.GREEN);
-		// this is supposed to reference the timePerTrial rather than timeLimit.
-		g.fillRect(0, 0, toXViewCoords(gm.timeRemaining), 20);
-		// System.out.println(gm.timeRemaining);
-		// g.drawString("", toViewCoords(50), 20);
-
-	}
-
-	public void drawHud(Graphics g) {
-
-		g.drawImage(coin, 2, 20, 50, 50, null);
-		g.setColor(Color.BLACK);
-		g.setFont(new Font("Helvetica", Font.BOLD, 50));
-		g.drawString(gm.wealth + "", 55, 65);
-	}
 
 	// method to draw the boat avatar
 	private void drawAvatar(Graphics g) {
@@ -282,8 +245,8 @@ public class GameView extends JPanel {
 	}
 
 	private void drawFish(Graphics g) {
-		java.util.List<GameActor> gaList = gm.getActorList();
-		for (GameActor a : gaList) {
+		java.util.List<Fish> gaList = gm.getActorList();
+		for (Fish a : gaList) {
 			drawActor(g, a, Color.WHITE);
 		}
 	}
@@ -330,7 +293,7 @@ public class GameView extends JPanel {
 	 * @param c
 	 *            - the default color for actors of unknown species
 	 */
-	private void drawActor(Graphics g, GameActor a, Color c) {
+	private void drawActor(Graphics g, Fish a, Color c) {
 		if (!a.active)
 			return;
 		int theRadius = toViewCoords(a.radius);
@@ -347,7 +310,7 @@ public class GameView extends JPanel {
 			break;
 		}
 
-		int theSize = gm.interpolateSize(gm.gameSpec.minThrobSize,
+		int theSize = interpolateSize(gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize, a.birthTime, System.nanoTime(),
 				visualHz);
 
@@ -430,5 +393,7 @@ public class GameView extends JPanel {
 		g.dispose();
 		return dimg;
 	}
+	
+
 
 }

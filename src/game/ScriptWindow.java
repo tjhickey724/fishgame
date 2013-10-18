@@ -39,7 +39,7 @@ public class ScriptWindow extends JFrame {
 		super("Script Window");
 		thisSW = this;
 		gs = new GameSpec();
-		gm = new GameModel(100, 10, gs);
+		gm = new GameModel(gs);
 		sw = new SubjectWindow(gm);
 		sw.setVisible(true);
 		setSize(300, 250);
@@ -104,25 +104,18 @@ public class ScriptWindow extends JFrame {
 				String SubjectID = subId.getText();
 				String ExperimenterID = expId.getText();
 
-				try {
-					gm.writeToLog("Version:                "
-							+ RunGame.versionNum);
-					gm.writeToLog("Experimenter:           " + ExperimenterID);
-					gm.writeToLog("Subject:                " + SubjectID);
-					gm.writeToLog("Date:                   "
-							+ (new java.util.Date()).toString());
+				gm.writeToLog("Version:                "
+						+ RunGame.versionNum);
+				gm.writeToLog("Experimenter:           " + ExperimenterID);
+				gm.writeToLog("Subject:                " + SubjectID);
+				gm.writeToLog("Date:                   "
+						+ (new java.util.Date()).toString());
 
-					gm.writeToLog("Scriptfile:             "
-							+ openButton.getText());
-
-					gm.logfile.flush();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				gm.writeToLog("Scriptfile:             "
+						+ openButton.getText());
 
 				// next we start the game model
-				gm.start();
+				gm.start_gameboard();
 				// and start the game loop which will update the model
 				// and view as fast as possible
 				GameLoop gl = new GameLoop(gm, sw.gameboard);

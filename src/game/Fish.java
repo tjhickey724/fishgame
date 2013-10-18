@@ -13,7 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * @author tim
  * 
  */
-public class GameActor {
+public class Fish {
 	// this is a bit of a hack, I need to refactor later REFACTOR!!
 	public static long GAME_START = 0; // System.nanoTime();
 	boolean responded=false;
@@ -42,7 +42,7 @@ public class GameActor {
 	public static double timeOnScreen = 20;
 	long lifeSpan;
 
-	long gameStart = GameActor.GAME_START;
+	long gameStart = Fish.GAME_START;
 	Color color1 = new Color(150, 0, 0), color2 = new Color(200, 0, 0),
 			color3 = new Color(100, 100, 100),
 			color4 = new Color(250, 250, 250);
@@ -59,11 +59,11 @@ public class GameActor {
 
 	private java.util.Random rand = new java.util.Random();
 
-	public GameActor(double x, double y, boolean active, Species spec) {
+	public Fish(double x, double y, boolean active, Species spec) {
 		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p");
 	}
 
-	public GameActor(double x, double y, boolean active, Species spec,
+	public Fish(double x, double y, boolean active, Species spec,
 			boolean stereo, String goodFishSounds, String badFishSounds) {
 		this.x = x;
 		this.y = y;
@@ -73,7 +73,7 @@ public class GameActor {
 		this.vy = speed * (rand.nextDouble() - 0.5);
 		this.birthTime = System.nanoTime();
 		this.lastUpdate = this.birthTime;
-		this.gameStart = GameActor.GAME_START;
+		this.gameStart = Fish.GAME_START;
 		this.species = spec;
 		String fishSounds;
 		// handles congruence
@@ -105,14 +105,14 @@ public class GameActor {
 		}
 	}
 
-	public GameActor(double x, double y) { // throws
+	public Fish(double x, double y) { // throws
 											// UnsupportedAudioFileException,
 											// IOException,
 											// LineUnavailableException {
 		this(x, y, true, Species.good);
 	}
 
-	public GameActor() { // throws UnsupportedAudioFileException, IOException,
+	public Fish() { // throws UnsupportedAudioFileException, IOException,
 							// LineUnavailableException {
 		this(0, 0, true, Species.good);
 	}

@@ -28,7 +28,7 @@ public class GameEvent {
 	public int responseTime = 0;
 
 	/** the fish itself, possibly null if a key was pressed for no fish **/
-	public GameActor fish = null;
+	public Fish fish = null;
 
 	/** the fish species **/
 	public Species species = Species.none;
@@ -49,7 +49,7 @@ public class GameEvent {
 
 	// converts from System.nanoTime units to milliseconds from game start
 	private int convertNanoToMSfromGS(long t) {
-		int ms = (int) Math.round((t - GameActor.GAME_START) / 1000000.0);
+		int ms = (int) Math.round((t - Fish.GAME_START) / 1000000.0);
 		return ms;
 	}
 
@@ -83,7 +83,7 @@ public class GameEvent {
 	 * 
 	 * @param fish
 	 */
-	public GameEvent(GameActor fish) {
+	public GameEvent(Fish fish) {
 		this.eventType = "missedfish";
 		this.when = System.nanoTime();
 		this.keyPressed = 0;
@@ -105,7 +105,7 @@ public class GameEvent {
 	 * @param keyPressed
 	 * @param fish
 	 */
-	public GameEvent(char keyPressed, GameActor fish) {
+	public GameEvent(char keyPressed, Fish fish) {
 		this.eventType = "hitfish   ";
 		this.when = System.nanoTime();
 		this.keyPressed = keyPressed;
@@ -128,7 +128,7 @@ public class GameEvent {
 	 * @param lastFish
 	 * @return
 	 */
-	private boolean hitCorrectKey(char c, GameActor lastFish) {
+	private boolean hitCorrectKey(char c, Fish lastFish) {
 		Species s = lastFish.species;
 		boolean onLeft = lastFish.origin == 0;
 		if (s == Species.good)
