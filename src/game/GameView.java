@@ -245,10 +245,9 @@ public class GameView extends JPanel {
 	}
 
 	private void drawFish(Graphics g) {
-		java.util.List<Fish> gaList = gm.getActorList();
-		for (Fish a : gaList) {
-			drawActor(g, a, Color.WHITE);
-		}
+		Fish currentFish = gm.getCurrentFish();
+		if (currentFish != null)
+			drawActor(g,currentFish,Color.WHITE);
 	}
 
 	private void drawBackground(Graphics g) {
