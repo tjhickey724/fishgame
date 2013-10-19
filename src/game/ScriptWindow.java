@@ -13,8 +13,9 @@ import java.io.IOException;
 import javax.swing.*;
 
 /**
- * This generates a window that lets the experimenter fill in some data about
- * the experiment and then run the script and create a log. It also provides
+ * This generates a window that lets the experimenter run an experiment.
+ * It prompts them to fill in some data about the experimenter and subject
+ * The it will run the script and create a log. It also provides
  * options for controlling the experiment by pausing/restarting and ending the
  * session.
  * 

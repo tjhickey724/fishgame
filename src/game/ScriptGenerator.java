@@ -9,8 +9,9 @@ import java.util.Collections;
 import java.util.Random;
 
 /**
- * This class will generate a script based on specifications from the
- * experimenter. For now we just look at min/max spawning intervals.
+ * This class will generate a script based on a GameSpec object. 
+ * It can be called several times with different GameSpec objects
+ * and it adds to the script each time.
  * 
  * @author tim
  * 

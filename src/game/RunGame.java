@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JSlider;
 
 /**
- * This creates the experimenter's window, which offers the user a choice to run
- * from a script or generate a script. It also stores the versionNum
+ * The experimenter's window offers the user a choice to run a script or generate a script. 
+ * It also stores the versionNum
  * 
  * @author tim
  * 

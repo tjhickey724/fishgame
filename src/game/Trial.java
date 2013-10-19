@@ -3,26 +3,36 @@ package game;
 import java.util.ArrayList;
 
 /**
- * A Trial is a Fish Event, e.g. Good Fish from Right Bad Fish from Left and it
- * has a fixed amount of time. In fMRI mode, the previous trial ends with the
- * fish disappearing from the screen The new trial begins with no fish, and the
- * after an inter-fish interval the fish appears
+ * A Trial specifies a Fish Event. 
  * 
  * @author tim
  * 
  */
 public class Trial {
 	/**
-	 * an ArrayList storing the properties of the trial
+	 * when the fish should appear after the beginning of the trial
 	 */
 	public Long interval;
+	
+	/*
+	 * which sound file should be played
+	 */
 	public String soundFile;
+	
+	/*
+	 * which visual hertz should be used
+	 */
 	public int visualHz;
+	
 	// congruent = 0, incongruent = 1, silent = 3
 	public int congruent;
+	
 	public int trial;
+	
 	public int block;
+	
 	public boolean fromLeft;
+	
 	public Species spec;
 
 	/**

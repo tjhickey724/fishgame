@@ -7,13 +7,17 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- * a Fish has a position and a velocity and a speed they also have a
- * species and they keep track of whether they are active or not
+ * a Fish is an object that appears on the screen at a particular time
+ * and is taken off the screen later. It has various properties that specify
+ * how it is to be displayed and any sounds that should be played when it is
+ * on screen.  It also stores information about what happened to it when it
+ * appears on the screen.
  * 
  * @author tim
  * 
  */
 public class Fish {
+	
 	public static long GAME_START = 0; // System.nanoTime();
 	
 	/**

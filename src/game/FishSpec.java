@@ -1,7 +1,9 @@
 package game;
 
 /**
- * this stores a complete specification of how the fish are to be rendered
+ * this stores a complete specification of how a fish 
+ * of a particular type is to be rendered.
+ * this includes the sound and image files and the throb rate 
  * 
  * @author tim
  * 

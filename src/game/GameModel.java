@@ -315,7 +315,10 @@ public class GameModel {
 		}
 	}
 
-	
+	/**
+	 * get the current Fish
+	 * @return
+	 */
 	public Fish getCurrentFish(){
 		return currentFish;
 	}

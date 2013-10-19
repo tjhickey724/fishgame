@@ -7,6 +7,10 @@ import java.util.ArrayList;
  * of the fish. These parameters will be written to the script file and the log
  * file to make the game play reproducible..
  * 
+ * The game state values in the spec can change during the game. They are specified
+ * in the script with a line that begins with -1
+ * 
+ * 
  * @author tim
  * 
  */
@@ -36,13 +40,7 @@ public class GameSpec {
 	public String badResponseSound = "sounds/bad.wav";
 	public String neutralResponseSound = "sounds/neutral.wav";
 	public String silence = "sounds/silence.wav";
-	// we can expand to more sounds later ...
-	/*
-	 * public String eatGood = goodSound; public String eatBad = badSound;
-	 * public String killGood = badSound; public String killBad = goodSound;
-	 * public String missGood = badSound; public String missBad = badSound;
-	 * public String pushKey = badSound;
-	 */
+
 
 	public int minFishRelease = 30, maxFishRelease = 60;
 	
@@ -89,9 +87,9 @@ public class GameSpec {
 	}
 
 	/**
-	 * this will change the value in the specified property, if it exists We
-	 * could replace this whole class with a HashMap though.... and maybe we
-	 * should!
+	 * this will change the value in the specified property, if it exists 
+	 * We could replace this whole class with a HashMap though.... and maybe we
+	 * should in a future version.
 	 * 
 	 * @param prop
 	 * @param value

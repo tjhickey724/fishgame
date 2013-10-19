@@ -16,10 +16,12 @@ import javax.imageio.ImageIO;
 import java.util.ArrayList;
 
 /**
- * a GameView is a 2D view of a GameModel the aspect of the view and model may
- * be different Since the GameModel is a square space, the GameView takes the
- * minimum of the width and height of the JPanel and uses that to scale the
- * GameModel to the Viewing window. Calling repaint() on the GameView will cause
+ * a GameView is a 2D view of a GameModel 
+ * The aspect of the view and model may be different. 
+ * The GameModel space will be scaled to fit the GameView screen
+ * but the Fish will not be scaled.
+ * 
+ * Calling repaint() on the GameView will cause
  * it to render the current state of the Model to the JPanel canvas...
  * 
  * @author tim

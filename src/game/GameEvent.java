@@ -1,10 +1,14 @@
 package game;
 
 /**
- * This class records game events which can be logged The events of interest are
- * generally keypresses after a fish is released, but sometimes there will be no
- * keypress for a fish and this is indicated using a 0 for the keyCharacter The
- * elements of interest are the response time
+ * This class records game events which can be logged 
+ * The events of interest are
+ * <ul>
+ * <li> key press events when a fish is on the screen</li>
+ * <li> key press events when no fish is on the screen</li>
+ * <li> beginning of a new trial</li>
+ * <li> release of a fish </li>
+ * </ul>
  * 
  * @author tim
  * 

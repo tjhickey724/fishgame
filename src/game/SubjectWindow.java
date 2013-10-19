@@ -10,9 +10,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /**
- * DrawDemo creates the GUI for the Psych Game which is designed to study the
- * effects of correlations between visual and auditory oscillation on response
- * time for motor activity among other features.
+ * DrawDemo creates the GUI for the subjects view of the Psych Game.
+ * It creates a GameView corresponding to the GameModel passed in
+ * and
  * 
  * @author tim
  * 
@@ -46,28 +46,6 @@ public class SubjectWindow extends JFrame {
 		frame.add(gameboard, BorderLayout.CENTER);
 		frame.add(status, BorderLayout.SOUTH);
 
-		KeyAdapter kl = new KeyAdapter() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar()=='='){
-					gameboard.gm.started=true;
-				}
-			}
-		};
-		pause.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (pause.getText().equals("pause")) {
-					gameboard.gm.pause();
-					pause.setText("resume");
-				} else {
-					gameboard.gm.restart();
-					pause.setText("pause");
-				}
-
-			}
-		});
 	}
 
 }

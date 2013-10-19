@@ -7,8 +7,9 @@ import java.awt.event.*;
 import java.io.IOException;
 
 /**
- * this creates two buttons one to open the "run from script" window the other
- * to open the "generate script" window
+ * this creates a window with two buttons: run and generate.
+ * "run from script" opens the windows to run the game from a script
+ * "generate script" opens a window to specify and generate a script
  * 
  * @author tim
  * 
@@ -20,6 +21,9 @@ public class ExperimenterWindow extends JFrame {
 	GenerateWindow gw;
 	JPanel buttonPanel;
 
+	/**
+	 * create the Experimenters window
+	 */
 	public ExperimenterWindow() {
 
 		super("Experimenter Window");
