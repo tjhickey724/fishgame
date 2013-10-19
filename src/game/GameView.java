@@ -216,8 +216,7 @@ public class GameView extends JPanel {
 
 		drawFish(g);
 
-		if (hasAvatar)
-			drawAvatar(g);
+		//if (hasAvatar) drawAvatar(g);
 		
 
 	}
