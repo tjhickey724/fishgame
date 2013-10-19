@@ -26,7 +26,7 @@ import java.io.*;
  * The fish starts out as active and becomes inactive when a key is pressed (even a wrong key).
  * It also become inactive if it reaches its lifetime without a key press.
  * 
- * 
+ * already responded
  * 
  * @author tim
  * 
@@ -128,6 +128,13 @@ public class GameModel {
 	private Fish nextFish = null;
 	
 	
+	// this stores the time, in nanoseconds, that the next trial should start
+	// this is set to zero when a trial begins and becomes non-zero when the
+	// beginning of the next trial time is known (usually after we spawn a fish
+	// and read the next fish info...
+	private long nextTrialStart = 0;
+	
+	
 	// this stores the instant when the "=" is received from the fMRI machines
 	// and the game starts. All times are relative to gameStart
 	private long gameStart;
@@ -181,7 +188,7 @@ public class GameModel {
 		this.pauseStart = System.nanoTime();
 		//this.nextFishTime = Long.MAX_VALUE;
 		this.paused = true;
-		this.writeToLog("PAUSE");
+		this.writeToLog(this.pauseStart,"PAUSE");
 	}
 
 	private long pauseRestart = 0;
@@ -191,7 +198,7 @@ public class GameModel {
 		this.gameStart += pauseDuration;
 		this.nextFishTime += pauseDuration;
 		this.paused = false;
-		this.writeToLog("RESTART");
+		this.writeToLog(this.pauseRestart,"RESTART");
 	}
 
 	
@@ -239,16 +246,15 @@ public class GameModel {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error while stopping: " + e);
+			System.err.println("Error while stopping: " + e);
 		}
 		currentFish = null;
 		try {
 			if (logfile != null)
 				logfile.close();
 			logfile = null;
-			System.out.println("closing log/script files");
 		} catch (Exception e) {
-			System.out.println("Problem closing logfile");
+			System.err.println("Problem closing logfile");
 		}
 
 	}
@@ -304,7 +310,7 @@ public class GameModel {
 			currentFish = null;
 			return lastFish;
 		} else {
-			System.out.println("trying to get last fish with an empty list!!!");
+			System.err.println("trying to get last fish with an empty list!!!");
 			return null;
 		}
 	}
@@ -323,7 +329,7 @@ public class GameModel {
 	 * @param goodclip
 	 * @param badclip
 	 */
-	public synchronized void handleKeyPress(KeyEvent e,AudioClip goodclip, AudioClip badclip) {
+	public synchronized void handleKeyPress(long now, KeyEvent e,AudioClip goodclip, AudioClip badclip) {
 		if (isGameOver())
 			return;
 
@@ -336,7 +342,7 @@ public class GameModel {
 		// first check to see if they pressed
 		// when there are no fish!!
 		if (getNumFish() == 0) {
-			writeToLog(new GameEvent(e.getKeyChar()));
+			writeToLog(now, new GameEvent(e.getKeyChar()));
 			badclip.play();
 			return;
 		}
@@ -350,14 +356,12 @@ public class GameModel {
 
 		// get the response time and write it to the log
 		long keyPressTime = ge.when;
-		long responseTime = keyPressTime - lastFish.birthTime;
+		//long responseTime = keyPressTime - lastFish.birthTime;
 
-		String log = e.getKeyChar() + " " + responseTime / 1000000.0
-				+ " " + ge.correctResponse + " " + lastFish;
+		//String log = e.getKeyChar() + " " + responseTime / 1000000.0 + " " + ge.correctResponse + " " + lastFish;
 
-		System.out.println(log);
 
-		writeToLog(ge);
+		writeToLog(now, ge);
 
 		// play the appropriate sound and modify the score
 
@@ -385,6 +389,12 @@ public class GameModel {
 
 		long now = System.nanoTime();
 		
+		if ((this.nextTrialStart>0) && (now > this.nextTrialStart)){
+			writeToLog(now,"new_trial");
+			this.nextTrialStart=0;
+			// log a trial event 
+		}
+		
 
 		if (currentFish == null) {
 			if (now > this.nextFishTime) {
@@ -403,24 +413,20 @@ public class GameModel {
 				Fish a = currentFish;
 				a.update();
 				keepOnBoard(a);
-				if (!a.active)  killFish(a);
+				if (!a.active)  killFish(now, a);
 		}
 	}
 
 
-	private void killFish(Fish a) {
+	private void killFish(long now, Fish a) {
 		a.ct.stop();
 
 		currentFish = null;
 		
 		if(!a.responded) {
-			System.out.println("nonresponse:"+a);
-			this.writeToLog(new GameEvent(a));
+			this.writeToLog(now, new GameEvent(a));
 			this.setNoKeyPress(this.getNoKeyPress() + 1);
-		} else {
-			System.out.println("already responded:"+a);
-			// it has been responded to earlier ...
-		}
+		} 
 	}
 	
 
@@ -488,9 +494,9 @@ public class GameModel {
 		
 		
 		// next we calculate the time the next fish should be launched
-		long beginningOfNextTrial = numTrials * gameSpec.trialLength*100000000L + this.gameStart;
+		this.nextTrialStart = numTrials * gameSpec.trialLength*100000000L + this.gameStart;
 		long delayBeforeFishAppears = interval*1000000L;
-		this.nextFishTime = beginningOfNextTrial + delayBeforeFishAppears;
+		this.nextFishTime = this.nextTrialStart + delayBeforeFishAppears;
 		
 		// we have completed the calculation for this trial, so we update the trial counter
 		numTrials++;
@@ -547,7 +553,7 @@ public class GameModel {
 			this.gameOver = true;
 			this.nextFishTime += 1000000000000L;
 		}
-		// System.out.println("interval="+interval+" prop="+prop+" value="+value);
+
 		interval = scan.nextLong();
 
 		gameSpec.update(prop, value);
@@ -560,7 +566,7 @@ public class GameModel {
 		try {
 			interval = scan.nextLong();
 		} catch (Exception e) {
-			System.out.println("error with " + scan
+			System.err.println("error with " + scan
 					+ " scanning for the first long on a line" + e);
 			e.printStackTrace();
 		}
@@ -572,7 +578,7 @@ public class GameModel {
 		try {
 			scan = new Scanner(new File(this.inputScriptFileName));
 		} catch (FileNotFoundException e) {
-			System.out.println("Error in reading inputScriptFile:"
+			System.err.println("Error in reading inputScriptFile:"
 					+ this.inputScriptFileName + " " + e);
 			e.printStackTrace();
 			this.stop();
@@ -592,7 +598,7 @@ public class GameModel {
 			if (currentFish.congruent != 2)
 				currentFish.ct.loop();
 			//nextFish = null;
-			writeToLog(currentFish); 
+			writeToLog(now,currentFish); 
 		}
 
 
@@ -684,7 +690,7 @@ public class GameModel {
 			this.logfile = new BufferedWriter(new FileWriter(new File(
 					logname)));
 		} catch (IOException e) {
-			System.out.println("Problems opening logfile:" + logname + ": "
+			System.err.println("Problems opening logfile:" + logname + ": "
 					+ e);
 			e.printStackTrace();
 		}
@@ -698,12 +704,12 @@ public class GameModel {
 	 * write out all of the fish properties too
 	 * @param f
 	 */
-	public void writeToLog(Fish f) {
+	public void writeToLog(long time, Fish f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
 				+ "\t" + f.trial + "\t" + f.block + "\t" + (f.fromLeft? "left":"right");
 
-		writeToLog(logLine);
+		writeToLog(time,logLine);
 	}
 
 	/**
@@ -714,23 +720,27 @@ public class GameModel {
 	 *            the string to be written to the log file
 	 */
 	public void writeToLog(String s) {
+		//long theTime = (System.nanoTime() - this.gameStart);
+		writeToLog(System.nanoTime(),s);
+	}
+	
+	public void writeToLog(long t, String s){
+		long theTime = (t - this.gameStart);
 		try {
-			long theTime = (System.nanoTime() - this.gameStart);
+
 
 			long theInterval = theTime - lastLogEventTimeNano;
 			lastLogEventTimeNano = theTime;
 
 			int theSeconds = (int) Math.round(theInterval / 1000000.0);
-			String logLine = theSeconds + GameEvent.sep + theTime / 1000000
-					+ " " + s + "\n";
+			String logLine = theTime / 1000000 + " " + theSeconds + GameEvent.sep + s + "\n";
 			
-
 			if (this.logfile == null) createLogfile();
 			this.logfile.write(logLine);
 			this.logfile.flush();
 			System.out.println("log:" + logLine);
 		} catch (Exception e) {
-			System.out.println("Error writing to log " + e);
+			System.err.println("Error writing to log " + e);
 		}
 	}
 
@@ -738,8 +748,8 @@ public class GameModel {
 	 * this writes a GameEvent (e.g. key press, missed fish, etc.) see doc for more to the logfile
 	 * @param e
 	 */
-	public void writeToLog(GameEvent e) {
-		writeToLog(e.toString());
+	public void writeToLog(long when, GameEvent e) {
+		writeToLog(when,e.toString());
 	}
 	
 	

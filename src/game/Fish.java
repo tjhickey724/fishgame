@@ -137,14 +137,7 @@ public class Fish {
 			double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
 			vy /= tmpSpeed;
 			vx /= tmpSpeed;
-			/*
-			System.out.println("speed = "+speed);
-			System.out.println("vx ="+vx);
-			System.out.println("vy="+vy);
-			System.out.println("dx/dt ="+vx*speed);
-			System.out.println("dy/dt="+vy*speed);
-			System.out.println("actualspeed = "+ speed*Math.sqrt(vx * vx + vy * vy));
-			*/
+
 			
 			// update the position of the fish
 			x += vx * speed * dt;

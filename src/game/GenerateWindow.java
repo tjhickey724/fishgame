@@ -72,7 +72,7 @@ public class GenerateWindow extends JFrame {
 		JPanel matrix1, matrix2, matrix3;
 
 		String currentDir = System.getProperty("user.dir");
-		System.out.println("Current dir using System:" + currentDir);
+		
 		fc = new JFileChooser(currentDir + "/sounds");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 

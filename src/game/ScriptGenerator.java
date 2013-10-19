@@ -63,7 +63,7 @@ public class ScriptGenerator {
 					+ RunGame.versionNum + "\n");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					System.out.println("Error Opening Script File");
+					System.err.println("Error Opening Script File");
 					e.printStackTrace();
 				}
 			}
@@ -152,7 +152,7 @@ public class ScriptGenerator {
 			scriptname = null;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Problems closing scriptfile:" + e);
+			System.err.println("Problems closing scriptfile:" + e);
 			e.printStackTrace();
 		}
 	}

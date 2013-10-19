@@ -35,7 +35,7 @@ public class GameLoop implements Runnable {
 				// this should be a method inside the gm to reset
 				gm.scan.close();
 				gm.scan = null;
-				System.out.println("ending game loop");
+				gm.writeToLog("GameOver");
 				return;
 			}
 			// update the model
@@ -53,7 +53,7 @@ public class GameLoop implements Runnable {
 			try {
 				Thread.sleep(1l);
 			} catch (Exception e) {
-				System.out.println("In game loop:" + e);
+				System.err.println("Error in game loop:" + e);
 			}
 		}
 	}

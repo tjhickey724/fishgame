@@ -71,7 +71,7 @@ public class GameView extends JPanel {
 			public void keyTyped(KeyEvent e) {
 				// to avoid thread conflicts we call a synchronized method in
 				// the GameModel class to handle the keypress and play the sounds ...
-				gm.handleKeyPress(e,goodclip,badclip);
+				gm.handleKeyPress(System.nanoTime(), e,goodclip,badclip);
 
 			}
 
@@ -87,7 +87,7 @@ public class GameView extends JPanel {
 	private void updateGameState(GameSpec gs) {
 
 		if (gs == null) {
-			System.out.println("gs is null!!!");
+			System.err.println("gs is null!!!");
 			return;
 		}
 		if(gs.mode == 0) {
@@ -132,7 +132,7 @@ public class GameView extends JPanel {
 
 			}
 		} catch (Exception e) {
-			System.out.println("can't find background images" + e);
+			System.err.println("can't find background images" + e);
 		}
 
 	}
@@ -298,8 +298,6 @@ public class GameView extends JPanel {
 		int x = toXViewCoords(a.x);
 		int y = toYViewCoords(a.y);
 		int visualHz = 1;
-		System.out.println("a.y="+a.y+" y="+y);
-		System.out.println("a.x="+a.x+" x="+x);
 
 		switch (a.species) {
 		case good:
