@@ -90,7 +90,7 @@ public class ScriptGenerator {
 				for (int i = 0; i < g.numincongruent / 2; i++){
 
 					trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-							g.good.throbRate, 0, (rand.nextInt(2) == 1),
+							g.good.throbRate, 1, (rand.nextInt(2) == 1),
 							Species.good));
 
 				}
@@ -98,14 +98,14 @@ public class ScriptGenerator {
 				 for(int i = 0; i < g.numincongruent / 2; i++){
 
 					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.bad.throbRate, 0, (rand.nextInt(2) == 1),
+							g.bad.throbRate, 1, (rand.nextInt(2) == 1),
 							Species.bad));
 				}
 				// generate good, congruent trials
 					for (int i = 0; i < g.numMissing / 2; i++){
 
 						trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-								g.good.throbRate, 0, (rand.nextInt(2) == 1),
+								g.good.throbRate, 2, (rand.nextInt(2) == 1),
 								Species.good));
 
 					}
@@ -113,7 +113,7 @@ public class ScriptGenerator {
 					 for(int i = 0; i < g.numMissing / 2; i++){
 
 						trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-								g.bad.throbRate, 0, (rand.nextInt(2) == 1),
+								g.bad.throbRate, 2, (rand.nextInt(2) == 1),
 								Species.bad));
 					}
 

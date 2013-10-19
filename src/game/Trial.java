@@ -50,7 +50,7 @@ public class Trial {
 		this.fromLeft = fromLeft;
 		this.spec = spec;
 	}
-	public void setBock(int block) {
+	public void setBlock(int block) {
 		this.block = block;
 	}
 	public String toScriptString() {

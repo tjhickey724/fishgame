@@ -50,7 +50,7 @@ public class GameSpec {
 	public int trialLength = 30;
 	
 	public int minThrobSize = 100, maxThrobSize = 125;
-	public int interval[] = {25, 35, 45};
+	public int interval[] = {25, 35, 45}; // fish entrance times in tenths of a second
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
 	public int mode = 1;

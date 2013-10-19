@@ -235,8 +235,7 @@ public class GameModel {
 		try {
 			if (currentFish != null) {
 				Fish a = currentFish; 
-				if(a.congruent != 2)
-					a.ct.stop();
+				a.ct.stop();
 			}
 
 		} catch (Exception e) {
@@ -478,9 +477,9 @@ public class GameModel {
 	private void readAndStoreNextFishInfo(long interval) {
 		
 		// first we read in the data on the line and store it in local variables for procession
-		String sound = scan.next();
-		int visualhz = scan.nextInt();		
-		int congruent = scan.nextInt();
+		String sound = scan.next();  // name of soundfile
+		int visualhz = scan.nextInt();	// visualhz rate (oscillations per second)
+		int congruent = scan.nextInt(); // 0=congruent, 1=not congruent, 2=silent
 		int trialnum = scan.nextInt();
 		int block = scan.nextInt();
 		boolean fromLeft = (scan.next().equals("left"));
@@ -525,8 +524,8 @@ public class GameModel {
 		nextFish.active = true;
 
 		// set the sound files
-		if (nextFish.species == Species.good)
-			nextFish.ct = new AudioClip(gameSpec.good.soundFile+"/fish.wav");
+		if ((nextFish.species == Species.good) == (nextFish.congruent==0))
+				nextFish.ct = new AudioClip(gameSpec.good.soundFile+"/fish.wav");
 		else
 			nextFish.ct = new AudioClip(gameSpec.bad.soundFile+"/fish.wav");
 	}
