@@ -130,7 +130,6 @@ public class GameEvent {
 	 */
 	private boolean hitCorrectKey(char c, Fish lastFish) {
 		Species s = lastFish.species;
-		boolean onLeft = lastFish.origin == 0;
 		if (s == Species.good)
 			return c == 'p';
 		else

@@ -38,6 +38,11 @@ public class GameModel {
 	 * about the current game aesthetics and mechanics.
 	 */
 	public GameSpec gameSpec, lastGameSpec;
+	
+	/*
+	 * a random number generator used to give the fish a random type of motion
+	 */
+	private java.util.Random rand = new java.util.Random();
 
 	// these variables store the width and height of the game screen
 	// in the current version the width and height have to be equal to the variable size
@@ -458,101 +463,80 @@ public class GameModel {
 			this.nextFish = null;
 			this.nextFishTime = System.nanoTime() + gameSpec.trialLength*100L*1000L*1000L;
 		} else {
-			storeNextFishInfo(interval);
+			readAndStoreNextFishInfo(interval);
 		}
 	}
 
 
 	/*
-	 * This is where we read in the rest of the line describing a fish
-	 * and we use that information to create the next fish.
-	 * We also calculate this.nextFishTime that specifies when the fish should be launched
+	 * This is where we read in the rest of the line from the script describing a fish
+	 * and we use that information to 
+	 * <ul><li> create the next fish with all its characteristics (visual/audio specs)
+	 * </li><li> calculate this.nextFishTime that specifies when the fish should be launched
+	 * </li></ul>
 	 */
-	private void storeNextFishInfo(long interval) {
-		// calculate the next FishTime and the basic characteristics of the
-		// nextFish (species and side)
-
-		// nextFishTime = interval *1000000 + this.nextFishTime;
+	private void readAndStoreNextFishInfo(long interval) {
 		
-		// these next two variables are read from the script file but are not used!!
-		// they are redundant with the congruent field and are used as documentation...
+		// first we read in the data on the line and store it in local variables for procession
 		String sound = scan.next();
-		int visualhz = scan.nextInt();
-		
+		int visualhz = scan.nextInt();		
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
 		int block = scan.nextInt();
+		boolean fromLeft = (scan.next().equals("left"));
+		String species = scan.next();
+		scan.nextLine(); // skip over the rest of the line
 		
 		
-		this.nextFishTime = numTrials * gameSpec.trialLength*100000000L + interval*1000000L + this.gameStart;
-
-		/*
-		System.out.println("trialnum="+trialnum+ " block="+block+ "  numTrials="+numTrials+" .. "+ (numTrials * gameSpec.trialLength*100000000L)/1000000000.0+": beginning of trial");
-		System.out.println((this.nextFishTime-gameStart)/1000000000.0 +": nft\n"+ interval+"  int\n"+ System.nanoTime())
-		;
-		System.out.println("now="+(System.nanoTime()-this.gameStart)/1000000.0+" ms");
-		*/
+		// next we calculate the time the next fish should be launched
+		long beginningOfNextTrial = numTrials * gameSpec.trialLength*100000000L + this.gameStart;
+		long delayBeforeFishAppears = interval*1000000L;
+		this.nextFishTime = beginningOfNextTrial + delayBeforeFishAppears;
 		
+		// we have completed the calculation for this trial, so we update the trial counter
 		numTrials++;
 		
-		boolean fromLeft = (scan.next().equals("left"));
-
-		String species = scan.next();
-
-		scan.nextLine(); // skip over the rest of the line
-
-		// create the next Fish to be launched
-		Fish a1 = new Fish();
-
-		a1.fromLeft = fromLeft;
-		a1.setCongruent(congruent);
-		a1.setTrial(trialnum);
-		a1.block = block;
-		a1.species = (species.equals("good")) ? Species.good : Species.bad;
-		this.nextFish = a1;
 		
 		
-		Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
-		Species s = this.nextFish.species;
-		// System.out.println("spawning "+s+" "+side);
+		/*
+		 * Now we create the next fish. We can fill in all of the fields except for the birthTime
+		 * which will be set in the spawnFish method. We store it in this.nextFish.
+		 */
+
+		this.nextFish = new Fish();
+
+		nextFish.fromLeft = fromLeft;
+		nextFish.congruent=congruent;
+		nextFish.trial = trialnum;
+		nextFish.block = block;
+		nextFish.species = (species.equals("good")) ? Species.good : Species.bad;
+		
 
 		// pick starting location and velocity
-		double y = this.modelHeight / 2;
-
-		double x = (side == Side.left) ? 1 : this.modelWidth - 1;
-
-		// then make an actor with that position
-		Fish a = new Fish(x, y, true, s, gameSpec.stereo,
-				gameSpec.good.soundFile, gameSpec.bad.soundFile);
-		// and fill in all the needed fields...
-		// we don't need both fromLeft and origin .... eliminate fromLeft...
-		a.fromLeft = (side == Side.left);
-		a.origin = (side == Side.left) ? 0 : 1; // we'll convert origin to Side
-												// later
-
-		a.setCongruent(nextFish.congruent);
-		a.setTrial(nextFish.trial);
-		a.block = nextFish.block;
-		// make sure it is moving inward if it comes from the right
-		if (!a.fromLeft)
-			a.vy = -a.vy;
-		// a.radius=4;
-		// start playing the music for the fish
-		if (a.fromLeft)
-			a.ct = a.ctL;
-		else
-			a.ct = a.ctR;
-		//if fish is not silent play sound
-		//if (a.congruent != 2) 
-		//	a.ct.loop();
+		nextFish.y = this.modelHeight / 2;
+		nextFish.x = this.nextFish.fromLeft ? 1 : this.modelWidth - 1;
 		
-		a.vx = (side == Side.left) ? 1 : -1;
-		nextFish = a;
 	
+		// initialize the fish velocity
+		nextFish.vx = nextFish.speed * (this.rand.nextDouble()) * (this.nextFish.fromLeft ? 1 : -1);
+		nextFish.vy = nextFish.speed * (this.rand.nextDouble() - 0.5);
 		
+		// initialize so that it is active
+		nextFish.active = true;
+
+		// set the sound files
+		if (nextFish.species == Species.good)
+			nextFish.ct = new AudioClip(gameSpec.good.soundFile+"/fish.wav");
+		else
+			nextFish.ct = new AudioClip(gameSpec.bad.soundFile+"/fish.wav");
 	}
 
 
+	/**
+	 * read in the property/value pair from the script and use it to update the gamespec
+	 * then read in the next interval and return it....
+	 * @return
+	 */
 	private long updateGameSpec() {
 		long interval;
 		String prop = scan.next();
@@ -604,6 +588,7 @@ public class GameModel {
 		public void spawnFish(long now) {
 
 			nextFish.birthTime = now;
+			nextFish.lastUpdate = now;
 			currentFish = nextFish;
 			if (currentFish.congruent != 2)
 				currentFish.ct.loop();

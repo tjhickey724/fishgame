@@ -295,10 +295,11 @@ public class GameView extends JPanel {
 	private void drawActor(Graphics g, Fish a, Color c) {
 		if (!a.active)
 			return;
-		int theRadius = toViewCoords(a.radius);
 		int x = toXViewCoords(a.x);
 		int y = toYViewCoords(a.y);
 		int visualHz = 1;
+		System.out.println("a.y="+a.y+" y="+y);
+		System.out.println("a.x="+a.x+" x="+x);
 
 		switch (a.species) {
 		case good:
@@ -306,6 +307,8 @@ public class GameView extends JPanel {
 			break;
 		case bad:
 			visualHz = gm.gameSpec.bad.throbRate;
+			break;
+		default:
 			break;
 		}
 

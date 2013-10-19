@@ -7,116 +7,116 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- * a GameActor has a position and a velocity and a speed they also have a
+ * a Fish has a position and a velocity and a speed they also have a
  * species and they keep track of whether they are active or not
  * 
  * @author tim
  * 
  */
 public class Fish {
-	// this is a bit of a hack, I need to refactor later REFACTOR!!
 	public static long GAME_START = 0; // System.nanoTime();
-	boolean responded=false;
-	String soundFolder = "fish_6_8_hz_pan0"; // "fish_3_5_hz_pan50";
-	// size
-	double radius = 10;
-	// position
-	double x;
-	double y;
-	// velocity
-	double vx;
-	double vy;
-	// still on board?
-	boolean active;
+	
+	/**
+	 * this indicates whether the user has pressed an appropriate key after seeing the fish
+	 * it starts out false and becomes true when a key is pressed
+	 */
+	public boolean responded=false;
+	
+	
+	/**
+	 * x position of the fish in model coordinates
+	 */
+	public double x;
+	
+	/**
+	 * y position of the fish in model coordinates
+	 */
+	public double y;
+	
+	/**
+	 * velocity of fish in the x direction in model coordinates
+	 */
+	public double vx;
+	
+	/**
+	 * velocity of fish in the y direction in model coordinates
+	 */
+	public double vy;
+	
+	/**
+	 * true if fish should still be displayed on the screen
+	 */
+	public boolean active;
 
-	// speed
-	double speed = 40;
-	// species
-	boolean fromLeft; // true if fish comes from left
+	/*
+	 * speed in model coordinates/sec that the fish moves across the screen
+	 */
+	public double speed = 40;
+	
+	/**
+	 * true if fish is launched from the left side of the screen
+	 */
+	public boolean fromLeft; 
+	
+	/**
+	 * true if the fish audio and video have the same hertz
+	 */
 	public int congruent;
+	
+	/**
+	 * the trial in which this fish appears
+	 */
 	public int trial;
+	
+	/**
+	 * the block in which this fish appears
+	 */
 	public int block;
-	long birthTime;
-	long lastUpdate;
-	// this is the time it stays on screen, in tenths of a second
-	public static double timeOnScreen = 20;
-	long lifeSpan;
+	
+	/**
+	 * the time this fish was launched (using System.nanoTime())
+	 */
+	public long birthTime;
+	
+	/**
+	 * the last time the fish was updated (using System.nanoTime())
+	 * this is used to calculate how far this fish should be moved
+	 * using the velocity and the time since last update
+	 */
+	public long lastUpdate;
+	
+	/**
+	 * this is the lifetime of the fish in tenths of a second.
+	 * After this time has elapsed, the fish will be set as inactive
+	 * and removed from the screen.
+	 */
+	public static double fishLifetime = 20;
+	
+	/**
+	 * the clip of the fish sound that should be played
+	 */
+	public AudioClip ct;
+	
+	/**
+	 * fish sounds depending on if the fish comes from the left or the right
+	 * we shouldn't have to have both in a single fish!
+	 */
+	public AudioClip ctL, ctR;
+	
+	/**
+	 * the species of the fish (i.e. good or bad)
+	 */
+	public Species species;
 
-	long gameStart = Fish.GAME_START;
-	Color color1 = new Color(150, 0, 0), color2 = new Color(200, 0, 0),
-			color3 = new Color(100, 100, 100),
-			color4 = new Color(250, 250, 250);
-	double colorHerz = 4;
-	// Origin:
-	int origin;
-	AudioClip ct, ctL, ctR;
-	// AudioClip bt;
-	Species species;
-
-	public int minBrightness = 10;
-	public int maxBrightness = 14;
-
-
+	/*
+	 * a random number generator used to give the fish a random type of motion
+	 */
 	private java.util.Random rand = new java.util.Random();
 
-	public Fish(double x, double y, boolean active, Species spec) {
-		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p");
+	/** create a fish with default values **/
+	public Fish(){
 	}
-
-	public Fish(double x, double y, boolean active, Species spec,
-			boolean stereo, String goodFishSounds, String badFishSounds) {
-		this.x = x;
-		this.y = y;
-		this.active = active;
-		// fish starts off moving forward always
-		this.vx = speed * (rand.nextDouble());
-		this.vy = speed * (rand.nextDouble() - 0.5);
-		this.birthTime = System.nanoTime();
-		this.lastUpdate = this.birthTime;
-		this.gameStart = Fish.GAME_START;
-		this.species = spec;
-		String fishSounds;
-		// handles congruence
-		if (congruent == 0) {
-			if (species.equals(Species.good))
-				fishSounds = goodFishSounds;
-			else
-				fishSounds = badFishSounds;
-		} else {
-			if (species.equals(Species.good))
-				fishSounds = badFishSounds;
-			else
-				fishSounds = goodFishSounds;
-		}
-
-		try {
-			this.ct = new AudioClip(fishSounds + "/fish.wav");
-			if (stereo) {
-				this.ctR = new AudioClip(fishSounds + "/fishR.wav");
-				this.ctL = new AudioClip(fishSounds + "/fishL.wav");
-				// (fishSounds+"/fishR.wav");
-				// System.out.println(fishSounds+"/fishL.wav");
-			} else {
-				this.ctR = this.ct;
-				this.ctL = this.ct;
-			}
-		} catch (Exception e) {
-			System.out.println("Audio problems!!:" + e);
-		}
-	}
-
-	public Fish(double x, double y) { // throws
-											// UnsupportedAudioFileException,
-											// IOException,
-											// LineUnavailableException {
-		this(x, y, true, Species.good);
-	}
-
-	public Fish() { // throws UnsupportedAudioFileException, IOException,
-							// LineUnavailableException {
-		this(0, 0, true, Species.good);
-	}
-
+	
 	/**
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that
@@ -125,18 +125,31 @@ public class Fish {
 	public void update() {
 		long now = System.nanoTime();
 
-		if (now < birthTime + timeOnScreen * 100000000) {
-			this.lifeSpan = now - birthTime;
-			double dt = (now - this.lastUpdate) / 1000000000.0;
+		if (now < birthTime + fishLifetime * 100*1000*1000) {
+			double dt = (now - this.lastUpdate) / (1000*1000*1000.0);
 			this.lastUpdate = now;
+			
+			// modify the vertical component of the fish velocity
 			double turnspeed = 0.1;
-			// vx += rand.nextDouble()*turnspeed -turnspeed/2;
 			vy += rand.nextDouble() * turnspeed - turnspeed / 2;
+			
+			// normalize so the fish has constant speed
 			double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
-			// vx /= tmpSpeed;
 			vy /= tmpSpeed;
+			vx /= tmpSpeed;
+			/*
+			System.out.println("speed = "+speed);
+			System.out.println("vx ="+vx);
+			System.out.println("vy="+vy);
+			System.out.println("dx/dt ="+vx*speed);
+			System.out.println("dy/dt="+vy*speed);
+			System.out.println("actualspeed = "+ speed*Math.sqrt(vx * vx + vy * vy));
+			*/
+			
+			// update the position of the fish
 			x += vx * speed * dt;
-			y += vy *5 * speed * dt;
+			y += vy * speed * dt;
+			
 		} else {
 			this.active = false;
 			this.ct.stop();
@@ -144,28 +157,12 @@ public class Fish {
 
 	}
 
-	// set congruent
-	public void setCongruent(int congruent) {
-		this.congruent = congruent;
-	}
 
-	// set block
-	public void setTrial(int trial) {
-		this.trial = trial;
-	}
+
 
 	public String toString() {
-		int ix = (int) x;
-		int iy = (int) y;
-		// return "["+ix+","+iy+","+active+"]";
-		return "[" + this.species + "," + this.origin + "]";
+		return "[" + this.species + "," + this.fromLeft + "]";
 	}
 
-	public String printStream() {
-		String output = toString();
-		output += "Fish is active: " + active + " Birth Time:"
-				+ " last updated: " + lastUpdate;
-		return output;
-	}
 
 }
