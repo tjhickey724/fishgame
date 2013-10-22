@@ -135,9 +135,9 @@ public class GameEvent {
 	private boolean hitCorrectKey(char c, Fish lastFish) {
 		Species s = lastFish.species;
 		if (s == Species.good)
-			return c == 'p';
+			return c == '1';
 		else
-			return c == 'l';
+			return c == '2';
 	}
 
 	public String toString() {

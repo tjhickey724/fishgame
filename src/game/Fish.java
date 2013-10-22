@@ -112,10 +112,10 @@ public class Fish {
 	 */
 	public Species species;
 
-	/*
-	 * a random number generator used to give the fish a random type of motion
+	/**
+	 * the random number generator used to give the fish a random type of motion
 	 */
-	private java.util.Random rand = new java.util.Random();
+	public static java.util.Random rand = new java.util.Random();
 
 	/** create a fish with default values **/
 	public Fish(){

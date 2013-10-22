@@ -104,15 +104,16 @@ public class ScriptWindow extends JFrame {
 				// the relevant information for this session
 				String SubjectID = subId.getText();
 				String ExperimenterID = expId.getText();
+				long now = System.nanoTime();
 
-				gm.writeToLog("Version:                "
+				gm.writeToLog(now,"0\t Version:                "
 						+ RunGame.versionNum);
-				gm.writeToLog("Experimenter:           " + ExperimenterID);
-				gm.writeToLog("Subject:                " + SubjectID);
-				gm.writeToLog("Date:                   "
+				gm.writeToLog(now,"0\t Experimenter:           " + ExperimenterID);
+				gm.writeToLog(now,"0\t Subject:                " + SubjectID);
+				gm.writeToLog(now,"0\t Date:                   "
 						+ (new java.util.Date()).toString());
 
-				gm.writeToLog("Scriptfile:             "
+				gm.writeToLog(now,"Scriptfile:             "
 						+ openButton.getText());
 
 				// next we start the game model

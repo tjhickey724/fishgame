@@ -121,7 +121,7 @@ public class GameModel {
 	private long nextFishTime = 0;
 
 	// this variable stores the information that we read from the script file 
-	// in the updateNextFish method about the features of the next fish to generate, 
+	// about the features of the next fish to generate, 
 	// including the time delay, ...
 	// it is used by spawnfish to generate the fish....
 	//
@@ -137,7 +137,7 @@ public class GameModel {
 	
 	// this stores the instant when the "=" is received from the fMRI machines
 	// and the game starts. All times are relative to gameStart
-	private long gameStart;
+	private long gameStart = System.nanoTime();
 
 
 	// this is the name of the file that holds the input script we are using
@@ -324,7 +324,8 @@ public class GameModel {
 	}
 	
 	/**
-	 * handle a keypress which is either an "=" or a "p" or "l"
+	 * handle a keypress which is either an "=" or a "1" or "2"
+	 * The first "=" is used to start the game all other "=" are ingnored.
 	 * it may have to start playing a sound also ...
 	 * It is called from GameView in the EventQueue thread
 	 * that's why this needs to be synchronized
@@ -336,40 +337,50 @@ public class GameModel {
 		if (isGameOver())
 			return;
 
+		char keyPressed = e.getKeyChar();
 
-		if ((e.getKeyChar()=='=') && (!started)){
+		/*
+		 * This handles the first "=" character and ignores the rest 
+		 */
+		if ((keyPressed=='=') && (!started)){
 			start_fMRI();
 			return;
 		}
+		
+		/*
+		 * Next we check to see if the character is not '1' or '2'
+		 * in which case we ignore it ..
+		 */
+		if ((keyPressed != '1') &&(keyPressed != '2'))
+			return;
 
 		// first check to see if they pressed
 		// when there are no fish!!
+		// in which case we ignore it...
 		if (getNumFish() == 0) {
-			writeToLog(now, new GameEvent(e.getKeyChar()));
-			badclip.play();
+			//writeToLog(now, new GameEvent(e.getKeyChar()));
+			//badclip.play();
 			return;
 		}
+		
 		// otherwise, see if we've responded already and if so, ignore the keypress???
 		Fish lastFish = this.getCurrentFish(); 
 		if (lastFish.responded==true){
 			return;
 		}
+		
+		// otherwise, create a GameEvent object and handle it properly
 		lastFish.responded=true;
 		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
 
-		// get the response time and write it to the log
-		long keyPressTime = ge.when;
-		//long responseTime = keyPressTime - lastFish.birthTime;
+		// get the response time, convert from ms to ns, and write it to the log
+		ge.when = e.getWhen()*1000000L;
 
-		//String log = e.getKeyChar() + " " + responseTime / 1000000.0 + " " + ge.correctResponse + " " + lastFish;
-
-
-		writeToLog(now, ge);
+		writeToLog(ge.when, ge);
 
 		// play the appropriate sound and modify the score
 
 		if (ge.correctResponse) {
-
 			goodclip.play();
 			setHits(getHits() + 1);
 		} else {
@@ -395,6 +406,11 @@ public class GameModel {
 		if ((this.nextTrialStart>0) && (now > this.nextTrialStart)){
 			writeToLog(now,"new_trial");
 			this.nextTrialStart=0;
+			// here we reset the random number generator so it is the same
+			// each time for the nth fish...
+			// this means the path of each fish will be exactly the same
+			// for each subject!
+			Fish.rand.setSeed(1000*1000*1000*1000*1000+this.numTrials);
 			// log a trial event 
 		}
 		
@@ -427,7 +443,7 @@ public class GameModel {
 		currentFish = null;
 		
 		if(!a.responded) {
-			this.writeToLog(now, new GameEvent(a));
+			//this.writeToLog(now, new GameEvent(a));
 			this.setNoKeyPress(this.getNoKeyPress() + 1);
 		} 
 	}
