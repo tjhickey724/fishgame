@@ -23,11 +23,13 @@ Fish trials all involve
  * after being on the screen for 2.0 seconds the fish disappears
  * the next trial starts at the next multiple of 2.6 seconds.
  
- There are five types of trials
+ There are five types of trials all of which last some multiple of 2.6 seconds
  * Baseline trials (where no fish is released) that last 10.4 seconds
  * Congruent trials where the fish visual and audio oscillations are at the same hertz
  * Incongruent trials where the visual and audio osciallations are different (reversed)
  * Neutral trials where there is no audio at all
+ * TextCue trial which simply displays the type of text for a certain amount of time
+   over the moving background.
  
  In addition, trials can be either Active or Passive
  * Active trials ask the user to press 1 for a visually slow oscillation and 2 else
