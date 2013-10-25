@@ -171,21 +171,21 @@ public class GameView extends JPanel {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * viewSize);
+		return (int) Math.round(x / GameModel.SIZE * viewSize);
 	}
 
 	public int toXViewCoords(double x) {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * width);
+		return (int) Math.round(x / GameModel.SIZE * width);
 	}
 
 	public int toYViewCoords(double x) {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / gm.size * height);
+		return (int) Math.round(x / GameModel.SIZE * height);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class GameView extends JPanel {
 		int width = this.getWidth();
 		int height = this.getHeight();
 		int viewSize = (width < height) ? width : height;
-		return x * gm.size / viewSize;
+		return x * GameModel.SIZE / viewSize;
 	}
 
 	/**
@@ -222,13 +222,16 @@ public class GameView extends JPanel {
 		}
 
 		if (gm.isGameOver()) {
+			int hits = gm.getHits();
+			int misses = gm.getMisses();
+			int nokey = gm.getNoKeyPress();
 			g.setFont(new Font("Helvetica", Font.BOLD, 50));
 			g.drawString("GAME OVER", 100, 100);
 			g.setFont(new Font("Helvetica", Font.BOLD, 25));
 			g.drawString("Right: " +gm.getHits(), 100, 130);
 			g.drawString("Wrong: " +gm.getMisses(), 100, 160);
 			g.drawString("Missed: " +gm.getNoKeyPress(), 100, 190);
-			g.drawString("Total: " +gm.getFishNum(), 100, 210);
+			g.drawString("Total: " +hits+misses+nokey, 100, 210);
 			return;
 		}
 
@@ -318,10 +321,10 @@ public class GameView extends JPanel {
 
 	}
 
-	private void drawFish(Graphics g) {
-		java.util.List<GameActor> gaList = gm.getActorList();
-		for (GameActor a : gaList) {
-			drawActor(g, a, Color.WHITE);
+	private void drawFish(Graphics g){
+		Fish f = gm.getCurrentFish();
+		if (f != null){
+			drawActor(g,f,Color.WHITE);
 		}
 	}
 
@@ -367,7 +370,7 @@ public class GameView extends JPanel {
 	 * @param c
 	 *            - the default color for actors of unknown species
 	 */
-	private void drawActor(Graphics g, GameActor aFish, Color c) {
+	private void drawActor(Graphics g, Fish aFish, Color c) {
 		if (!aFish.active)
 			return;
 		int theRadius = toViewCoords(aFish.radius);

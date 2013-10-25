@@ -27,7 +27,7 @@ public class ScriptWindow extends JFrame {
 	GameSpec gs;
 	SubjectWindow sw;
 	ScriptWindow thisSW;
-	JButton openButton,pause;
+	JButton openButton, pause;
 	JTextField scr, subId, expId;
 
 	JFileChooser fc;
@@ -36,7 +36,7 @@ public class ScriptWindow extends JFrame {
 		super("Script Window");
 		thisSW = this;
 		gs = new GameSpec();
-		gm = new GameModel(100, 10, gs);
+		gm = new GameModel(gs);
 		sw = new SubjectWindow(gm);
 		sw.setVisible(true);
 		setSize(300, 250);
@@ -55,7 +55,7 @@ public class ScriptWindow extends JFrame {
 		scr = new JTextField("scripts/demoscriptv1.txt");
 		JButton start = new JButton("start");
 		pause = new JButton("pause");
-		
+
 		JButton restart = new JButton("Restart");
 		// stop = new JButton("Stop");
 		JButton sdone = new JButton("Done");
@@ -91,7 +91,7 @@ public class ScriptWindow extends JFrame {
 
 			}
 		});
-		
+
 		sdone.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -109,7 +109,7 @@ public class ScriptWindow extends JFrame {
 				// we use the static variable GAME_START of GameActor
 				// to record when the game has begun, this is used to print out
 				// time stamps in the log files
-				GameActor.GAME_START = System.nanoTime();
+				Fish.GAME_START = System.nanoTime();
 
 				// the GameModel is the object that reads the script
 
@@ -120,22 +120,13 @@ public class ScriptWindow extends JFrame {
 				String SubjectID = subId.getText();
 				String ExperimenterID = expId.getText();
 
-				try {
-					gm.writeToLog("Version:                "
-							+ RunGame.versionNum);
-					gm.writeToLog("Experimenter:           " + ExperimenterID);
-					gm.writeToLog("Subject:                " + SubjectID);
-					gm.writeToLog("Date:                   "
-							+ (new java.util.Date()).toString());
+				gm.writeToLog("Version:                " + RunGame.versionNum);
+				gm.writeToLog("Experimenter:           " + ExperimenterID);
+				gm.writeToLog("Subject:                " + SubjectID);
+				gm.writeToLog("Date:                   "
+						+ (new java.util.Date()).toString());
 
-					gm.writeToLog("Scriptfile:             "
-							+ openButton.getText());
-
-					gm.logfile.flush();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				gm.writeToLog("Scriptfile:             " + openButton.getText());
 
 				// next we start the game model
 				gm.start();
@@ -150,7 +141,6 @@ public class ScriptWindow extends JFrame {
 
 		// this pauses or resumes the game so the subject can take a break if
 		// needed
-
 
 		// Finally we do the layout of the components
 		// we could also have moved all the labels and other info into here

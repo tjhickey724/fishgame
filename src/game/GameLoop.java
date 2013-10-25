@@ -33,8 +33,6 @@ public class GameLoop implements Runnable {
 			} else if (gm.isGameOver()) {
 				// we need to clean up the old game
 				// this should be a method inside the gm to reset
-				gm.scan.close();
-				gm.scan = null;
 				System.out.println("ending game loop");
 				return;
 			}
