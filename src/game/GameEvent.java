@@ -9,6 +9,9 @@ package game;
  * @author tim
  * 
  */
+
+// REFACTOR:  this hasn't been refactored yet
+
 public class GameEvent {
 
 	public static String sep = "\t";
@@ -130,7 +133,6 @@ public class GameEvent {
 	 */
 	private boolean hitCorrectKey(char c, Fish lastFish) {
 		Species s = lastFish.species;
-		boolean onLeft = lastFish.origin == 0;
 		if (s == Species.good)
 			return c == 'p';
 		else

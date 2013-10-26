@@ -21,6 +21,9 @@ import javax.swing.*;
  * @author mike
  * 
  */
+
+// Refactor: this has not been refactored yet
+
 public class ScriptWindow extends JFrame {
 	JPanel scriptpanel;
 	GameModel gm;

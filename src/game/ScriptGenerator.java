@@ -15,6 +15,10 @@ import java.util.Random;
  * @author tim
  * 
  */
+
+// Refactor: this has not be refactored yet
+
+
 public class ScriptGenerator {
 
 	private BufferedWriter scriptFile;

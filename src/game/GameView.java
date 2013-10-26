@@ -32,6 +32,12 @@ import java.util.ArrayList;
  * @author tim
  * 
  */
+
+// REFACTOR:  this needs more refactoring. In particular, the wins/losses/etc
+// fields of the GameModel are really statistics that are only used for the GUI here
+// and so they should be abstracted to their own GameStats class which will clean up
+// the GameModel code and make this code easier to maintain...
+
 public class GameView extends JPanel {
 	private static final long serialVersionUID = 1L;
 

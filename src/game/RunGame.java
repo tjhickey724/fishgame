@@ -16,6 +16,8 @@ import javax.swing.JSlider;
  * @author tim
  * 
  */
+// REFACTOR: we may need to call the setVisible method from inside the EventQueue....
+
 public class RunGame {
 	/**
 	 * version must have the form A.B.C where A,B,C are numbers It represents

@@ -10,6 +10,12 @@ import java.util.ArrayList;
  * @author tim
  * 
  */
+
+// REFACTOR:  haven't refactored this yet
+// in particular, make sure that everything stored here is used in the game
+// and that everything in the script file is copied into the GameSpec when read
+
+
 public class GameSpec {
 	public FishSpec good = new FishSpec(), bad = new FishSpec();
 

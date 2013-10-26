@@ -2,10 +2,14 @@ package game;
 
 /**
  * this stores a complete specification of how the fish are to be rendered
+ * visually and aurally
  * 
  * @author tim
  * 
  */
+
+// REFACTOR:  this hasn't been refactored yet...
+
 public class FishSpec {
 	public String soundFile = "sounds/fish6hz0p";
 	public String imageFile = "images/fish1";

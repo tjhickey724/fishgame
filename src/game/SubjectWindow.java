@@ -17,6 +17,9 @@ import javax.swing.event.*;
  * @author tim
  * 
  */
+
+// REFACTOR:  this hasn't been refactored yet...
+
 public class SubjectWindow extends JFrame {
 
 	public JFrame frame;

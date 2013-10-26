@@ -11,6 +11,12 @@ import java.util.ArrayList;
  * @author tim
  * 
  */
+
+// REFACTOR: this hasn't been refactored yet.
+// we may want to use Trial to read in the script file into an array of Trials
+// rather than reading each line during the experiment. It might make the code
+// cleaner...
+
 public class Trial {
 	/**
 	 * an ArrayList storing the properties of the trial

@@ -19,6 +19,9 @@ import java.io.*;
  * 
  * 
  */
+
+// REFACTOR: much refactoring has been completed but there is still some to do!
+
 public class GameModel {
 
 	/**
@@ -456,7 +459,6 @@ public class GameModel {
 		// code!
 		nextFish.active = true;
 		nextFish.avmode = gameSpec.avmode;
-		nextFish.origin = nextFish.fromLeft ? 0 : 1;
 		nextFish.birthTime = now;
 		nextFish.lastUpdate = now;
 
@@ -591,8 +593,8 @@ public class GameModel {
 		nextFish.interval = interval;
 		nextFish.avmode = gameSpec.avmode;
 		nextFish.fromLeft = fromLeft.equals("left");
-		nextFish.setCongruent(congruent);
-		nextFish.setTrial(trialnum);
+		nextFish.congruent = congruent;
+		nextFish.trial = trialnum; 
 		nextFish.species = (species.equals("good")) ? Species.good
 				: Species.bad;
 		nextFish.active = true;

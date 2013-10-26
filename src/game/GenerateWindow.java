@@ -28,6 +28,10 @@ import javax.swing.JTextField;
  * @author mike
  * 
  */
+
+// REFACTOR: this code has not been refactored yet.
+
+
 public class GenerateWindow extends JFrame {
 
 	/**

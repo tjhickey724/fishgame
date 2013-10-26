@@ -9,8 +9,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 /**
  * The GameLoop repeatedly updates the model and draws a representation of the
  * model on the screen. Since it is running in its own thread it needs to use
- * EventQueue.invokeLater to update the GUI components...
+ * EventQueue.invokeLater to update the GUI components.
+ * Also, the gm.update method is synchronized so it may have to wait if the
+ * EventQueue thread is also accessing the GameModel at the same time..
+ * Those accesses are quite brief though...
  */
+
+// REFACTOR:  haven't refactored this yet...
+
 public class GameLoop implements Runnable {
 	private GameModel gm;
 	private GameView gameboard;
