@@ -26,7 +26,6 @@ public class GameModel {
 	 */
 	public GameModel(GameSpec gameSpec){
 		this.gameSpec = gameSpec;
-		this.gameOver=false;
 	}
 
 
@@ -37,16 +36,23 @@ public class GameModel {
 	 * the sound files for the good and bad fish, etc.
 	 */
 	public GameSpec gameSpec;
+	
+	// here are some convenient constants for converting between nanoseconds 
+	// and milliseconds and seconds
+	private static long million = 1000000L;
+	private static long billion = 1000000000L;
 
 
     /**
      * the SIZE of the GameBoard is 100x100 in model units
      * when it is drawn to a screen it is stretched in the x and y directions
-     * to fit the screen
+     * to fit the screen. The x and y positions can be thought of
+     * as percentages of the screen, however it is scaled.
      */
 	public static final double SIZE=100;
-	private double width=SIZE;
-	private double height=SIZE;
+	// these are convenience variables to make the code easier to read
+	private static double WIDTH=SIZE;
+	private static double HEIGHT=SIZE;
 
 	
 	
@@ -55,8 +61,22 @@ public class GameModel {
 	 * methods related to the current Fish
 	 */
 	private Fish currentFish = null;
+	
+	public synchronized double getCurrentFishX(){
+		if (currentFish!= null)
+			return currentFish.x;
+		else
+			return 0;
+	}
+	
+	public synchronized double getCurrentFishY(){
+		if (currentFish!= null)
+			return currentFish.y;
+		else
+			return 0;
+	}
 
-	public Fish getCurrentFish(){
+	public synchronized Fish getCurrentFish(){
 		return this.currentFish;
 	}
 	/**
@@ -84,10 +104,6 @@ public class GameModel {
 	 * methods related to the gameOver field
 	 * which is true when the game is over
 	 */
-	
-	// this is set to true when the session is over ...
-	// we need to add a timer to end the session, or have the
-	// experimenter end the session ...
 	private boolean gameOver = false;
 	
 	/**
@@ -134,19 +150,34 @@ public class GameModel {
 	
 	
 
-
-	private long nextFishTime = 0;
+	/*
+	 * this is the time, in nanoseconds (relative to System.nanoTime)
+	 * that the next fish should be launched. We initialize it
+	 * to the maximum time so that no fish will be launched
+	 * unless this variable is reset to a smaller value
+	 */
+	private long nextFishTime = Long.MAX_VALUE;
 
 	/*
 	 * this variable holds the information about the next fish to be released!
 	 */
 	private Fish nextFish = new Fish();
 	
-	
+	/*
+	 * this stores the time, in nanoseconds, at which the game part of the experiment started
+	 * it is reset when the game actually does start, but we give it a default time
+	 * for when the class is loaded...
+	 */
 	private long gameStart = System.nanoTime();
 	
 
-	// this is true if we are reading from a script
+	
+	
+	
+	/*
+	 *  this is the name of the input script file used
+	 *  when creating the scanner and set from the ScriptWindow
+	 */
 	private String inputScriptFileName;
 
 	/**
@@ -158,24 +189,25 @@ public class GameModel {
 	}
 	
 	
-
-	// this is a scanner used to read the fish creation info
+	/*
+	 *  this is a scanner used to read the input script
+	 */
 	private Scanner scan; // = new Scanner(typescript);
 
 
 	
 	
-	// this is where the log will be written...
-	public BufferedWriter logfile;
+	/*
+	 *  this holds the logfile for the experiment
+	 */
+	private BufferedWriter logfile;	
 
-	
-
-
-
-
-	
-	
-
+	/*
+	 * if there is no logfile yet, it creates one with a unique name
+	 * otherwise it returns the logfile. 
+	 * REFACTOR: Exceptions are caught in this method, but
+	 * should be thrown and caught at a higher level
+	 */
 	private void getLogFile() {
 		if (this.logfile == null) {
 			// open the logfile
@@ -193,26 +225,340 @@ public class GameModel {
 	}
 
 
+	/*
+	 * this is used so that we can calculate a field in each logfile entry
+	 * which shows the time since the last log element was written
+	 */
+	private long lastLogEventTimeNano = 0;
+
+
+
 	/**
-	 * this reads the next line in the Script file property/value lines cause
-	 * the system to update the GameSpec fish launches read the interval and use
+	 * this starts the game by initializing the GAME_START variable
+	 * and reading the script to set the properties and create the next fish
+	 * and set its launch time. 
+	 */
+	public void start() {
+		this.paused=false;
+		this.gameOver=false;
+		this.nextFishTime = System.nanoTime();
+		this.gameStart = nextFishTime;
+		Fish.GAME_START = this.gameStart;
+		createNextFish(this.gameStart);
+
+	}
+
+	/**
+	 * this stops the game and closes the output log file
+	 * This catches I/O errors if it can't close the logfile
+	 * and prints and error message.
+	 * REFACTOR: make sure the input script is closed too!
+	 */
+	public void stop() {
+		this.paused=true;
+		this.gameOver=true;
+		this.scan=null;
+		this.setPaused(true);
+		this.setGameOver(true);
+		if (currentFish!=null){
+			currentFish.ct.stop();
+		}
+		currentFish = null;
+
+		try {
+			if (logfile != null)
+				logfile.close();
+			logfile = null;
+			System.out.println("closing log/script files");
+		} catch (Exception e) {
+			System.out.println("Problem closing logfile");
+		}
+
+	}
+	
+	private long pauseTime = 0;
+	/**
+	 * temporarily pause the game (incase subject has to go to the bathroom!)
+	 * QUESTION: do we need to pause the EEG also and then resynchronize when resuming?
+	 */
+	public void pause() {
+		pauseTime = System.nanoTime();
+		this.nextFishTime = Long.MAX_VALUE;
+		setPaused(true);
+		this.writeToLog(pauseTime,"PAUSE");
+	}
+
+	/**
+	 * resumes from a paus
+	 * REFACTOR: make sure this handles the log correctly
+	 * QUESTION: does the EEG stop, how should that effect the log timing data?
+	 */
+	public void resume() {
+		long now = System.nanoTime();
+
+		this.nextFishTime += (now-pauseTime);
+		setPaused(false);
+		this.writeToLog(now,"RESUME");
+	}
+
+
+
+	/**
+	 * if an actor moves off the board, in the x (or y) direction, it is bounced
+	 * back into the board and its velocity in the offending direction is
+	 * reversed. 
+	 * REFACTOR: move this to the update method of the fish class.
+	 * 
+	 * @param a
+	 */
+	public void keepOnBoard(Fish a) {
+		if (a.x < 0) {
+			a.x = 0;
+			a.vx = -a.vx;
+		} else if (a.x > WIDTH) {
+			a.x = WIDTH;
+			a.vx = -a.vx;
+		}
+		if (a.y < 0) {
+			a.y = -a.y;
+			a.vy = -a.vy;
+		} else if (a.y > HEIGHT) {
+			a.y = HEIGHT - (a.y - HEIGHT);
+			a.vy = -a.vy;
+		}
+	}
+
+	
+	
+	/**
+	 * This method is called from GameView when a clip needs to be handled 
+	 * it handles the keypress event and creates and logs a GameEvent
+	 * @param e
+	 * @param goodclip
+	 * @param badclip
+	 */
+	public synchronized boolean handleKeyPress(KeyEvent e) {
+		
+		Fish lastFish = this.getCurrentFish();
+		
+		// the EventQueue stores the time of the event in ms in the "when" field
+		// this is the most accurate representation for when the event occurred
+		long keyHitTime = e.getWhen()*million; 
+
+		// create a GameEvent for logging purposes
+		// this also determines if it was a correct or incorrect key press
+		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
+		ge.when = keyHitTime;
+		
+		// then we update the NextFishTime which means reading in another line and 
+		// storing the info about that fish in this.nextFish
+		// and setting this.nextFishTime
+		// Note: this does not launch the fish!
+		
+		this.createNextFish(ge.when);  //
+
+		// get the response time, in nanoseconds, and write it to the log
+		// long responseTime = ge.when - lastFish.birthTime;
+
+		//String log = e.getKeyChar() + " " + responseTime / 1000000.0 + " " + ge.correctResponse + " " + lastFish;
+		//System.out.println(log);
+
+		// now we write the result to the log
+		this.writeToLog(ge.when, ge);
+
+		// flash the lights, and modify the score
+		// REFACTOR: move the goodclip/badclip playing into this file
+		// so it will occur closer to the actual button press
+		// it is current in GameView, all AudioClips should be played in the same thread
+		
+		this.soundflash=true;
+		this.soundIndicatorUpdate=System.nanoTime()+50*million;
+		
+		if (ge.correctResponse) {
+			this.wealth++;
+			this.hits += 1;
+		} else {
+			this.wealth--;
+			this.misses += 1;
+		}
+		
+		// Finally, remove the last fish (should only be one!)
+		// but don't remove until the end as update could be called as we are pressing the key!!!
+		// THIS NEEDS TO BE SYNCHRONIZED
+		this.removeLastFish();
+		return ge.correctResponse;
+	}
+	
+
+	/**
+	 * update moves all actors one step
+	 * check to see if a fish has become inactive
+	 * if so, remove it and create a new fish (but don't launch right away!)
+	 */
+	public synchronized void update() { 
+		long now = System.nanoTime(); 
+		
+		if (isPaused() || isGameOver())
+			return;
+
+
+		// these variables are used by the GameView class
+		// REFACTOR: be careful about synchronization of these variables
+		totalActorTime = (currentActorTime) / 1000000;
+		timeRemaining = 100 - (totalActorTime / timePerTrial);
+
+		
+		/*
+		 * There are two possibilities to consider.
+		 * Either there is no fish on the screen or there is one fish
+		 * If there is no fish, then we check to see if it is time to launch
+		 * the next fish, and we do so
+		 * If there is a fish on screen, then we update its state
+		 */
+		
+		/*
+		 * check to see if it time to create a new fish and
+		 * we haven't yet created it...
+		 * We will spawn a fish (so currentFish will be non null)
+		 * but we won't create a new fish until this one disappears!
+		 */
+		if (currentFish==null) { 
+			if (now > this.nextFishTime){
+				currentActorTime = 0;		
+				spawnFish(now);
+			}
+		} else { //update the fish state
+				Fish a = currentFish;
+				a.update();
+				keepOnBoard(a);
+
+				if (!a.active) { // this is where we remove the fish if the user didn't press a key and the lifespan has been reached...
+					removeFish(now, a);
+					// these fields are used by GameView for gamification
+					previousActorTime += a.lifeSpan;
+					currentActorTime = 0;
+					this.noKeyPress += 1;
+				} else {
+					this.currentActorTime = a.lifeSpan;
+				}
+		}
+
+	}
+	private void removeFish(long now, Fish a) {
+		a.ct.stop();
+
+		GameEvent missedFishEvent = new GameEvent(a);
+		createNextFish(now);
+		this.writeToLog(now, missedFishEvent);
+		currentFish=null;
+	}
+	
+	
+	/**
+	 * spawns a new fish using the data stored in the this.nextFish object
+	 */
+	public void spawnFish(long now) {
+		
+		if (this.isGameOver())
+			return;
+		
+		// first we initialize its position and velocity
+		double y = GameModel.HEIGHT / 2;
+		double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;		
+		nextFish.x=x;
+		nextFish.y=y;
+		nextFish.vx = (nextFish.fromLeft) ? 10 : -10;
+		nextFish.vy = 0;
+		
+		// next we initialize a few other fields
+		// REFACTOR: some of these are redundant -- remove and simplify the code!
+		nextFish.active=true;
+		nextFish.avmode = gameSpec.avmode;
+		nextFish.origin = nextFish.fromLeft?0:1;
+		nextFish.birthTime = now;
+		nextFish.lastUpdate = now;
+		
+		// REFACTOR: use the gameSpec.lifetime field instead of 2000L here
+		nextFishTime = now + 2000L*million;
+		
+		//System.out.println("Spawning new fish: "+nextFish);
+
+		/*
+		 * this decides which sound file to play and starts it in a loop
+		 */
+		playFishSound();
+
+
+		// add the fish to the list of actors...
+		currentFish = nextFish;
+
+		//send a flash to the indicator
+		flash=true;
+		indicatorUpdate=System.nanoTime()+50000000l;
+		
+		// log this event
+		writeToLog(now, nextFish); // indicate that a was spawned
+
+	}
+	private void playFishSound() {
+		// this gives the location of the soundfile
+		String clip = ((nextFish.congruent==0) && (nextFish.species==Species.good))?gameSpec.good.soundFile:gameSpec.bad.soundFile;
+		
+
+		// set the appropriate AudioClip
+		if (!gameSpec.stereo)
+			nextFish.ct = new AudioClip(clip+"/fish.wav");
+		else 
+			if (nextFish.fromLeft)
+				nextFish.ct = new AudioClip(clip+"/fishL.wav");
+			else
+				nextFish.ct = new AudioClip(clip+"/fishR.wav");
+
+
+		//if fish is not silent play sound
+		if (nextFish.congruent != 2 && gameSpec.avmode != 1) {
+			nextFish.ct.loop();
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+		} else if (gameSpec.avmode == 1){
+			nextFish.ct.loop();
+			soundflash=true;
+			soundIndicatorUpdate=System.nanoTime()+50000000l;
+		}
+	}
+
+
+
+	
+	/**
+	 * this reads the next line in the Script file 
+	 * property/value lines cause the system to update the GameSpec 
+	 * fish launches read the interval and use
 	 * it to compute nextFishTime and read the species and side and store it in
 	 * this.nextFish
 	 * 
-	 * We should read this right after launching a fish, so we can know when its
-	 * time to launch the next fish!
+	 * This is called at the beginning of each trial.
+	 * That is, at the beginning of the game
+	 * and right after each fish is removed from the gameboard
+	 * (either by a key press or by its exceeding its lifetime)
+	 *
+	 * If there are no more fish, then the game ends.
+	 * 
+	 * This method sets the nextFishTime using the currentTime
+	 * and the nextFish.interval field.
 	 * 
 	 * @return
 	 */
 
-	public void updateNextFishTime(long now) {
+	public void createNextFish(long now) {
 
 		// initialize the scanner if its the first time we're reading a line
 		if (scan == null) createScanner();	
 		if (scan == null) return;
 		
 		
-		// this should never happen!
+		// this should never happen because there is a GAMEOVER event at the end
+		// of every script file,  but just in case, we'll end the game...
 		if (!scan.hasNext()) {
 			System.out.println("This should never happen!  Reached end of file!!");
 			this.setGameOver(true);
@@ -235,16 +581,21 @@ public class GameModel {
 			setGameOver(true);
 			return;
 		}
+		
 		readNextFishData(now, interval);
 
 	}
 	
 	
 	
+
 	
 	private void readNextFishData(long now, long interval) {
-		nextFishTime = interval *1000000 + now;
+		nextFishTime = interval * million + System.nanoTime(); //now;
 		// the sound file and visual hertz in the input files are not used and are just documentation....
+	
+		// REFACTOR: we should do a check to see that these values
+		// all are consistent as congruent, sound, species and visualhz are redundant...
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
 		int congruent = scan.nextInt();
@@ -252,28 +603,47 @@ public class GameModel {
 		String fromLeft = scan.next();
 
 		String species = scan.next();
-
+		
+		/*
+		System.out.println("Next fish release in "+interval+" milliseconds\n" +
+		   "from \n"+ System.nanoTime() + " at \n"+ nextFishTime +"\n  or in ms "+
+		   "at "+(nextFishTime-gameStart)/million + " ms since start");
+		*/
+		
 		scan.nextLine(); // skip over the rest of the line
 
 		// create the next Fish to be launched
+		nextFish.interval = interval; 
 		nextFish.avmode = gameSpec.avmode;
 		nextFish.fromLeft = fromLeft.equals("left");
 		nextFish.setCongruent(congruent);
 		nextFish.setTrial(trialnum);
 		nextFish.species = (species.equals("good")) ? Species.good : Species.bad;
+		nextFish.active = true;
+		nextFish.lastUpdate = now;
+		
+		nextFishTime = now + interval*million;
 	}
 	
-	
+	/*
+	 * this reads a property/value pair in the script file
+	 * and uses that data to update the GameSpec for this model
+	 * 
+	 * REFACTOR:  we allow files to end with a "-1 gameover .." line
+	 * or a "0 gameover ..." line. Make a decision about which to use
+	 * and stick with it!
+	 */
 	private long updateGameSpec() {
 		long interval;
+		long now = System.nanoTime();
 		String prop = scan.next();
 		String value = scan.next();
 		scan.nextLine(); // skip over the rest of the line
-		writeToLog("0\t" + prop + "\t" + value);
+		writeToLog(now, "0\t" + prop + "\t" + value);
 		if (prop.equals("gameover")) {
 			this.stop();
 			this.setGameOver(true);
-			this.nextFishTime = System.nanoTime() + 10*1000000000L;
+			this.nextFishTime = now + 10*1000000000L;
 			return 0;
 		}
 		// System.out.println("interval="+interval+" prop="+prop+" value="+value);
@@ -283,7 +653,9 @@ public class GameModel {
 		return interval;
 	}
 	
-	
+	/**
+	 * if no scanner exists yet, then create it using the inputScriptFileName
+	 */
 	private void createScanner() {
 		try {
 			scan = new Scanner(new File(this.inputScriptFileName));
@@ -295,271 +667,16 @@ public class GameModel {
 		}
 	}
 
-	private long lastLogEventTimeNano = 0;
-
-
-	public void pause() {
-
-		this.nextFishTime = Long.MAX_VALUE;
-		setPaused(true);
-		this.writeToLog("PAUSE");
-	}
-
-	public void restart() {
-
-		this.nextFishTime = System.nanoTime() + 2 * 1000000000L;
-		setPaused(false);
-		this.writeToLog("RESTART");
-	}
-
-	// spawn an actor randomly
-	/**
-	 * randomly spawns a new fish,based on the script and resets the time for
-	 * the next fish to be spawned...
-	 * A new fish is spawned D milliseconds after the current fish disappears.
-	 * This means that the nextFishTime variable has to be updated when a key 
-	 * is pressed! The properties of the fish (excluding when it should appear)
-	 * are read from a file and stored in the "nextFish" variable.
-	 */
-	public void spawnFish() {
-		if (this.isGameOver())
-			return;
-		
-		Side side = (this.nextFish.fromLeft) ? Side.left : Side.right;
-		Species s = this.nextFish.species;
-		// System.out.println("spawning "+s+" "+side);
-
-		// pick starting location and velocity
-		double y = this.height / 2;
-
-		double x = (side == Side.left) ? 1 : this.width - 1;
-
-		// then make an actor with that position
-		Fish a = new Fish(x, y, true, s, gameSpec.stereo,
-				gameSpec.good.soundFile, gameSpec.bad.soundFile,gameSpec.avmode,nextFish.congruent);
-		
-		
-		// and fill in all the needed fields...
-		// we don't need both fromLeft and origin .... eliminate fromLeft...
-		a.fromLeft = (side == Side.left);
-		a.origin = (side == Side.left) ? 0 : 1; // we'll convert origin to Side
-												// later
-
-		a.setCongruent(nextFish.congruent);
-		a.setTrial(nextFish.trial);
-		// make sure it is moving inward if it comes from the right
-		if (!a.fromLeft)
-			a.vy = -a.vy;
-		// a.radius=4;
-		// start playing the music for the fish
-		if (a.fromLeft)
-			a.ct = a.ctL;
-		else
-			a.ct = a.ctR;
-		//if fish is not silent play sound
-		if (a.congruent != 2 && gameSpec.avmode != 1) {
-			a.ct.loop();
-			soundflash=true;
-			soundIndicatorUpdate=System.nanoTime()+50000000l;
-		} else if (gameSpec.avmode == 1){
-			a.ct.loop();
-			soundflash=true;
-			soundIndicatorUpdate=System.nanoTime()+50000000l;
-		}
-		a.vx = (side == Side.left) ? 1 : -1;
-
-		// add the fish to the list of actors...
-		currentFish = a;
-
-		//send a flash to the indicator
-		flash=true;
-		indicatorUpdate=System.nanoTime()+50000000l;
-		writeToLog(a); // indicate that a was spawned
-	}
-
-	public void start() {
-		this.paused=false;
-		this.gameOver=false;
-		this.nextFishTime = System.nanoTime();
-		this.gameStart = nextFishTime;
-		Fish.GAME_START = this.gameStart;
-		updateNextFishTime(this.gameStart);
-
-	}
-
-	public void stop() {
-		this.paused=true;
-		this.gameOver=true;
-		this.scan=null;
-		this.setPaused(true);
-		this.setGameOver(true);
-		if (currentFish!=null){
-			currentFish.ct.stop();
-		}
-		currentFish = null;
-
-		try {
-			if (logfile != null)
-				logfile.close();
-			logfile = null;
-			System.out.println("closing log/script files");
-		} catch (Exception e) {
-			System.out.println("Problem closing logfile");
-		}
-
-	}
-
-	/**
-	 * if an actor moves off the board, in the x (or y) direction, it is bounced
-	 * back into the board and its velocity in the offending direction is
-	 * reversed
-	 * 
-	 * @param a
-	 */
-	public void keepOnBoard(Fish a) {
-		if (a.x < 0) {
-			a.x = -a.x;
-			a.vx = -a.vx;
-		} else if (a.x > width) {
-			a.x = width - (a.x - width);
-			a.vx = -a.vx;
-		}
-		if (a.y < 0) {
-			a.y = -a.y;
-			a.vy = -a.vy;
-		} else if (a.y > height) {
-			a.y = height - (a.y - height);
-			a.vy = -a.vy;
-		}
-	}
-
-	
-	
-	/**
-	 * This method is called from GameView when a clip needs to be handled 
-	 * @param e
-	 * @param goodclip
-	 * @param badclip
-	 */
-	public synchronized boolean handleKeyPress(KeyEvent e) {
-		// ALL OF THIS CODE SHOULD GO INTO A SYNCHRONIZED METHOD IN GameModel ...
-		// now we will create the GameEvent for killing the last fish
-		// first we need to get the current fish to see if the response was correct ...
-		Fish lastFish = this.getCurrentFish();
-
-		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
-		
-		// then we update the NextFishTime which means reading in another line and 
-		// storing the info about that fish in gm.nextFish
-		
-		// THIS MODIFIES gm and needs to be synchronized
-		this.updateNextFishTime(ge.when);
-
-		// get the response time and write it to the log
-		long keyPressTime = ge.when;
-		long responseTime = keyPressTime - lastFish.birthTime;
-
-		String log = e.getKeyChar() + " " + responseTime / 1000000.0
-				+ " " + ge.correctResponse + " " + lastFish;
-
-		System.out.println(log);
-
-		// THIS NEEDS TO BE SYNCHRONIZED
-		this.writeToLog(ge);
-
-		// play the appropriate sound and modify the score
-
-		if (ge.correctResponse) {
-			soundflash=true;
-			soundIndicatorUpdate=System.nanoTime()+50000000l;
-			this.wealth++;
-			this.hits += 1;
-		} else {
-			soundflash=true;
-			soundIndicatorUpdate=System.nanoTime()+50000000l;
-			this.wealth--;
-			this.misses += 1;
-		}
-		
-		// Finally, remove the last fish (should only be one!)
-		// but don't remove until the end as update could be called as we are pressing the key!!!
-		// THIS NEEDS TO BE SYNCHRONIZED
-		this.removeLastFish();
-		return ge.correctResponse;
-	}
-	
-
-	/**
-	 * update moves all actors one step update will check if the difference
-	 * between the lastUpdate and the current time is greater than the sRate
-	 * plus a random number from 1 to 4, and spawn a fish if so.
-	 */
-	public synchronized void update() { 
-		long now = System.nanoTime(); 
-		
-		if (isPaused() || isGameOver())
-			return;
-
-
-		// these are for the GUI
-		totalActorTime = (currentActorTime) / 1000000;
-		timeRemaining = 100 - (totalActorTime / timePerTrial);
-
-		
-		if ((now > this.nextFishTime) && currentFish==null) { // this means we need to launch a fish!!
-			currentActorTime = 0;		
-			spawnFish();
-		}
-		
-		/*
-		 *  Finally, we update  the fish 
-		 */
-
-		try {
-			if (currentFish!= null) {
-				Fish a = currentFish;
-				a.update();
-				keepOnBoard(a);
-
-				if (!a.active) { // this is where we remove the fish if the user didn't press a key and the lifespan has been reached...
-					a.ct.stop();
-					previousActorTime += a.lifeSpan;
-					currentActorTime = 0;
-					this.noKeyPress += 1;
-					GameEvent missedFishEvent = new GameEvent(a);
-					updateNextFishTime(missedFishEvent.when);
-					this.writeToLog(missedFishEvent);
-					currentFish=null;
-				} else {
-					this.currentActorTime = a.lifeSpan;
-				}
-
-			}
-		} catch (Exception e) {
-			System.out.println("Exception on update: " + e);
-		}
-
-	}
-
-	public int interpolateSize(double min, double max, long birth, long now,
-			double freq) {
-		double t = ((now - birth) / 1000000000.0) * freq;
-		double y = 1 - 0.5 * (Math.sin(Math.PI * 2 * t) + 1);
-		double s = min * y + max * (1 - y);
-		int size = (int) Math.round(s);
-		return size;
-	}
-
-	public int getVisualHZ(FishSpec fs) {
-		return fs.throbRate;
-	}
-	
 	
 	
 	
 	/*****************************************************************************
 	 * Fields used for the Graphical User Interface
 	 * but that don't affect the model
+	 * 
+	 * REFACTOR: these should all be stored in their own object
+	 * as they don't really effect the model at all and so should be
+	 * fields of the model....
 	 */
 	
 	/**
@@ -618,15 +735,22 @@ public class GameModel {
 	
 	/*****************************************************************************
 	 * logging data
+	 * 
+	 * REFACTOR: we might want to make this a separate class too since
+	 * it doesn't really affect the model.
 	 */
 	
 
-	public void writeToLog(Fish f) {
+	public void writeToLog(long now, Fish f) {
 
 		String logLine = "launch\t" + f.species + "\t" + f.congruent
 				+ "\t" + f.trial + "\t" + (f.fromLeft?"left":"right");
 
-		writeToLog(logLine);
+		writeToLog(now, logLine);
+	}
+	
+	public void writeToLog(long now, GameEvent e) {
+		writeToLog(now, e.toString());
 	}
 
 	/**
@@ -636,16 +760,15 @@ public class GameModel {
 	 * @param s
 	 *            the string to be written to the log file
 	 */
-	public void writeToLog(String s) {
+	public void writeToLog(long now, String s) {
 		try {
-			long theTime = (System.nanoTime() - this.gameStart);
+			long theTime = (now - this.gameStart);
 
 			long theInterval = theTime - lastLogEventTimeNano;
 			lastLogEventTimeNano = theTime;
 
 			int theSeconds = (int) Math.round(theInterval / 1000000.0);
-			String logLine = theSeconds + GameEvent.sep + theTime / 1000000
-					+ " " + s + "\n";
+			String logLine = theTime / 1000000 + " " + theSeconds + GameEvent.sep +  s + "\n";
 			getLogFile(); // make sure the logfile is open!
 			this.logfile.write(logLine);
 			this.logfile.flush();
@@ -655,9 +778,7 @@ public class GameModel {
 		}
 	}
 
-	public void writeToLog(GameEvent e) {
-		writeToLog(e.toString());
-	}
+
 
 
 }

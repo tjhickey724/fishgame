@@ -85,7 +85,7 @@ public class ScriptWindow extends JFrame {
 					gm.pause();
 					pause.setText("resume");
 				} else {
-					gm.restart();
+					gm.resume();
 					pause.setText("pause");
 				}
 
@@ -119,14 +119,15 @@ public class ScriptWindow extends JFrame {
 				// the relevant information for this session
 				String SubjectID = subId.getText();
 				String ExperimenterID = expId.getText();
+				long now = System.nanoTime();
 
-				gm.writeToLog("Version:                " + RunGame.versionNum);
-				gm.writeToLog("Experimenter:           " + ExperimenterID);
-				gm.writeToLog("Subject:                " + SubjectID);
-				gm.writeToLog("Date:                   "
+				gm.writeToLog(now,"Version:                " + RunGame.versionNum);
+				gm.writeToLog(now,"Experimenter:           " + ExperimenterID);
+				gm.writeToLog(now,"Subject:                " + SubjectID);
+				gm.writeToLog(now,"Date:                   "
 						+ (new java.util.Date()).toString());
 
-				gm.writeToLog("Scriptfile:             " + openButton.getText());
+				gm.writeToLog(now,"Scriptfile:             " + openButton.getText());
 
 				// next we start the game model
 				gm.start();

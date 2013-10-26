@@ -88,7 +88,8 @@ public class GameView extends JPanel {
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.getNumFish() == 0) {
-					gm.writeToLog(new GameEvent(e.getKeyChar()));
+					long keyPressTime = e.getWhen()* 1000000L;
+					gm.writeToLog(keyPressTime, new GameEvent(e.getKeyChar()));
 					badclip.play();
 					return;
 				}
@@ -159,7 +160,8 @@ public class GameView extends JPanel {
 	}
 
 	/**
-	 * toViewCoords(x) converts from model coordinates to pixels on the screen
+	 * toXViewCoords(x) converts from model coordinates to pixels on the screen
+	 * in the horizontal direction
 	 * so that objects can be drawn to scale, i.e. as the screen is resized the
 	 * objects change size proportionately.
 	 * 
@@ -167,44 +169,18 @@ public class GameView extends JPanel {
 	 *            the unit in model coordinates
 	 * @return the corresponding value in pixel based on window-size
 	 */
-	public int toViewCoords(double x) {
-		int width = this.getWidth();
-		int height = this.getHeight();
-		int viewSize = (width < height) ? width : height;
-		return (int) Math.round(x / GameModel.SIZE * viewSize);
-	}
 
 	public int toXViewCoords(double x) {
 		int width = this.getWidth();
-		int height = this.getHeight();
-		int viewSize = (width < height) ? width : height;
 		return (int) Math.round(x / GameModel.SIZE * width);
 	}
 
 	public int toYViewCoords(double x) {
-		int width = this.getWidth();
 		int height = this.getHeight();
-		int viewSize = (width < height) ? width : height;
 		return (int) Math.round(x / GameModel.SIZE * height);
 	}
 
-	/**
-	 * toModelCoords(x) is used to convert mouse locations to positions in the
-	 * model so that the avatar position in the model can be changed correctly
-	 * 
-	 * @param x
-	 *            position in pixels in view
-	 * @return position in model coordinates
-	 */
 
-	// bug in this code when the game is scale wider than it is tall
-	// BUG
-	public double toModelCoords(int x) {
-		int width = this.getWidth();
-		int height = this.getHeight();
-		int viewSize = (width < height) ? width : height;
-		return x * GameModel.SIZE / viewSize;
-	}
 
 	/**
 	 * paintComponent(g) draws the current state of the model onto the
@@ -323,9 +299,11 @@ public class GameView extends JPanel {
 
 	private void drawFish(Graphics g){
 		Fish f = gm.getCurrentFish();
+		//if (f!= null) System.out.println("drawing fish: "+f);
 		if (f != null){
 			drawActor(g,f,Color.WHITE);
 		}
+		//if (f!= null) System.out.println("drew fish: "+f);
 	}
 
 	private void drawBackground(Graphics g) {
@@ -373,12 +351,18 @@ public class GameView extends JPanel {
 	private void drawActor(Graphics g, Fish aFish, Color c) {
 		if (!aFish.active)
 			return;
-		int theRadius = toViewCoords(aFish.radius);
+		double fx = gm.getCurrentFishX();
+		double fy = gm.getCurrentFishY();
 		int x = toXViewCoords(aFish.x);
 		int y = toYViewCoords(aFish.y);
 		int visualHz = 1;
+		//System.out.println("+++ fx="+fx+" gm.x="+aFish.x+" w ="+this.getWidth()+" gv.x="+x);
+		//System.out.println("+++ fy="+fy+" gm.y="+aFish.y+" w ="+this.getHeight()+" gv.y="+y);
+		
 		
 		// set the default visual hertz for the fish
+		// this should be done when the fish is created!
+		// the visualhz should be a field of the fish...
 		switch (aFish.species) {
 		case good:
 			visualHz = gm.gameSpec.good.throbRate;
@@ -404,7 +388,7 @@ public class GameView extends JPanel {
 			}
 		}
 
-		int theSize = gm.interpolateSize(gm.gameSpec.minThrobSize,
+		int theSize = interpolateSize(gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize, aFish.birthTime, System.nanoTime(),
 				visualHz);
 
@@ -412,8 +396,7 @@ public class GameView extends JPanel {
 				gm.gameSpec.maxBrightness, aFish.birthTime, System.nanoTime(),
 				visualHz);
 
-		double aspectRatio = fishL[12].getHeight()
-				/ (1.0 * fishL[12].getWidth());
+		// double aspectRatio = fishL[12].getHeight() / (1.0 * fishL[12].getWidth());
 
 		int theWidth = gm.gameSpec.minThrobSize; // theSize; //(int) (theSize);
 		int theHeight = theSize * fishL[12].getHeight() / fishL[12].getWidth();// (int)
@@ -431,6 +414,7 @@ public class GameView extends JPanel {
 		}
 
 	}
+	
 
 	// brightness works by cycling through a sprite image that has 25 different
 	// levels of brightness.

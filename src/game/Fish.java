@@ -18,6 +18,12 @@ public class Fish {
 	public static long GAME_START = 0; // System.nanoTime();
 
 	String soundFolder = "fish_6_8_hz_pan0"; // "fish_3_5_hz_pan50";
+	
+	// this is the inter-fish-interval (in milliseconds) for this fish
+	// i.e. the delay between the death of the last fish 
+	// and the birth of this fish ...
+	
+	public long interval;
 	// size
 	double radius = 10;
 	// position
@@ -28,6 +34,14 @@ public class Fish {
 	double vy;
 	// still on board?
 	boolean active;
+	
+	public String toString(){
+		return "["+x+","+y+","+vx+","+vy+","+active+","+fromLeft+","+congruent+","
+				+ trial+","+
+	       birthTime+","+lastUpdate+","+deathTime+","+lifeSpan+","
+	       
+	       ;
+	}
 
 	// speed
 	double speed = 40;
@@ -38,8 +52,8 @@ public class Fish {
 	long birthTime;
 	long lastUpdate;
 	long deathTime;
-	// this is the time it stays on screen, in tenths of a second
-	public static double timeOnScreen = 20;
+	// this is the time it stays on screen, in milliseconds of a second
+	public static double maxTimeOnScreen = 2000;
 	long lifeSpan;
 
 	long gameStart = Fish.GAME_START;
@@ -138,32 +152,67 @@ public class Fish {
 		// create a new fish
 	}
 	
-
+	public static final double billionD = 1000000000.0;
+	
+	public static final long millionL = 1000000L; 
+	
 	/** 
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that
 	 * to compute their new position. Note that velocity is in units per update.
+	 * 
+	 * BUGFIX -- this is all messed up!!!
 	 */
 	public void update() {
 		long now = System.nanoTime();
-
-		if (now < birthTime + timeOnScreen * 100000000) {
+		//System.out.println("about to update: "+this);
+		if (now < birthTime + maxTimeOnScreen * millionL) {
 			this.lifeSpan = now - birthTime;
-			double dt = (now - this.lastUpdate) / 1000000000.0;
-			this.lastUpdate = now;
+			double dt = (now - this.lastUpdate) / billionD; 
+			//System.out.println("now=\n"+now+"\n lastUpdate=\n"+lastUpdate+
+			//		" diff = "+(now-lastUpdate) +"ns"+ (now-lastUpdate)/millionL+"ms");
+			
 			double turnspeed = 0.1;
 			// vx += rand.nextDouble()*turnspeed -turnspeed/2;
-			vy += rand.nextDouble() * turnspeed - turnspeed / 2;
+			//System.out.println("dt="+dt);
+			//System.out.println("speed="+speed);
+			vy += (rand.nextDouble() -0.5) * turnspeed;
+			//System.out.println("vy1="+vy);
+			// make sure it doesn't change vertical speed too quickly
+			if (vy> speed/2) vy=speed/2;
+			if (vy < -speed/2) vy = -speed/2;
+			//System.out.println("vy2="+vy);
+			//System.out.println("vx="+vx);
+
+			
 			double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
-			// vx /= tmpSpeed;
+			//System.out.println("tmpspeed1="+tmpSpeed);
+			// We want to be careful that we don't divide by a very small number
+			if (tmpSpeed < 0.1) tmpSpeed = 0.1;
+			//System.out.println("tmpspeed2="+tmpSpeed);
+			vx /= tmpSpeed;
 			vy /= tmpSpeed;
-			x += vx * speed * dt;
-			y += vy *5 * speed * dt;
+			//System.out.println("vx'="+vx);
+			//System.out.println("vy'="+vy);
+			double dx = vx * speed * dt;
+			double dy = vy * speed * dt;
+			//System.out.println("x'="+x);
+			//System.out.println("dx'="+dx);
+			//System.out.println("y'="+y);
+			//System.out.println("dy'="+dy);
+			x += dx;
+			y += dy;
+			//System.out.println("x''="+x);
+			//System.out.println("y''="+y);
+			this.lastUpdate = now;
 		} else {
 			this.active = false;
 			if(congruent != 2)
 				this.ct.stop();
 		}
+		
+		//System.out.println("just updated: "+this);
+		
 
 	}
 
@@ -177,10 +226,7 @@ public class Fish {
 		this.trial = trial;
 	}
 
-	public String toString() {
-		int ix = (int) x;
-		int iy = (int) y;
-		// return "["+ix+","+iy+","+active+"]";
+	public String toString2() {
 		return "[" + this.species + "," + this.origin + "]";
 	}
 

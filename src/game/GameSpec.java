@@ -18,9 +18,11 @@ public class GameSpec {
 
 	public boolean stereo = true;
 	
-	// this represents the type of experiment being
-	// run, whether the correct response is tied to the 
-	// visual rate or the auditory rate. 0=visual, 1=auditory
+	/**
+	 *  this represents the type of experiment being
+	 *   run, whether the correct response is tied to the
+	 *   visual rate or the auditory rate. 0=visual, 1=auditory
+	 */
 	public int avmode=0;
 
 	public boolean hasAvatar = true;
