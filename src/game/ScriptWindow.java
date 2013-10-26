@@ -121,13 +121,15 @@ public class ScriptWindow extends JFrame {
 				String ExperimenterID = expId.getText();
 				long now = System.nanoTime();
 
-				gm.writeToLog(now,"Version:                " + RunGame.versionNum);
-				gm.writeToLog(now,"Experimenter:           " + ExperimenterID);
-				gm.writeToLog(now,"Subject:                " + SubjectID);
-				gm.writeToLog(now,"Date:                   "
+				gm.writeToLog(now, "Version:                "
+						+ RunGame.versionNum);
+				gm.writeToLog(now, "Experimenter:           " + ExperimenterID);
+				gm.writeToLog(now, "Subject:                " + SubjectID);
+				gm.writeToLog(now, "Date:                   "
 						+ (new java.util.Date()).toString());
 
-				gm.writeToLog(now,"Scriptfile:             " + openButton.getText());
+				gm.writeToLog(now,
+						"Scriptfile:             " + openButton.getText());
 
 				// next we start the game model
 				gm.start();

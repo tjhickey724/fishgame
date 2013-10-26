@@ -13,16 +13,25 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- * audio file object with play and stop play methods
+ * this class is for playing small Audio Clips you can start, stop, and loop
+ * clips
  */
 public class AudioClip {
 	public Clip clip;
 	public String filename;
 
+	/**
+	 * create an AudioClip based on the filename
+	 * 
+	 * @param audiof
+	 */
 	public AudioClip(String audiof) {
 		filename = audiof;
 	}
 
+	/**
+	 * play the audio clip
+	 */
 	public void play() {
 		// play the sound clip
 		try {
@@ -84,8 +93,8 @@ public class AudioClip {
 		if (clip != null) {
 			if (clip.isRunning())
 				clip.stop();
-		} //else
-			//System.out.println("Trying to stop a null clip!!");
+		} // else
+			// System.out.println("Trying to stop a null clip!!");
 	}
 
 	public void loadClip(String path) throws UnsupportedAudioFileException,

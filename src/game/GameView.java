@@ -22,11 +22,12 @@ import java.util.ArrayList;
  * GameModel to the Viewing window. Calling repaint() on the GameView will cause
  * it to render the current state of the Model to the JPanel canvas...
  * 
- * The keyListener created for the GameView will be called when ever the user hits a key
- * This code will be run in parallel with the GameLoop, so you have to be careful in the
- * update method of GameModel to assume that a key could be pressed anytime while the update
- * is being modified.... This means we really should be synchronizing on the model when it
- * is modified from the key listener.
+ * The keyListener created for the GameView will be called when ever the user
+ * hits a key This code will be run in parallel with the GameLoop, so you have
+ * to be careful in the update method of GameModel to assume that a key could be
+ * pressed anytime while the update is being modified.... This means we really
+ * should be synchronizing on the model when it is modified from the key
+ * listener.
  * 
  * @author tim
  * 
@@ -38,7 +39,7 @@ public class GameView extends JPanel {
 	boolean hasAvatar = true;
 	boolean flash = false;
 	boolean soundflash = false;
-	
+
 	public AudioClip bgSound;
 	String lastbgSound;
 
@@ -79,26 +80,28 @@ public class GameView extends JPanel {
 			public void keyTyped(KeyEvent e) {
 				if (gm.isGameOver())
 					return;
-				// when a key is pressed, we send a 'flash' to the indicator in the corner
-				flash=true;
-				// we set the update time to be 50 ms after the keypress, so the indicator stays lit for 50 ms
-				indicatorUpdate=System.nanoTime()+50000000l;
-
+				// when a key is pressed, we send a 'flash' to the indicator in
+				// the corner
+				flash = true;
+				// we set the update time to be 50 ms after the keypress, so the
+				// indicator stays lit for 50 ms
+				indicatorUpdate = System.nanoTime() + 50000000l;
 
 				// first check to see if they pressed
 				// when there are no fish!!
 				if (gm.getNumFish() == 0) {
-					long keyPressTime = e.getWhen()* 1000000L;
+					long keyPressTime = e.getWhen() * 1000000L;
 					gm.writeToLog(keyPressTime, new GameEvent(e.getKeyChar()));
 					badclip.play();
 					return;
 				}
-				
+
 				// this is a synchronized call to the GameModel
 				// and will delay if gm.update is being called from the GameLoop
-				// Also, once it is called here, gm.update must delay if called from the GameLoop
+				// Also, once it is called here, gm.update must delay if called
+				// from the GameLoop
 				boolean correctResponse = gm.handleKeyPress(e);
-				
+
 				if (correctResponse) {
 					goodclip.play();
 				} else {
@@ -107,7 +110,6 @@ public class GameView extends JPanel {
 
 			}
 
-			
 		};
 		this.addKeyListener(kl);
 	}
@@ -143,7 +145,7 @@ public class GameView extends JPanel {
 			coin = ImageIO.read(new File("images/wealth.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
-			hasAvatar=gs.hasAvatar;
+			hasAvatar = gs.hasAvatar;
 			if (!gs.bgSound.equals(this.lastbgSound)) {
 				this.lastbgSound = gs.bgSound;
 				if (bgSound != null)
@@ -161,9 +163,8 @@ public class GameView extends JPanel {
 
 	/**
 	 * toXViewCoords(x) converts from model coordinates to pixels on the screen
-	 * in the horizontal direction
-	 * so that objects can be drawn to scale, i.e. as the screen is resized the
-	 * objects change size proportionately.
+	 * in the horizontal direction so that objects can be drawn to scale, i.e.
+	 * as the screen is resized the objects change size proportionately.
 	 * 
 	 * @param x
 	 *            the unit in model coordinates
@@ -179,8 +180,6 @@ public class GameView extends JPanel {
 		int height = this.getHeight();
 		return (int) Math.round(x / GameModel.SIZE * height);
 	}
-
-
 
 	/**
 	 * paintComponent(g) draws the current state of the model onto the
@@ -204,10 +203,10 @@ public class GameView extends JPanel {
 			g.setFont(new Font("Helvetica", Font.BOLD, 50));
 			g.drawString("GAME OVER", 100, 100);
 			g.setFont(new Font("Helvetica", Font.BOLD, 25));
-			g.drawString("Right: " +gm.getHits(), 100, 130);
-			g.drawString("Wrong: " +gm.getMisses(), 100, 160);
-			g.drawString("Missed: " +gm.getNoKeyPress(), 100, 190);
-			g.drawString("Total: " +hits+misses+nokey, 100, 210);
+			g.drawString("Right: " + gm.getHits(), 100, 130);
+			g.drawString("Wrong: " + gm.getMisses(), 100, 160);
+			g.drawString("Missed: " + gm.getNoKeyPress(), 100, 190);
+			g.drawString("Total: " + hits + misses + nokey, 100, 210);
 			return;
 		}
 
@@ -221,7 +220,7 @@ public class GameView extends JPanel {
 
 		if (hasAvatar)
 			drawAvatar(g);
-		
+
 		drawIndicator(g);
 		drawSoundIndicator(g);
 
@@ -230,35 +229,38 @@ public class GameView extends JPanel {
 	}
 
 	private void drawIndicator(Graphics g) {
-		if (flash){
+		if (flash) {
 			g.setColor(Color.white);
-			
-			if (indicatorUpdate<System.nanoTime())flash=false;
-		} else if (gm.flash){
+
+			if (indicatorUpdate < System.nanoTime())
+				flash = false;
+		} else if (gm.flash) {
 			g.setColor(Color.white);
-			if (gm.indicatorUpdate<System.nanoTime())gm.flash=false;
+			if (gm.indicatorUpdate < System.nanoTime())
+				gm.flash = false;
 		} else {
 			g.setColor(Color.black);
 		}
-		
-		g.fillRect(0, getHeight()-60, 60, 60);
-		
-		
+
+		g.fillRect(0, getHeight() - 60, 60, 60);
+
 	}
-	
-	private void drawSoundIndicator(Graphics g){
-		if (soundflash){
+
+	private void drawSoundIndicator(Graphics g) {
+		if (soundflash) {
 			g.setColor(Color.white);
-			if (soundIndicatorUpdate<System.nanoTime())soundflash=false;
-		} else if (gm.soundflash){
+			if (soundIndicatorUpdate < System.nanoTime())
+				soundflash = false;
+		} else if (gm.soundflash) {
 			g.setColor(Color.white);
-			if (gm.soundIndicatorUpdate<System.nanoTime())gm.soundflash=false;
+			if (gm.soundIndicatorUpdate < System.nanoTime())
+				gm.soundflash = false;
 		} else {
 			g.setColor(Color.black);
 		}
-		
-		g.fillRect(getWidth()-60, getHeight()-60, 60, 60);
-		
+
+		g.fillRect(getWidth() - 60, getHeight() - 60, 60, 60);
+
 	}
 
 	private void drawTimeBar(Graphics g) {
@@ -293,17 +295,15 @@ public class GameView extends JPanel {
 		g.setFont(new Font("Helvetica", Font.BOLD, 20));
 		g.setColor(Color.WHITE);
 
-		
-
 	}
 
-	private void drawFish(Graphics g){
+	private void drawFish(Graphics g) {
 		Fish f = gm.getCurrentFish();
-		//if (f!= null) System.out.println("drawing fish: "+f);
-		if (f != null){
-			drawActor(g,f,Color.WHITE);
+		// if (f!= null) System.out.println("drawing fish: "+f);
+		if (f != null) {
+			drawActor(g, f, Color.WHITE);
 		}
-		//if (f!= null) System.out.println("drew fish: "+f);
+		// if (f!= null) System.out.println("drew fish: "+f);
 	}
 
 	private void drawBackground(Graphics g) {
@@ -356,10 +356,9 @@ public class GameView extends JPanel {
 		int x = toXViewCoords(aFish.x);
 		int y = toYViewCoords(aFish.y);
 		int visualHz = 1;
-		//System.out.println("+++ fx="+fx+" gm.x="+aFish.x+" w ="+this.getWidth()+" gv.x="+x);
-		//System.out.println("+++ fy="+fy+" gm.y="+aFish.y+" w ="+this.getHeight()+" gv.y="+y);
-		
-		
+		// System.out.println("+++ fx="+fx+" gm.x="+aFish.x+" w ="+this.getWidth()+" gv.x="+x);
+		// System.out.println("+++ fy="+fy+" gm.y="+aFish.y+" w ="+this.getHeight()+" gv.y="+y);
+
 		// set the default visual hertz for the fish
 		// this should be done when the fish is created!
 		// the visualhz should be a field of the fish...
@@ -371,10 +370,12 @@ public class GameView extends JPanel {
 			visualHz = gm.gameSpec.bad.throbRate;
 			break;
 		}
-		
+
 		// handle the exception conditions...
-		if (gm.gameSpec.avmode == 1){ // auditory determines good/bad, so switch the visual hertz in incongruent case
-			if (aFish.congruent==1){
+		if (gm.gameSpec.avmode == 1) { // auditory determines good/bad, so
+										// switch the visual hertz in
+										// incongruent case
+			if (aFish.congruent == 1) {
 				switch (aFish.species) {
 				case bad:
 					visualHz = gm.gameSpec.good.throbRate;
@@ -383,8 +384,8 @@ public class GameView extends JPanel {
 					visualHz = gm.gameSpec.bad.throbRate;
 					break;
 				}
-			} else if (aFish.congruent == 2){
-				visualHz = 0 ;
+			} else if (aFish.congruent == 2) {
+				visualHz = 0;
 			}
 		}
 
@@ -396,14 +397,14 @@ public class GameView extends JPanel {
 				gm.gameSpec.maxBrightness, aFish.birthTime, System.nanoTime(),
 				visualHz);
 
-		// double aspectRatio = fishL[12].getHeight() / (1.0 * fishL[12].getWidth());
+		// double aspectRatio = fishL[12].getHeight() / (1.0 *
+		// fishL[12].getWidth());
 
 		int theWidth = gm.gameSpec.minThrobSize; // theSize; //(int) (theSize);
 		int theHeight = theSize * fishL[12].getHeight() / fishL[12].getWidth();// (int)
 																				// ((theSize
 																				// *
 																				// aspectRatio)/100);
-		
 
 		if (aFish.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
@@ -414,7 +415,6 @@ public class GameView extends JPanel {
 		}
 
 	}
-	
 
 	// brightness works by cycling through a sprite image that has 25 different
 	// levels of brightness.

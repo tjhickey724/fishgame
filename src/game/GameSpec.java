@@ -17,13 +17,13 @@ public class GameSpec {
 	public boolean requireGameViewUpdate = true;
 
 	public boolean stereo = true;
-	
+
 	/**
-	 *  this represents the type of experiment being
-	 *   run, whether the correct response is tied to the
-	 *   visual rate or the auditory rate. 0=visual, 1=auditory
+	 * this represents the type of experiment being run, whether the correct
+	 * response is tied to the visual rate or the auditory rate. 0=visual,
+	 * 1=auditory
 	 */
-	public int avmode=0;
+	public int avmode = 0;
 
 	public boolean hasAvatar = true;
 
@@ -36,7 +36,6 @@ public class GameSpec {
 	public int numCon = 10;
 	public int numIncon = 10;
 	public int numMissing = 10;
-	
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
@@ -50,15 +49,16 @@ public class GameSpec {
 	 */
 
 	public int minFishRelease = 30, maxFishRelease = 60;
-	
+
 	public int minThrobSize = 100, maxThrobSize = 125;
-	public int interval[] = {35, 45, 55};
+	public int interval[] = { 35, 45, 55 };
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
 
 	public GameSpec() {
 
 	}
+
 	private String scriptLine(String prop, String val) {
 
 		return "-1" + sep + prop + sep + val + "\n";
@@ -84,7 +84,7 @@ public class GameSpec {
 		s += scriptLine("totalInCongruentTrials", "" + numIncon);
 		s += scriptLine("totalmissingTrials", "" + numMissing);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
-		s += scriptLine("avmode", ""+avmode);
+		s += scriptLine("avmode", "" + avmode);
 		return (s);
 
 	}
@@ -126,7 +126,7 @@ public class GameSpec {
 			this.maxBrightness = Integer.parseInt(value);
 		} else if (prop.equals("hasAvatar")) {
 			this.hasAvatar = (value.contains("true") ? true : false);
-		} else if (prop.equals("avmode")){
+		} else if (prop.equals("avmode")) {
 			this.avmode = Integer.parseInt(value);
 		} else
 			return false;

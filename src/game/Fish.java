@@ -18,11 +18,11 @@ public class Fish {
 	public static long GAME_START = 0; // System.nanoTime();
 
 	String soundFolder = "fish_6_8_hz_pan0"; // "fish_3_5_hz_pan50";
-	
+
 	// this is the inter-fish-interval (in milliseconds) for this fish
-	// i.e. the delay between the death of the last fish 
+	// i.e. the delay between the death of the last fish
 	// and the birth of this fish ...
-	
+
 	public long interval;
 	// size
 	double radius = 10;
@@ -34,13 +34,13 @@ public class Fish {
 	double vy;
 	// still on board?
 	boolean active;
-	
-	public String toString(){
-		return "["+x+","+y+","+vx+","+vy+","+active+","+fromLeft+","+congruent+","
-				+ trial+","+
-	       birthTime+","+lastUpdate+","+deathTime+","+lifeSpan+","
-	       
-	       ;
+
+	public String toString() {
+		return "[" + x + "," + y + "," + vx + "," + vy + "," + active + ","
+				+ fromLeft + "," + congruent + "," + trial + "," + birthTime
+				+ "," + lastUpdate + "," + deathTime + "," + lifeSpan + ","
+
+		;
 	}
 
 	// speed
@@ -66,18 +66,18 @@ public class Fish {
 	AudioClip ct, ctL, ctR;
 	// AudioClip bt;
 	Species species;
-	
-	/** determines whether visual(0) or audio(1) specifies good or bad  **/
-	public int avmode=0;
+
+	/** determines whether visual(0) or audio(1) specifies good or bad **/
+	public int avmode = 0;
 
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
 
-
 	private java.util.Random rand = new java.util.Random();
 
 	public Fish(double x, double y, boolean active, Species spec, int avmode) {
-		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p",avmode,0);
+		this(x, y, active, spec, true, "sounds/fish6hz0p", "sounds/fish8hz0p",
+				avmode, 0);
 	}
 
 	public Fish(double x, double y, boolean active, Species spec,
@@ -105,23 +105,26 @@ public class Fish {
 			fishSounds = goodFishSounds;
 		else
 			fishSounds = badFishSounds;
-		
+
 		if (congruent == 0) {
 			; // use the default values in all avmodes
-		} else if (congruent == 1){
-			if (avmode==0){
+		} else if (congruent == 1) {
+			if (avmode == 0) {
 				if (species.equals(Species.good))
 					fishSounds = badFishSounds;
 				else
 					fishSounds = goodFishSounds;
 			} else {
-				; // we should switch the visual hz but that will be done in GameView ...
-				
+				; // we should switch the visual hz but that will be done in
+					// GameView ...
+
 			}
-		} else{ // congruent = 2 so 
-			if (avmode == 0){ // visual mode so the sound is silent, so no change
-			   ;}
-			else { // avmode == 1, auditory mode so the visual is non-oscillating, and use default sounds
+		} else { // congruent = 2 so
+			if (avmode == 0) { // visual mode so the sound is silent, so no
+								// change
+				;
+			} else { // avmode == 1, auditory mode so the visual is
+						// non-oscillating, and use default sounds
 				;
 			}
 		}
@@ -141,22 +144,21 @@ public class Fish {
 		}
 	}
 
-
-
-	public Fish(int avmode) { // throws UnsupportedAudioFileException, IOException,
-							// LineUnavailableException {
+	public Fish(int avmode) { // throws UnsupportedAudioFileException,
+								// IOException,
+								// LineUnavailableException {
 		this(0, 0, true, Species.good, avmode);
 	}
-	
-	public Fish(){
+
+	public Fish() {
 		// create a new fish
 	}
-	
+
 	public static final double billionD = 1000000000.0;
-	
-	public static final long millionL = 1000000L; 
-	
-	/** 
+
+	public static final long millionL = 1000000L;
+
+	/**
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that
 	 * to compute their new position. Note that velocity is in units per update.
@@ -165,54 +167,56 @@ public class Fish {
 	 */
 	public void update() {
 		long now = System.nanoTime();
-		//System.out.println("about to update: "+this);
+		// System.out.println("about to update: "+this);
 		if (now < birthTime + maxTimeOnScreen * millionL) {
 			this.lifeSpan = now - birthTime;
-			double dt = (now - this.lastUpdate) / billionD; 
-			//System.out.println("now=\n"+now+"\n lastUpdate=\n"+lastUpdate+
-			//		" diff = "+(now-lastUpdate) +"ns"+ (now-lastUpdate)/millionL+"ms");
-			
+			double dt = (now - this.lastUpdate) / billionD;
+			// System.out.println("now=\n"+now+"\n lastUpdate=\n"+lastUpdate+
+			// " diff = "+(now-lastUpdate) +"ns"+
+			// (now-lastUpdate)/millionL+"ms");
+
 			double turnspeed = 0.1;
 			// vx += rand.nextDouble()*turnspeed -turnspeed/2;
-			//System.out.println("dt="+dt);
-			//System.out.println("speed="+speed);
-			vy += (rand.nextDouble() -0.5) * turnspeed;
-			//System.out.println("vy1="+vy);
+			// System.out.println("dt="+dt);
+			// System.out.println("speed="+speed);
+			vy += (rand.nextDouble() - 0.5) * turnspeed;
+			// System.out.println("vy1="+vy);
 			// make sure it doesn't change vertical speed too quickly
-			if (vy> speed/2) vy=speed/2;
-			if (vy < -speed/2) vy = -speed/2;
-			//System.out.println("vy2="+vy);
-			//System.out.println("vx="+vx);
+			if (vy > speed / 2)
+				vy = speed / 2;
+			if (vy < -speed / 2)
+				vy = -speed / 2;
+			// System.out.println("vy2="+vy);
+			// System.out.println("vx="+vx);
 
-			
 			double tmpSpeed = Math.sqrt(vx * vx + vy * vy);
-			//System.out.println("tmpspeed1="+tmpSpeed);
+			// System.out.println("tmpspeed1="+tmpSpeed);
 			// We want to be careful that we don't divide by a very small number
-			if (tmpSpeed < 0.1) tmpSpeed = 0.1;
-			//System.out.println("tmpspeed2="+tmpSpeed);
+			if (tmpSpeed < 0.1)
+				tmpSpeed = 0.1;
+			// System.out.println("tmpspeed2="+tmpSpeed);
 			vx /= tmpSpeed;
 			vy /= tmpSpeed;
-			//System.out.println("vx'="+vx);
-			//System.out.println("vy'="+vy);
+			// System.out.println("vx'="+vx);
+			// System.out.println("vy'="+vy);
 			double dx = vx * speed * dt;
 			double dy = vy * speed * dt;
-			//System.out.println("x'="+x);
-			//System.out.println("dx'="+dx);
-			//System.out.println("y'="+y);
-			//System.out.println("dy'="+dy);
+			// System.out.println("x'="+x);
+			// System.out.println("dx'="+dx);
+			// System.out.println("y'="+y);
+			// System.out.println("dy'="+dy);
 			x += dx;
 			y += dy;
-			//System.out.println("x''="+x);
-			//System.out.println("y''="+y);
+			// System.out.println("x''="+x);
+			// System.out.println("y''="+y);
 			this.lastUpdate = now;
 		} else {
 			this.active = false;
-			if(congruent != 2)
+			if (congruent != 2)
 				this.ct.stop();
 		}
-		
-		//System.out.println("just updated: "+this);
-		
+
+		// System.out.println("just updated: "+this);
 
 	}
 

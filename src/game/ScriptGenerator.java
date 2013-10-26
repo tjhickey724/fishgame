@@ -22,8 +22,8 @@ public class ScriptGenerator {
 	public final static String SEP = "\t";
 	public int fishNum = 0;
 	public String scriptname;
-	public int mode=0;
-	
+	public int mode = 0;
+
 	public ArrayList<Trial> trials = new ArrayList<Trial>();
 
 	public ScriptGenerator() {
@@ -71,12 +71,10 @@ public class ScriptGenerator {
 
 			scriptFile.write(g.toScript());
 			int sixthTrials;
-			mode=g.avmode;
-			
-			
-			
+			mode = g.avmode;
+
 			// generate good, congruent trials
-			for(int i = 0; i < g.numCon / 2; i++) {
+			for (int i = 0; i < g.numCon / 2; i++) {
 
 				trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
 						g.good.throbRate, 0, (rand.nextInt(2) == 1),
@@ -84,64 +82,62 @@ public class ScriptGenerator {
 
 			}
 			// congruent bad fishes
-			for(int i = 0; i < g.numCon / 2; i++) {
+			for (int i = 0; i < g.numCon / 2; i++) {
 
 				trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.bad.throbRate, 0, (rand.nextInt(2) == 1),
-						Species.bad));
+						g.bad.throbRate, 0, (rand.nextInt(2) == 1), Species.bad));
 
 			}
 			// incongruent bad fishes
 			for (int i = 0; i < g.numIncon / 2; i++) {
-				if (mode==0){
-				trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
-						g.bad.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.bad));
-				}
-				else if (mode==1){
-					trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
-							g.good.throbRate, 1, (rand.nextInt(2) == 1),
-							Species.bad));
+				if (mode == 0) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.good.soundFile, g.bad.throbRate, 1, (rand
+									.nextInt(2) == 1), Species.bad));
+				} else if (mode == 1) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.bad.soundFile, g.good.throbRate, 1, (rand
+									.nextInt(2) == 1), Species.bad));
 				}
 			}
 			// incongruent good fishes
-			
-			for (int i = 0; i < g.numIncon / 2; i++){
-				if (mode==0){
-				trials.add(new Trial(getInterval(g.interval), g.bad.soundFile,
-						g.good.throbRate, 1, (rand.nextInt(2) == 1),
-						Species.good));
-				} else if (mode==1){
-					trials.add(new Trial(getInterval(g.interval), g.good.soundFile,
-							g.bad.throbRate, 1, (rand.nextInt(2) == 1),
+
+			for (int i = 0; i < g.numIncon / 2; i++) {
+				if (mode == 0) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.bad.soundFile, g.good.throbRate, 1, (rand
+									.nextInt(2) == 1), Species.good));
+				} else if (mode == 1) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.good.soundFile, g.bad.throbRate, 1, (rand
+									.nextInt(2) == 1), Species.good));
+				}
+			}
+			// good silent fish
+			for (int i = 0; i < g.numMissing / 2; i++) {
+				if (mode == 0) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.silentResponseSound, g.good.throbRate, 2, (rand
+									.nextInt(2) == 1), Species.good));
+				} else if (mode == 1) {
+					trials.add(i, new Trial(getInterval(g.interval),
+							g.good.soundFile, 0, 2, (rand.nextInt(2) == 1),
 							Species.good));
 				}
 			}
-			//good silent fish
-			for (int i = 0; i < g.numMissing / 2; i++){
-				if (mode==0){
-				trials.add(new Trial(getInterval(g.interval), g.silentResponseSound,
-						g.good.throbRate, 2, (rand.nextInt(2) == 1),
-						Species.good));
-				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.good.soundFile,
-							0, 2, (rand.nextInt(2) == 1),
-							Species.good));
-				}
-			}
-			//bad silent fish
-			for (int i = 0; i < g.numMissing / 2; i++){
-				if (mode==0){
-				trials.add(new Trial(getInterval(g.interval), g.silentResponseSound,
-						g.bad.throbRate, 2, (rand.nextInt(2) == 1),
-						Species.bad));
-				} else if (mode==1){
-					trials.add(i, new Trial(getInterval(g.interval), g.bad.soundFile,
-							0, 2, (rand.nextInt(2) == 1),
+			// bad silent fish
+			for (int i = 0; i < g.numMissing / 2; i++) {
+				if (mode == 0) {
+					trials.add(new Trial(getInterval(g.interval),
+							g.silentResponseSound, g.bad.throbRate, 2, (rand
+									.nextInt(2) == 1), Species.bad));
+				} else if (mode == 1) {
+					trials.add(i, new Trial(getInterval(g.interval),
+							g.bad.soundFile, 0, 2, (rand.nextInt(2) == 1),
 							Species.bad));
 				}
 			}
-			
+
 			// shuffle
 
 			Collections.shuffle(trials);
@@ -160,9 +156,9 @@ public class ScriptGenerator {
 	}
 
 	// chooses randomly inbetween min fish release and max
-	public Long getInterval( int[] interval) {
+	public Long getInterval(int[] interval) {
 		int index = rand.nextInt(3);
-		
+
 		long m = interval[index] * 100;
 		return m;
 	}

@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * This is a class to store errors that arise when interacting with the NetStation over TCP/IP
+ * This is a class to store errors that arise when interacting with the
+ * NetStation over TCP/IP
+ * 
  * @author tim
- *
+ * 
  */
 public class NetStationError extends java.lang.Exception {
 

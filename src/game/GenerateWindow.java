@@ -34,10 +34,9 @@ public class GenerateWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1635763426843293108L;
-	public int interval[] = {35, 45, 55};
-	JTextField int1 = new JTextField(""+interval[0]),
-			int3 = new JTextField(""+interval[2]),
-			int2 = new JTextField(""+interval[1]),
+	public int interval[] = { 35, 45, 55 };
+	JTextField int1 = new JTextField("" + interval[0]), int3 = new JTextField(
+			"" + interval[2]), int2 = new JTextField("" + interval[1]),
 			maxBrightnessTF = new JTextField("24"),
 			minBrightnessTF = new JTextField("0"),
 			numCongruent = new JTextField("10"),
@@ -48,7 +47,7 @@ public class GenerateWindow extends JFrame {
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-	
+
 	Checkbox hasAvatar = new Checkbox();
 
 	JTextField minSizeTF = new JTextField("100");
@@ -58,8 +57,6 @@ public class GenerateWindow extends JFrame {
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
 	JButton imageSelect = new JButton("Open");
-
-
 
 	ScriptGenerator sgen = new ScriptGenerator();
 
@@ -87,14 +84,13 @@ public class GenerateWindow extends JFrame {
 
 		JScrollPane jscrollpane = new JScrollPane(jtextarea);
 
-
 		String[] soundtypes = new String[] { "Stereo", "Mono" };
 		soundtype = new JComboBox(soundtypes);
 
 		String[] volumes = new String[] { "low", "med", "hi" };
 		vol = new JComboBox(volumes);
-		
-		String[] modes = new String[] { "Visual", "Auditory"};
+
+		String[] modes = new String[] { "Visual", "Auditory" };
 		tiedto = new JComboBox(modes);
 
 		JButton gdone = new JButton("Done");
@@ -106,15 +102,15 @@ public class GenerateWindow extends JFrame {
 				// here we create a GameSpec and use the user input
 				// to set the appropriate fields of the GameSpec object
 				GameSpec gs = new GameSpec();
-				interval[0]= Integer.parseInt(int1.getText());
-				interval[1]= Integer.parseInt(int2.getText());
-				interval[2]= Integer.parseInt(int3.getText());
-				gs.interval=interval;
+				interval[0] = Integer.parseInt(int1.getText());
+				interval[1] = Integer.parseInt(int2.getText());
+				interval[2] = Integer.parseInt(int3.getText());
+				gs.interval = interval;
 				gs.numCon = Integer.parseInt(numCongruent.getText());
 				gs.numIncon = Integer.parseInt(numInCongruent.getText());
 				gs.numMissing = Integer.parseInt(numMissingStimulus.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
-				gs.bad.update("soundFile",  badSoundTF.getText());
+				gs.bad.update("soundFile", badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
 						.equals("Stereo"));
 				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF
@@ -127,7 +123,8 @@ public class GenerateWindow extends JFrame {
 						.getText());
 				gs.minBrightness = (int) Integer.parseInt(minBrightnessTF
 						.getText());
-				gs.avmode= (tiedto.getSelectedItem().toString().equals("Visual")? 0 : 1);
+				gs.avmode = (tiedto.getSelectedItem().toString()
+						.equals("Visual") ? 0 : 1);
 				gs.hasAvatar = hasAvatar.getState();
 
 				String volumeLevel = (vol.getSelectedItem()).toString();
@@ -140,14 +137,13 @@ public class GenerateWindow extends JFrame {
 				}
 				gs.bgSound = "sounds/background/" + gs.bgSound;
 
-				
 				System.out.println(gs.toScript());
 				sgen.generate(gs);
 
 				// here we generate a report for the user, so they know what's
 				// happening
 				jtextarea.append(gs.toScript());
-				//jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
+				// jtextarea.append("GENERATE " + gs.totalTrials + " events\n");
 
 			}
 		});
@@ -229,7 +225,6 @@ public class GenerateWindow extends JFrame {
 		matrix2.add(soundtype);
 		matrix2.add(new JLabel("Tied to"));
 		matrix2.add(tiedto);
-
 
 		matrix2.add(volLabel);
 		matrix2.add(vol);
