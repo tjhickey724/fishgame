@@ -44,7 +44,23 @@ public class GameModel {
 	// here are some convenient constants for converting between nanoseconds
 	// and milliseconds and seconds
 	private static long million = 1000000L;
+	
 	private static long billion = 1000000000L;
+
+	
+	public int systimeToMillis(long t){
+		return (int) ((t - this.gameStart)/million);
+	}
+	
+	/**
+	 * this is the connection to the EEG recording device
+	 * It must first be initialize, synchronized, and have the recording started
+	 * before events will be recorded...
+	 * In this application we use the EEG.eventNS0(CODE,TIME,DURATION) method
+	 * which is ignored if recording has not been turned on...
+	 */
+	public NetStation EEG = new NetStation(this);
+	public boolean usingEEG = false;
 
 	/**
 	 * the SIZE of the GameBoard is 100x100 in model units when it is drawn to a
@@ -231,8 +247,40 @@ public class GameModel {
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
 		Fish.GAME_START = this.gameStart;
-		createNextFish(this.gameStart);
+		
+		initEEG();
+		
 
+
+		// I think we need to send a "new trial" marker to the EEG
+		// and update the time in the call to createNextFish accordingly...
+		createNextFish(System.nanoTime());
+
+	}
+
+	private void initEEG() {
+		System.out.println("initEEG");
+		if (usingEEG) {
+			try {
+				this.EEG.connectNS();
+				this.EEG.startTime = this.gameStart;
+				this.EEG.synchronizeNS();
+				Thread.sleep(1000L);
+				this.EEG.startRecordingNS();
+				
+			} catch (NetStationError e) {
+				e.printStackTrace();
+				System.out.println("Error in NetStation initialization"+e);
+				System.exit(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.out.println("Error in NetStation init:"+e);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("Error in Netstation init:"+e);
+			}
+			
+		}
 	}
 
 	/**
@@ -258,6 +306,30 @@ public class GameModel {
 			System.out.println("closing log/script files");
 		} catch (Exception e) {
 			System.out.println("Problem closing logfile");
+		}
+		
+		stopEEG();
+		
+
+	}
+
+	private void stopEEG() {
+
+		if (!this.usingEEG)
+			return;
+		
+		System.out.println("stopEEG");
+		
+		// turn off EEG recording....
+		try {
+			EEG.stopRecordingNS();
+			EEG.disconnectNS();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error trying to stop EEG recording "+e);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.out.println("Error trying to stop EEG recording "+e);
 		}
 
 	}
@@ -324,14 +396,10 @@ public class GameModel {
 
 		Fish lastFish = this.getCurrentFish();
 
-		// the EventQueue stores the time of the event in ms in the "when" field
-		// this is the most accurate representation for when the event occurred
-		long keyHitTime = e.getWhen() * million;
 
 		// create a GameEvent for logging purposes
 		// this also determines if it was a correct or incorrect key press
-		GameEvent ge = new GameEvent(e.getKeyChar(), lastFish);
-		ge.when = keyHitTime;
+		GameEvent ge = new GameEvent(e, lastFish);
 
 		// then we update the NextFishTime which means reading in another line
 		// and
@@ -360,10 +428,13 @@ public class GameModel {
 		this.soundflash = true;
 		this.soundIndicatorUpdate = System.nanoTime() + 50 * million;
 
+		// update the summary data and send markers to the EEG
 		if (ge.correctResponse) {
+			sendEEGMarker(ge.when,"KEYG");
 			this.wealth++;
 			this.hits += 1;
 		} else {
+			sendEEGMarker(ge.when,"KEYB");
 			this.wealth--;
 			this.misses += 1;
 		}
@@ -437,6 +508,23 @@ public class GameModel {
 		this.writeToLog(now, missedFishEvent);
 		currentFish = null;
 	}
+	
+
+	public void sendEEGMarker(long now,String code){
+
+		if (!this.usingEEG)
+			return;
+		
+		//this.writeToLog(now, "sendEEGMarker:"+ code);
+		
+		try {
+			EEG.eventNS0(code, systimeToMillis(now), 1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Problem with EEG connection!!!\n Error is "+e);
+		}
+	}
+	
 
 	/**
 	 * spawns a new fish using the data stored in the this.nextFish object
@@ -461,14 +549,27 @@ public class GameModel {
 		nextFish.avmode = gameSpec.avmode;
 		nextFish.birthTime = now;
 		nextFish.lastUpdate = now;
+		
+		// now we set the seed for the random number generator for the fish
+		// to depend on the trial number so that it is the same in every experiment
+		// there will still be slight differences as the times since the fish updates
+		// depend on the time since the last update and that will vary from run to run
+		// If we want we could be more precise here and create a random path based on the
+		// seed and have the fish follow that path
+		
+		nextFish.rand.setSeed(nextFish.trial);
 
 		// REFACTOR: use the gameSpec.lifetime field instead of 2000L here
 		nextFishTime = now + 2000L * million;
+		
+		// send marker to EEG
+		sendEEGMarker(now,"GO--");
 
 		// System.out.println("Spawning new fish: "+nextFish);
 
 		/*
 		 * this decides which sound file to play and starts it in a loop
+		 * if we are in EEG mode this should delay 200ms ...
 		 */
 		playFishSound();
 
@@ -482,6 +583,49 @@ public class GameModel {
 		// log this event
 		writeToLog(now, nextFish); // indicate that a was spawned
 
+	}
+
+	private void sendEEGTrialStartMarker(long now, int congruent, boolean fromLeft, Species species) {
+		/* EEG code */
+		// here we create a code of the form Txxx
+		// where xxx is the trial number 
+		// to be safe we handle the case more than 1000 trials
+		// by taking the remainder of the trial number by 1000
+		// and then making a number of the form 1xxx where xxx
+		// is the trial number modulo 1000
+		String trialString = Integer.toString(1000+(nextFish.trial % 1000 ));
+		String code = "T" + trialString.substring(1);
+		sendEEGMarker(now,code);
+		
+		switch (congruent) {
+		case 0: code = "CONG";break;
+		case 1: code = "INCO";break;
+		case 2: code = "CONT";break;
+		case 3: code = "AUDI";break;
+		default: code="ERRO";break;
+		}
+
+		sendEEGMarker(now+million,code);
+		
+		if (fromLeft)
+			code="DIRL";
+		else
+			code="DIRR";
+
+		sendEEGMarker(now+2*million,code);
+		
+		// Yile wants the frequency encoded here too
+		// but that is a little tricky as it depends on 
+		// if they are focused on audio or visual
+		// and if it is audio, then we only have a sound file
+		// and we don't actually have an integer frequency....
+		switch (species) {
+		case good: code="GOOD";break;
+		case bad: code="BAD "; break;
+		default: code="ERRO"; break;
+		}
+		now = System.nanoTime();
+		sendEEGMarker(now+3*million,code);		
 	}
 
 	private void playFishSound() {
@@ -601,6 +745,9 @@ public class GameModel {
 		nextFish.lastUpdate = now;
 
 		nextFishTime = now + interval * million;
+		
+		// this is the beginning of the trial so we can post some EEG markers
+		sendEEGTrialStartMarker(now,nextFish.congruent,nextFish.fromLeft,nextFish.species);
 	}
 
 	/*

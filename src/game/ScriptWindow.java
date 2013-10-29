@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -32,6 +35,8 @@ public class ScriptWindow extends JFrame {
 	ScriptWindow thisSW;
 	JButton openButton, pause;
 	JTextField scr, subId, expId;
+	JCheckBox eeg = new JCheckBox("EEG?");
+	//JLabel eegLabel = new JLabel("EEG?");
 
 	JFileChooser fc;
 
@@ -64,6 +69,19 @@ public class ScriptWindow extends JFrame {
 		JButton sdone = new JButton("Done");
 
 		fc = new JFileChooser(System.getProperty("user.dir") + "/scripts");
+		
+		eeg.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					gm.usingEEG = true;
+				}else {
+					gm.usingEEG=false;
+				}
+			}
+			
+		});
 
 		openButton = new JButton("Script File");
 		openButton.addActionListener(new ActionListener() {
@@ -152,20 +170,27 @@ public class ScriptWindow extends JFrame {
 		// we could also have moved all the labels and other info into here
 		// and not given them names at all!
 		scriptpanel = new JPanel();
-		scriptpanel.setLayout(new GridLayout(3, 1));
+		scriptpanel.setLayout(new GridLayout(5,2));
 
 		scriptpanel.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Main Control"));
+		
+		scriptpanel.add(this.eeg);
+		scriptpanel.add(openButton);
+
+		
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
-		scriptpanel.add(pause);
-		scriptpanel.add(openButton);
+		
+		scriptpanel.add(new JLabel(""));
 		scriptpanel.add(start);
-		// scriptpanel.add(restart);
-		// scriptpanel.add(stop);
+		
+		scriptpanel.add(pause);
+		scriptpanel.add(new JLabel(""));
+			
+		scriptpanel.add(new JLabel(""));
 		scriptpanel.add(sdone);
-		// scriptpanel.add(openButton);
-		// scriptpanel.add(new JLabel("Script File"));
+		
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
 	}

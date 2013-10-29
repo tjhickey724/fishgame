@@ -11,6 +11,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * species and they keep track of whether they are active or not.
  * This class contains public fields and an update method...
  * 
+ * This class should contain all the information about the fish which is
+ * need to draw the fish on the screen and control its audio clip
+ * 
  * @author tim
  * 
  */
@@ -20,12 +23,14 @@ public class Fish {
 	 */
 	public static long GAME_START = 0; // System.nanoTime();
 
+	// these make it easier to avoid errors converting among ms,ns, and sec
 	public static final double billionD = 1000000000.0;
-
 	public static final long millionL = 1000000L;
 
 
-	
+	/**
+	 * the default constructor for a fish
+	 */
 	public Fish() {
 		// create a new fish
 	}
@@ -38,8 +43,10 @@ public class Fish {
 	 * *************************************************************************
 	 */
 	/**
-	 * this is the inter-fish-interval 
+	 * this is the inter-fish-interval in milliseconds
 	 * i.e. the delay between the death of the last fish and the birth of this fish
+	 * the death of a fish, it the beginning of the trial,
+	 * so this is also the launch time relative the the beginning of the trial
 	 */
 	public long interval;
 
@@ -72,13 +79,7 @@ public class Fish {
 	 */
 	public boolean active;
 
-	public String toString() {
-		return "[" + x + "," + y + "," + vx + "," + vy + "," + active + ","
-				+ fromLeft + "," + congruent + "," + trial + "," + birthTime
-				+ "," + lastUpdate + ","  + lifeSpan + ","
 
-		;
-	}
 
 	/**
 	 * speed of the fish in model units per second (screen is 100x100 model units)
@@ -92,6 +93,7 @@ public class Fish {
 	
 	/**
 	 * true if the fish audio and video cues have the same oscillation frequency
+	 * 0=congruent,  1=incongruent, 2=noaudio, 3=novideo
 	 */
 	public int congruent;
 	
@@ -135,14 +137,30 @@ public class Fish {
 	 */
 	public Species species;
 
-	/** determines whether visual(0) or audio(1) specifies good or bad **/
+	/** 
+	 * determines whether visual(0) or audio(1) specifies good or bad 
+	 * 
+	 */
+	// REFACTOR
+	// this should be read from the GameSpec as it doesn't change from fish to fish...
+
 	public int avmode = 0;
 
 	
 
-	private java.util.Random rand = new java.util.Random();
+	public java.util.Random rand = new java.util.Random();
 
+	/**
+	 * print the public fields for the fish
+	 */
+	public String toString() {
+		return "fish[x=" + x + ",y=" + y + ",vx=" + vx + ",vy=" + vy + 
+				",active=" + active + ",fromLeft="
+				+ fromLeft + ",congruent=" + congruent + 
+				",trial=" + trial + ",birthtime=" + birthTime
+				+ ",lastUpdate=" + lastUpdate + ",lifeSpan="  + lifeSpan + "]";
 
+	}
 
 	/**
 	 * actors change their velocity slightly at every step but their speed
@@ -160,7 +178,7 @@ public class Fish {
 			this.lifeSpan = now - birthTime;
 			double dt = (now - this.lastUpdate) / billionD;
 
-
+			// this is the rate at which the y-velocity changes per frame
 			double turnspeed = 0.1;
 
 			vy += (rand.nextDouble() - 0.5) * turnspeed;

@@ -64,7 +64,7 @@ markers and data
 
 marker with trial index before a fish is launched
 T001 T002 T003 .... T999  for the key
-this should happen half way before the next fish is launched....
+this should happen when the new trial is started.
 
 Congruence marker is one of these
 CONT
@@ -84,8 +84,10 @@ When this fish is launched we need a marker
 GO__
 
 When they respond to a fish we need a marker
-KEYP
-KEYL
+KEYG   for a good fish press (currently P)
+KEYB   for a bad fish press (currently L)
+**** QUESTION --- what should we do for other key presses??????
+
 
 There will be a 200 ms delay in the feedback tone for EEG
 and we need a marker for the feedback tone
@@ -94,6 +96,16 @@ FPOS
 FNEG
 
 ===================================================================
+
+
+General Issues with using Games in Experiments
+1) Nondeterminism -- every time you run a game in which the user is interacting
+with the game, the game will run slightly differently. These differences can be
+controlled so they don't make much of a difference.
+
+For example, a fast reaction time will make the fish disappear sooner 
+and shorten the total length of the experiment. Also, if the game employs any randomness
+then that may make change some details of the run for each different subject.
 
 
 

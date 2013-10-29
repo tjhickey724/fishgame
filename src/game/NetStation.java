@@ -5,6 +5,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -20,9 +21,11 @@ import java.net.UnknownHostException;
 public class NetStation {
 	boolean nsrecording = false; // true if the machine is recording ...
 
-	static final boolean VERBOSE = true;
+	static boolean VERBOSE = true;
 
 	long startTime = System.nanoTime();
+	
+	private GameModel gm;
 
 	String host;
 	int port;
@@ -31,15 +34,15 @@ public class NetStation {
 	BufferedInputStream in;
 	BufferedOutputStream out;
 
-	static final String DEFAULT_HOST = "10.0.0.42";
-	static final int DEFAULT_PORT = 55513;
+	static final String DEFAULT_HOST =  "10.0.0.42";
+	static final int DEFAULT_PORT =  55513;
 	static final double DEFAULT_SYNCH_LIMIT = 2.5; // ms
 
 	/**
 	 * Create a NetStation proxy with the default host and port
 	 */
-	public NetStation() {
-		this(DEFAULT_HOST, DEFAULT_PORT);
+	public NetStation(GameModel gm) {
+		this(DEFAULT_HOST, DEFAULT_PORT,gm);
 	}
 
 	/**
@@ -50,9 +53,10 @@ public class NetStation {
 	 * @param port
 	 *            a port number
 	 */
-	public NetStation(String host, int port) {
+	public NetStation(String host, int port, GameModel gm) {
 		this.host = host;
 		this.port = port;
+		this.gm = gm;
 	}
 
 	/**
@@ -75,10 +79,20 @@ public class NetStation {
 		}
 
 		try {
-			log("open connection to " + host + "/" + port);
-			con = new Socket(host, port);
+			writeDebug("open connection to " + host + "/" + port);
+			//con = new Socket(host, port); 
+			con = new Socket();
+			con.connect(new InetSocketAddress(host, port), 5000);
+			if (con.isConnected()){
+				System.out.println("Connected to NetStation");
+			}else {
+				System.out.println("*****\n******\n*****\n*****");
+				System.out.println("NO CONNECTION TO NetStation");
+				System.out.println("*****\n******\n*****\n*****");
+			}
+			
 		} catch (UnknownHostException e) {
-			log("Error:unknow host:" + host + "/" + port);
+			writeDebug("Error:unknow host:" + host + "/" + port);
 			throw new NetStationError(con, "unknown host" + host + "/" + port
 					+ " e=" + e);
 		} catch (IOException e) {
@@ -88,7 +102,7 @@ public class NetStation {
 
 		// open the input stream to read from NetStation
 		try {
-			log("get input stream from NS");
+			writeDebug("get input stream from NS");
 			InputStream in_raw = con.getInputStream();
 			in = new BufferedInputStream(in_raw);
 		} catch (IOException e) {
@@ -98,7 +112,7 @@ public class NetStation {
 
 		// open the output stream to write to NetStation
 		try {
-			log("get output stream from NS");
+			writeDebug("get output stream from NS");
 			OutputStream out_raw = con.getOutputStream();
 			out = new BufferedOutputStream(out_raw);
 
@@ -111,7 +125,7 @@ public class NetStation {
 		byte[] buffer = new byte[100];
 		buffer = "QMAC-".getBytes();
 		try {
-			log("Send QMAC- to NS");
+			writeDebug("Send QMAC- to NS");
 			out.write(buffer, 0, 5);
 			out.flush();
 		} catch (IOException e) {
@@ -124,11 +138,11 @@ public class NetStation {
 		// read the result
 		try {
 			b = in.read(); // returns a number in range 0-255, should be 'I'
-			log("recv response from NetStation:" + (char) b);
+			writeDebug("recv response from NetStation:" + (char) b);
 			if (b == 'I') {
 				vers = in.read(); // return the version number
 			}
-			log("recv '" + vers + "' from NetStation");
+			writeDebug("recv '" + vers + "' from NetStation");
 		} catch (IOException e) {
 			throw new NetStationError(con,
 					"problem reading status from QMAC- message, e=" + e);
@@ -160,18 +174,18 @@ public class NetStation {
 			Thread.sleep(500L);
 			out.write('E');
 			out.flush();
-			log("Sent 'E' to NetStation");
+			writeDebug("Sent 'E' to NetStation");
 			int rep = in.read();
-			log("Recv '" + rep + "' from NetStation");
+			writeDebug("Recv '" + rep + "' from NetStation");
 			// just ignore this ...
 			nsrecording = false;
 		}
 		Thread.sleep(1000L);
 		out.write('X');
 		out.flush();
-		log("Sent 'X' to NetStation");
+		writeDebug("Sent 'X' to NetStation");
 		int rep = in.read();
-		log("Recv '" + rep + "' from NetStation");
+		writeDebug("Recv '" + rep + "' from NetStation");
 		Thread.sleep(500L);
 		con.close();
 		con = null;
@@ -212,17 +226,17 @@ public class NetStation {
 		while ((df > ns_synch_limit) && (n < 100)) {
 			out.write('A');
 			out.flush();
-			log("Sent 'A' to NetStation");
+			writeDebug("Sent 'A' to NetStation");
 			tmp = in.read();
-			log("Recv '" + tmp + "' from NetStation");
+			writeDebug("Recv '" + tmp + "' from NetStation");
 
 			int now_ms = getTime_ms();
-			log("now_ms= " + now_ms);
+			writeDebug("now_ms= " + now_ms);
 			byte[] b = int_to_big_endian4(now_ms);
 
 			out.write('T');
 			out.flush();
-			log("Sent 'T' to NetStation" + b[0] + "," + b[1] + "," + b[2] + ","
+			writeDebug("Sent 'T' to NetStation" + b[0] + "," + b[1] + "," + b[2] + ","
 					+ b[3]);
 			out.write(b[0]);
 			out.write(b[1]);
@@ -233,18 +247,18 @@ public class NetStation {
 			System.out.println("Sent '" + b[0] + " " + b[1] + " " + b[2] + " "
 					+ b[3] + " " + "' = " + now_ms + " to NetStation");
 			tmp = in.read();
-			log("Recv '" + tmp + "' from NetStation");
+			writeDebug("Recv '" + tmp + "' from NetStation");
 
 			double now2_sec = getTime_sec();
 			df = (now2_sec - now_ms / 1000.0) * 1000;
 			n += 1;
-			log("Trying to Synch." + " n=" + n + " df = " + df + " ms");
+			writeDebug("Trying to Synch." + " n=" + n + " df = " + df + " ms");
 		}
 		if (n >= 100) {
-			log("NetStation synchronization did not succeed!");
+			writeDebug("NetStation synchronization did not succeed!");
 			throw new NetStationError(con, "NetStation sychronization failure");
 		} else
-			log("NetStation synched ...");
+			writeDebug("NetStation synched ...");
 
 	}
 
@@ -260,9 +274,9 @@ public class NetStation {
 		if (!nsrecording) {
 			out.write('B');
 			out.flush();
-			log("Send 'B' to NetStation");
+			writeDebug("Send 'B' to NetStation");
 			tmp = in.read();
-			log("Recv '" + tmp + "' from NetStation");
+			writeDebug("Recv '" + tmp + "' from NetStation");
 			nsrecording = true;
 		}
 
@@ -279,9 +293,9 @@ public class NetStation {
 		if (nsrecording) {
 			out.write('E');
 			out.flush();
-			log("Send 'E' to NetStation");
+			writeDebug("Send 'E' to NetStation");
 			tmp = in.read();
-			log("Recv '" + tmp + "' from NetStation");
+			writeDebug("Recv '" + tmp + "' from NetStation");
 		}
 
 	}
@@ -361,6 +375,10 @@ public class NetStation {
 	 */
 	public void eventNS(String code, int startMS, int durationMS,
 			String[] keyCodes, int[] keyValues) throws IOException {
+		
+
+		
+
 
 		int keyvaluepairs = keyCodes.length;
 		int numBytes = 15 + keyvaluepairs * 12;
@@ -368,8 +386,13 @@ public class NetStation {
 		if (durationMS > 120000) {
 			durationMS = 1;
 		}
-		log("sending an event:" + code + " " + numBytes + " " + startMS + " "
+		writeDebug("sendEEGMarker:" + code + " " + numBytes + " " + startMS + " "
 				+ durationMS + " " + keyvaluepairs);
+		gm.writeToLog(System.nanoTime(),"EEGmarker: "+code + " " + numBytes + " " + startMS + " "
+				+ durationMS + " " + keyvaluepairs);
+
+		// if we aren't recording then we just ignore these events..
+		if (!nsrecording)  return;
 
 		// first we write out 3+15 bytes specifying the event and the
 		// number of keys to come!
@@ -387,7 +410,7 @@ public class NetStation {
 		for (int i = 0; i < keyvaluepairs; i++) {
 			String keyCode = keyCodes[i];
 			int keyValue = keyValues[i];
-			log("sending key/value pairs " + keyCode + "/" + keyValue);
+			writeDebug("sending key/value pairs " + keyCode + "/" + keyValue);
 
 			// now we write out 12 bytes for the key/value pair
 			out.write(string_to_bytes4(keyCode).getBytes()); // 4 byte key code
@@ -398,6 +421,7 @@ public class NetStation {
 			out.flush();
 		}
 		int b = in.read();
+		writeDebug("just read a byte:"+b);
 
 	}
 
@@ -468,9 +492,9 @@ public class NetStation {
 		return b;
 	}
 
-	private static void log(String s) {
+	private static void writeDebug(String s) {
 		if (VERBOSE)
-			System.out.println(s);
+			System.out.println("NetStationDebug: "+s);
 	}
 
 	/**
@@ -486,7 +510,7 @@ public class NetStation {
 
 	static void demo1() {
 		try {
-			NetStation ns = new NetStation();
+			NetStation ns = new NetStation(new GameModel(null));
 			ns.connectNS();
 			Thread.sleep(1000L);
 			ns.synchronizeNS();
@@ -506,7 +530,7 @@ public class NetStation {
 			// ns.out.write(ns.string_to_bytes4("\n").getBytes());
 			ns.out.flush();
 		} catch (Exception e) {
-			log("demo1 threw an exception: " + e);
+			writeDebug("demo1 threw an exception: " + e);
 		}
 	}
 

@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.event.KeyEvent;
+
 /**
  * This class records game events which can be logged The events of interest are
  * generally keypresses after a fish is released, but sometimes there will be no
@@ -108,10 +110,10 @@ public class GameEvent {
 	 * @param keyPressed
 	 * @param fish
 	 */
-	public GameEvent(char keyPressed, Fish fish) {
+	public GameEvent(KeyEvent e, Fish fish) {
 		this.eventType = "hitfish   ";
-		this.when = System.nanoTime();
-		this.keyPressed = keyPressed;
+		this.when = e.getWhen()*1000000; // this.when is System time in nanosecs
+		this.keyPressed = e.getKeyChar();
 		this.fish = fish;
 		this.species = fish.species;
 

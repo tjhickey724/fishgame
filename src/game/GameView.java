@@ -77,7 +77,6 @@ public class GameView extends JPanel {
 		super();
 		this.gm = gm;
 		this.updateGameState(gm.gameSpec);
-
 		this.requestFocus();
 
 		KeyAdapter kl = new KeyAdapter() {
@@ -97,8 +96,8 @@ public class GameView extends JPanel {
 				// when there are no fish!!
 				if (gm.getNumFish() == 0) {
 					long keyPressTime = e.getWhen() * 1000000L;
-					gm.writeToLog(keyPressTime, new GameEvent(e.getKeyChar()));
-					badclip.play();
+					
+					badclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
 					return;
 				}
 
@@ -109,9 +108,9 @@ public class GameView extends JPanel {
 				boolean correctResponse = gm.handleKeyPress(e);
 
 				if (correctResponse) {
-					goodclip.play();
+					goodclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
 				} else {
-					badclip.play();
+					badclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
 				}
 
 			}
@@ -132,8 +131,12 @@ public class GameView extends JPanel {
 		}
 
 		goodclip = new AudioClip(gs.goodResponseSound);
+		goodclip.gm = this.gm;
+		goodclip.codeForEEG = "FPOS";
 
 		badclip = new AudioClip(gs.badResponseSound);
+		badclip.gm = this.gm;
+		badclip.codeForEEG = "FNEG";
 
 		// here we read in the background image which tiles the scene
 		try {

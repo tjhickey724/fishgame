@@ -11,14 +11,23 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * this class is for playing small Audio Clips you can start, stop, and loop
  * clips
  */
-public class AudioClip {
+public class AudioClip extends TimerTask {
 	public Clip clip;
 	public String filename;
+	public GameModel gm = null;
+	/**
+	 * the 4 char code to be sent to the NetStation in EEG mode
+	 * when this clip is played
+	 */
+	public String codeForEEG=""; 
+
 
 	/**
 	 * create an AudioClip based on the filename
@@ -28,6 +37,13 @@ public class AudioClip {
 	public AudioClip(String audiof) {
 		filename = audiof;
 	}
+	
+	public AudioClip(String audiof, GameModel gm){
+		filename = audiof;
+		this.gm=gm;
+		
+	}
+	
 
 	/**
 	 * play the audio clip
@@ -46,7 +62,14 @@ public class AudioClip {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		gm.writeToLog(System.nanoTime(), "playFeedback: "+this.filename);
 		clip.start();
+
+		if (this.codeForEEG != ""){
+			gm.sendEEGMarker(System.nanoTime(), this.codeForEEG);
+		}
+
 
 		clip.addLineListener(new LineListener() {
 
@@ -59,6 +82,7 @@ public class AudioClip {
 			}
 		});
 	}
+	
 
 	public void loop() {
 		// play the sound clip
@@ -107,5 +131,22 @@ public class AudioClip {
 		DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
 		clip = (Clip) AudioSystem.getLine(info);
 		clip.open(sound);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		this.play();
+		
+	}
+	
+	
+	
+	public void playDelayed(NetStation ns, long delay){
+		Timer theTimer = new Timer();
+		AudioClip newSound = new AudioClip(this.filename,gm);
+		theTimer.schedule(newSound, delay);
+
+
 	}
 }

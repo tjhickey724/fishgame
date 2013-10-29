@@ -23,6 +23,13 @@ public class GameSpec {
 	public boolean requireGameViewUpdate = true;
 
 	public boolean stereo = true;
+	
+	/** 
+	 * delay inserted before playing clips, in milliseconds
+	 * This is used in the EEG mode so that the EEG signal for events
+	 * is not confounded by the brain's response to a sound....
+	 */
+	public long audioDelay = 200;
 
 	/**
 	 * this represents the type of experiment being run, whether the correct
