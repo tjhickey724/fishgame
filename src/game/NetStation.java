@@ -35,7 +35,7 @@ public class NetStation {
 	BufferedOutputStream out;
 
 	static final String DEFAULT_HOST =  "10.0.0.42";
-	static final int DEFAULT_PORT =  55513;
+	static final int DEFAULT_PORT =   55513;
 	static final double DEFAULT_SYNCH_LIMIT = 2.5; // ms
 
 	/**
