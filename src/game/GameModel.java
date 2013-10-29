@@ -318,10 +318,13 @@ public class GameModel {
 		if (!this.usingEEG)
 			return;
 		
-		System.out.println("stopEEG");
+		
 		
 		// turn off EEG recording....
+		/*
 		try {
+			// we are not stopping the recording
+			// or disconnecting at this point
 			EEG.stopRecordingNS();
 			EEG.disconnectNS();
 		} catch (IOException e) {
@@ -331,6 +334,7 @@ public class GameModel {
 			e.printStackTrace();
 			System.out.println("Error trying to stop EEG recording "+e);
 		}
+		*/
 
 	}
 
