@@ -37,6 +37,7 @@ public class ScriptWindow extends JFrame {
 	JTextField scr, subId, expId;
 	JCheckBox eeg = new JCheckBox("EEG?");
 	//JLabel eegLabel = new JLabel("EEG?");
+	JFrame theWindow;
 
 	JFileChooser fc;
 
@@ -116,6 +117,9 @@ public class ScriptWindow extends JFrame {
 		sdone.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (gm.usingEEG){
+					JOptionPane.showMessageDialog(theWindow, "Please save the EEG data, then press OK");
+				}
 				gm.stop();
 				thisSW.setVisible(false);
 				sw.setVisible(false);
@@ -193,6 +197,8 @@ public class ScriptWindow extends JFrame {
 		
 		scriptpanel.setBackground(Color.gray);
 		this.add(scriptpanel);
+		
+		this.theWindow = this;
 	}
 
 }
