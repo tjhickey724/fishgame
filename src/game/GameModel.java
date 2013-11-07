@@ -637,8 +637,15 @@ public class GameModel {
 
 	private void playFishSound() {
 		// this gives the location of the soundfile
-		String clip = ((nextFish.congruent == 0) && (nextFish.species == Species.good)) ? gameSpec.good.soundFile
+		String clip = ((nextFish.congruent == 0) == (nextFish.species == Species.good)) 
+				? gameSpec.good.soundFile
 				: gameSpec.bad.soundFile;
+		System.out.println("goodfile="+gameSpec.good.soundFile);
+		System.out.println("badfile="+gameSpec.bad.soundFile);
+		
+		System.out.println("congruent="+nextFish.congruent);
+		System.out.println("species="+nextFish.species);
+		System.out.println("clip="+clip);
 
 		// set the appropriate AudioClip
 		if (!gameSpec.stereo)
