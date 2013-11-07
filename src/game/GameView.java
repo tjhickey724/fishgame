@@ -329,9 +329,11 @@ public class GameView extends JPanel {
 			y_offset = 0;
 			if (gm.getNumFish() > 0) {
 				gm.removeLastFish();
-				this.bgSound.stop();
 			}
 
+		}
+		if (gm.isGameOver()){
+			this.bgSound.stop();
 		}
 
 		// draw image on screen tiled

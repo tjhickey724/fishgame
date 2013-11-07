@@ -371,6 +371,7 @@ public class GameModel {
 	 * @param a
 	 */
 	public void keepOnBoard(Fish a) {
+		double tmpY = a.y;
 		if (a.x < 0) {
 			a.x = 0;
 			a.vx = -a.vx;
@@ -378,13 +379,16 @@ public class GameModel {
 			a.x = WIDTH;
 			a.vx = -a.vx;
 		}
-		if (a.y < 0) {
-			a.y = -a.y;
-			a.vy = -a.vy;
-		} else if (a.y > HEIGHT) {
-			a.y = HEIGHT - (a.y - HEIGHT);
-			a.vy = -a.vy;
+		// here we keep the fish from dropping too low in the frame
+		if (a.y < 0.2*HEIGHT) {
+			a.y = 0.2*HEIGHT;
+			a.vy = Math.abs(a.vy);
+		// we also keep it from getting too high..
+		} else if (a.y > 0.6*HEIGHT) {
+			a.y = 0.6*HEIGHT;
+			a.vy = -Math.abs(a.vy);
 		}
+		//System.out.println("@@@ "+tmpY+"-->"+a.y+"..."+a.vy);
 	}
 
 	/**
