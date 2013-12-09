@@ -152,7 +152,7 @@ public class GameView extends JPanel {
 
 			fish = ImageIO.read(new File("images/fish/fish.png"));
 			coin = ImageIO.read(new File("images/wealth.png"));
-			fixationMark=ImageIO.read(new File("images/FixationMark.png"));
+			fixationMark=ImageIO.read(new File("images/FixationMark3.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
 			hasAvatar = gs.hasAvatar;
@@ -210,13 +210,14 @@ public class GameView extends JPanel {
 			int hits = gm.getHits();
 			int misses = gm.getMisses();
 			int nokey = gm.getNoKeyPress();
+			int total=hits-misses-nokey;
 			g.setFont(new Font("Helvetica", Font.BOLD, 50));
 			g.drawString("GAME OVER", 100, 100);
 			g.setFont(new Font("Helvetica", Font.BOLD, 25));
 			g.drawString("Right: " + gm.getHits(), 100, 130);
 			g.drawString("Wrong: " + gm.getMisses(), 100, 160);
 			g.drawString("Missed: " + gm.getNoKeyPress(), 100, 190);
-			g.drawString("Total: " + hits + misses + nokey, 100, 210);
+			g.drawString("Total: " + total, 100, 210);
 			return;
 		}
 
@@ -245,8 +246,8 @@ public class GameView extends JPanel {
 	
 	private void drawFixationMark(Graphics g){
 		int x = (this.getWidth()- fixationMark.getWidth())/2;
-		int y = (this.getHeight())/2-fixationMark.getHeight();
-		g.drawImage(fixationMark, x, y, fixationMark.getWidth(), fixationMark.getHeight(), null);
+		int y = (this.getHeight()-fixationMark.getHeight())/2;
+		g.drawImage(fixationMark, x, y, fixationMark.getWidth()/4, fixationMark.getHeight()/4, null);
 	}
 
 	private void drawIndicator(Graphics g) {
