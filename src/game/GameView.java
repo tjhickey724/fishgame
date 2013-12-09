@@ -55,7 +55,7 @@ public class GameView extends JPanel {
 
 	public boolean gameActive = false; // shouldn't this be in the model???
 
-	public BufferedImage streamImage, streamImage2, fish, boat, coin;
+	public BufferedImage streamImage, streamImage2, fish, boat, coin,fixationMark;
 
 	// these arrays store the sprite images used to adjust brightness. the
 	// default brightness is in image, 12, accesible using fishL[12] or
@@ -152,6 +152,7 @@ public class GameView extends JPanel {
 
 			fish = ImageIO.read(new File("images/fish/fish.png"));
 			coin = ImageIO.read(new File("images/wealth.png"));
+			fixationMark=ImageIO.read(new File("images/FixationMark.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
 			hasAvatar = gs.hasAvatar;
@@ -234,6 +235,7 @@ public class GameView extends JPanel {
 		drawSoundIndicator(g);
 
 		updateScore(g);
+		drawFixationMark(g);
 		if (gm.usingEEG){
 			drawFixationMark(g);	
 		}
@@ -242,7 +244,9 @@ public class GameView extends JPanel {
 	}
 	
 	private void drawFixationMark(Graphics g){
-		
+		int x = (this.getWidth()- fixationMark.getWidth())/2;
+		int y = (this.getHeight())/2-fixationMark.getHeight();
+		g.drawImage(fixationMark, x, y, fixationMark.getWidth(), fixationMark.getHeight(), null);
 	}
 
 	private void drawIndicator(Graphics g) {
