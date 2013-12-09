@@ -655,6 +655,10 @@ public class GameModel {
 		else
 			nextFish.ct = new AudioClip(clip + "/fishR.wav");
 
+		/*
+		 * 
+		 */
+		
 		// if fish is not silent play sound
 		if (nextFish.congruent != 2 && gameSpec.avmode != 1) {
 			nextFish.ct.loop();
@@ -665,6 +669,22 @@ public class GameModel {
 			soundflash = true;
 			soundIndicatorUpdate = System.nanoTime() + 50000000l;
 		}
+		/*
+		// if fish is not silent play sound
+		if (nextFish.congruent != 2 && gameSpec.avmode != 1) {
+			nextFish.ct.loop();
+			soundflash = true;
+			soundIndicatorUpdate = System.nanoTime() + 50000000l;
+		} else if (gameSpec.avmode == 1) {
+			nextFish.ct.loop();
+			soundflash = true;
+			soundIndicatorUpdate = System.nanoTime() + 50000000l;
+		}
+		*/
+		
+		
+		
+		
 	}
 
 	/**
@@ -732,6 +752,11 @@ public class GameModel {
 		// redundant...
 		String sound = scan.next();
 		int visualhz = scan.nextInt();
+		/*
+		if (visualhz != .visualhz) {
+			
+		}
+		*/
 		int congruent = scan.nextInt();
 		int trialnum = scan.nextInt();
 		String fromLeft = scan.next();

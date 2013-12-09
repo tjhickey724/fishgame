@@ -234,7 +234,15 @@ public class GameView extends JPanel {
 		drawSoundIndicator(g);
 
 		updateScore(g);
+		if (gm.usingEEG){
+			drawFixationMark(g);	
+		}
 
+
+	}
+	
+	private void drawFixationMark(Graphics g){
+		
 	}
 
 	private void drawIndicator(Graphics g) {
