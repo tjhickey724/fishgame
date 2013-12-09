@@ -245,8 +245,8 @@ public class GameView extends JPanel {
 	}
 	
 	private void drawFixationMark(Graphics g){
-		int x = (this.getWidth()- fixationMark.getWidth())/2;
-		int y = (this.getHeight()-fixationMark.getHeight())/2;
+		int x = (this.getWidth()- fixationMark.getWidth()/4)/2;
+		int y = (this.getHeight()-fixationMark.getHeight()/4)/2;
 		g.drawImage(fixationMark, x, y, fixationMark.getWidth()/4, fixationMark.getHeight()/4, null);
 	}
 
