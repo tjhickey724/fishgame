@@ -22,6 +22,7 @@ public class NetStation {
 	boolean nsrecording = false; // true if the machine is recording ...
 
 	static boolean VERBOSE = true;
+	static final boolean DEBUGGING = true;
 
 	long startTime = System.nanoTime();
 	
@@ -73,6 +74,7 @@ public class NetStation {
 	 */
 	public void connectNS() throws NetStationError, InterruptedException,
 			IOException {
+		if (DEBUGGING) return;
 
 		if (con != null) {
 			this.disconnectNS();
@@ -169,7 +171,8 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void disconnectNS() throws InterruptedException, IOException {
-
+		if (DEBUGGING) return;
+		
 		if (nsrecording) {
 			Thread.sleep(500L);
 			out.write('E');
@@ -218,6 +221,8 @@ public class NetStation {
 	 * @throws NetStationError
 	 */
 	public void synchronizeNS() throws IOException, NetStationError {
+		if (DEBUGGING) return;
+		
 		double ns_synch_limit = DEFAULT_SYNCH_LIMIT;
 		double df = 10000;
 		int n = 0;
@@ -269,6 +274,8 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void startRecordingNS() throws IOException {
+		if (DEBUGGING) return;
+		
 		int tmp;
 
 		if (!nsrecording) {
@@ -288,6 +295,8 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void stopRecordingNS() throws IOException {
+		if (DEBUGGING) return;
+		
 		int tmp;
 
 		if (nsrecording) {
@@ -310,6 +319,8 @@ public class NetStation {
 	 */
 	public void eventNS0(String code, int startMS, int durationMS)
 			throws IOException {
+		if (DEBUGGING) return;
+		
 		String[] keyCodes = new String[0];
 		int[] keyValues = new int[0];
 		eventNS(code, startMS, durationMS, keyCodes, keyValues);
@@ -327,6 +338,8 @@ public class NetStation {
 	 */
 	public void eventNS1(String code, int startMS, int durationMS, String key,
 			int value) throws IOException {
+		if (DEBUGGING) return;
+		
 		String[] keyCodes = new String[1];
 		int[] keyValues = new int[1];
 		keyCodes[0] = key;
@@ -348,6 +361,8 @@ public class NetStation {
 	 */
 	public void eventNS2(String code, int startMS, int durationMS, String key1,
 			int value1, String key2, int value2) throws IOException {
+		if (DEBUGGING) return;
+		
 		String[] keyCodes = new String[2];
 		int[] keyValues = new int[2];
 		keyCodes[0] = key1;
@@ -375,6 +390,8 @@ public class NetStation {
 	 */
 	public void eventNS(String code, int startMS, int durationMS,
 			String[] keyCodes, int[] keyValues) throws IOException {
+		if (DEBUGGING) return;
+		
 		
 
 		

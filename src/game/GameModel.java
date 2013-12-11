@@ -61,6 +61,12 @@ public class GameModel {
 	 */
 	public NetStation EEG = new NetStation(this);
 	public boolean usingEEG = false;
+	public boolean firstBlankScreen = false;
+	public boolean secondBlankScreen = false;
+	private long blankScreenTimeout = 0L;
+	private static long BLANK_SCREEN_DELAY = 3;  // in seconds 
+	
+	
 
 	/**
 	 * the SIZE of the GameBoard is 100x100 in model units when it is drawn to a
@@ -112,7 +118,10 @@ public class GameModel {
 	 * @return
 	 */
 	public void removeLastFish() {
-		currentFish.ct.stop();
+		System.out.println("currentFish = "+currentFish);
+		if (currentFish != null){ // DEBUG - FIND OUT WHY THIS HAPPENS!!!
+			currentFish.ct.stop();
+		}
 		currentFish = null;
 	}
 
@@ -247,20 +256,28 @@ public class GameModel {
 		this.nextFishTime = System.nanoTime();
 		this.gameStart = nextFishTime;
 		Fish.GAME_START = this.gameStart;
+		long delay = 0;  
+		long now = System.nanoTime();
 		
-		initEEG();
-		
+		if (this.usingEEG){
+			writeToLog(now,"FirstBlankScreen");
+			initEEG();
+			delay = BLANK_SCREEN_DELAY*billion;
+			this.firstBlankScreen = true;
+			this.blankScreenTimeout = now + delay; // 3 minutes from now ...
+		}
 
 
 		// I think we need to send a "new trial" marker to the EEG
 		// and update the time in the call to createNextFish accordingly...
-		createNextFish(System.nanoTime());
+		createNextFish(System.nanoTime()+delay);
 
 	}
 
 	private void initEEG() {
 		System.out.println("initEEG");
-		if (usingEEG) {
+
+
 			try {
 				this.EEG.connectNS();
 				this.EEG.startTime = this.gameStart;
@@ -280,7 +297,7 @@ public class GameModel {
 				System.out.println("Error in Netstation init:"+e);
 			}
 			
-		}
+
 	}
 
 	/**
@@ -289,16 +306,32 @@ public class GameModel {
 	 * REFACTOR: make sure the input script is closed too!
 	 */
 	public void stop() {
-		this.paused = true;
-		this.gameOver = true;
 		this.scan = null;
-		this.setPaused(true);
-		this.setGameOver(true);
+		
+
 		if (currentFish != null) {
 			currentFish.ct.stop();
 		}
 		currentFish = null;
 
+
+		long now = System.nanoTime();
+		long delay = 0;
+		
+		if (usingEEG){
+			this.secondBlankScreen = true;
+			this.blankScreenTimeout = now + BLANK_SCREEN_DELAY*billion;
+			this.writeToLog(now,"SecondBlankScreen");
+		} else {
+			this.paused = true;
+			this.gameOver = true;
+		}
+
+		
+
+	}
+
+	private void closeLogfile() {
 		try {
 			if (logfile != null)
 				logfile.close();
@@ -307,11 +340,9 @@ public class GameModel {
 		} catch (Exception e) {
 			System.out.println("Problem closing logfile");
 		}
-		
-		stopEEG();
-		
-
 	}
+	
+	
 
 	private void stopEEG() {
 
@@ -455,6 +486,9 @@ public class GameModel {
 	}
 
 	/**
+	 * There are two modes, depending on whether we are showing a blank screen or not.
+	 * For a blankscreen, we do nothing except check to see if the blankscreen timeout
+	 * has occurred, if so then we set this.blankScreen to false, and return in all cases.
 	 * update moves all actors one step check to see if a fish has become
 	 * inactive if so, remove it and create a new fish (but don't launch right
 	 * away!)
@@ -462,8 +496,35 @@ public class GameModel {
 	public synchronized void update() {
 		long now = System.nanoTime();
 
-		if (isPaused() || isGameOver())
+
+		/*
+		 * if you are in EEG mode, then the session starts and ends with
+		 * a blank screen, and the next two if statements handle those
+		 * cases ... If you are not in EEG mode, these boolean variables
+		 * will always be false.
+		 */
+		if (this.firstBlankScreen){
+			if (now > this.blankScreenTimeout){
+				this.firstBlankScreen = false;
+			}else
+				return;
+		}
+		
+		if (this.secondBlankScreen){
+			if (now > this.blankScreenTimeout){
+				System.out.println("ending the 2nd blank screen");
+				this.secondBlankScreen=false;
+				this.paused=true;
+				this.gameOver = true;	
+				stopEEG();
+			} else return;
+	
+		}
+		
+		if (isPaused() || isGameOver()){
+			closeLogfile();
 			return;
+		}
 
 		// these variables are used by the GameView class
 		// REFACTOR: be careful about synchronization of these variables
@@ -734,7 +795,7 @@ public class GameModel {
 		// calculate the next FishTime and the basic characteristics of the
 		// nextFish (species and side)
 		if (interval == 0) {
-			setGameOver(true);
+			stop();
 			return;
 		}
 
@@ -806,7 +867,6 @@ public class GameModel {
 		writeToLog(now, "0\t" + prop + "\t" + value);
 		if (prop.equals("gameover")) {
 			this.stop();
-			this.setGameOver(true);
 			this.nextFishTime = now + 10 * 1000000000L;
 			return 0;
 		}

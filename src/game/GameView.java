@@ -200,6 +200,11 @@ public class GameView extends JPanel {
 		super.paintComponent(g);
 		if (gm == null)
 			return; // this shouldn't ever happen!
+		
+		if (gm.firstBlankScreen || gm.secondBlankScreen){
+			drawBlankScreen(g);
+			return;
+		}
 
 		if (gm.gameSpec.requireGameViewUpdate) {
 			// if the gameSpec changes, need to update gameState
@@ -341,6 +346,13 @@ public class GameView extends JPanel {
 		// if (f!= null) System.out.println("drew fish: "+f);
 	}
 
+	private void drawBlankScreen(Graphics g) {
+		int width = this.getWidth();
+		int height = this.getHeight();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, width, height);	
+	}
+	
 	private void drawBackground(Graphics g) {
 		int width = this.getWidth();
 		int height = this.getHeight();
