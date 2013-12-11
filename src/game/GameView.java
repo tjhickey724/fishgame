@@ -45,7 +45,7 @@ public class GameView extends JPanel {
 	boolean hasAvatar = true;
 	boolean flash = false;
 	boolean soundflash = false;
-
+    boolean blank=true;
 	public AudioClip bgSound;
 	String lastbgSound;
 
@@ -55,7 +55,7 @@ public class GameView extends JPanel {
 
 	public boolean gameActive = false; // shouldn't this be in the model???
 
-	public BufferedImage streamImage, streamImage2, fish, boat, coin,fixationMark;
+	public BufferedImage streamImage, streamImage2, fish, boat, coin,fixationMark,bubble;
 
 	// these arrays store the sprite images used to adjust brightness. the
 	// default brightness is in image, 12, accesible using fishL[12] or
@@ -153,6 +153,7 @@ public class GameView extends JPanel {
 			fish = ImageIO.read(new File("images/fish/fish.png"));
 			coin = ImageIO.read(new File("images/wealth.png"));
 			fixationMark=ImageIO.read(new File("images/FixationMark3.png"));
+			bubble=ImageIO.read(new File("images/bubble2.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
 			hasAvatar = gs.hasAvatar;
@@ -220,8 +221,11 @@ public class GameView extends JPanel {
 			g.drawString("Total: " + total, 100, 210);
 			return;
 		}
-
 		drawBackground(g);
+		if (gm.usingEEG){
+			
+			drawFixationMark(g);	
+		}
 
 		drawTimeBar(g);
 
@@ -236,11 +240,9 @@ public class GameView extends JPanel {
 		drawSoundIndicator(g);
 
 		updateScore(g);
-		drawFixationMark(g);
-		if (gm.usingEEG){
-			drawFixationMark(g);	
-		}
-
+		
+		
+        
 
 	}
 	
@@ -248,6 +250,11 @@ public class GameView extends JPanel {
 		int x = (this.getWidth()- fixationMark.getWidth()/4)/2;
 		int y = (this.getHeight()-fixationMark.getHeight()/4)/2;
 		g.drawImage(fixationMark, x, y, fixationMark.getWidth()/4, fixationMark.getHeight()/4, null);
+	}
+	private void drowbubble(Graphics g){
+		int x = (this.getWidth()- bubble.getWidth()/4)/2;
+		int y = (this.getHeight()-bubble.getHeight()/4)/2;
+		g.drawImage(bubble, x, y, bubble.getWidth(), bubble.getHeight(), null);
 	}
 
 	private void drawIndicator(Graphics g) {
@@ -302,7 +309,13 @@ public class GameView extends JPanel {
 		g.drawImage(coin, 2, 20, 50, 50, null);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Helvetica", Font.BOLD, 50));
-		g.drawString(gm.wealth + "", 55, 65);
+		int hits = gm.getHits();
+		int misses = gm.getMisses();
+		int nokey = gm.getNoKeyPress();
+		int total=hits-misses-nokey;
+		//g.drawString(gm.wealth + "", 55, 65);
+		g.drawString(total + "", 55, 65);
+		
 	}
 
 	// method to draw the boat avatar

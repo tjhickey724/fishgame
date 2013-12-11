@@ -5,6 +5,7 @@ package game;
 
 import java.awt.Checkbox;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,13 +46,15 @@ public class GenerateWindow extends JFrame {
 			minBrightnessTF = new JTextField("0"),
 			numCongruent = new JTextField("10"),
 			numInCongruent = new JTextField("10"),
-			numMissingStimulus = new JTextField("10");
-
+			numNeutral = new JTextField("10"),
+	        numConstatntVisual=new JTextField("10");
+	Font font1 = new Font("SansSerif", Font.BOLD, 10);
+	
 	JComboBox soundtype, vol, tiedto;
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-
+	JTextField nonMoudlatedVisual = new JTextField("0");
 	Checkbox hasAvatar = new Checkbox();
 
 	JTextField minSizeTF = new JTextField("100");
@@ -60,14 +63,16 @@ public class GenerateWindow extends JFrame {
 
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
+	JButton nonMoudlated=new JButton("sounds/...");
 	JButton imageSelect = new JButton("Open");
 
 	ScriptGenerator sgen = new ScriptGenerator();
 
 	JFileChooser fc;
-
+  
 	public GenerateWindow() {
 		super("Generate Window");
+		
 		setLayout(new GridLayout(4, 1));
 		setSize(300, 800);
 
@@ -112,7 +117,7 @@ public class GenerateWindow extends JFrame {
 				gs.interval = interval;
 				gs.numCon = Integer.parseInt(numCongruent.getText());
 				gs.numIncon = Integer.parseInt(numInCongruent.getText());
-				gs.numMissing = Integer.parseInt(numMissingStimulus.getText());
+				gs.numMissing = Integer.parseInt(numNeutral.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
 				gs.bad.update("soundFile", badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
@@ -185,7 +190,18 @@ public class GenerateWindow extends JFrame {
 				}
 			}
 		});
+		nonMoudlated.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
+				// Handle open button action.
+				int returnVal = fc.showOpenDialog(GenerateWindow.this);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File nonmodulatedsound = fc.getSelectedFile();
+					badSoundTF.setText("sounds/" + nonmodulatedsound.getName());
+				}
+			}
+		});
 		imageSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -200,7 +216,7 @@ public class GenerateWindow extends JFrame {
 		});
 
 		matrix1 = new JPanel();
-		matrix1.setLayout(new GridLayout(3, 3));
+		matrix1.setLayout(new GridLayout(4, 3));
 		matrix2 = new JPanel();
 		matrix2.setLayout(new GridLayout(6, 2));
 
@@ -219,6 +235,10 @@ public class GenerateWindow extends JFrame {
 		matrix1.add(new JLabel("Bad"));
 		matrix1.add(this.badSoundTF);
 		matrix1.add(this.badVisualHzTF);
+		matrix1.add(new JLabel("Neutral"));
+		matrix1.add(this.nonMoudlated);
+		matrix1.add(nonMoudlatedVisual);
+		
 		// col2.add(gs);
 		// col2.add(bs);
 
@@ -255,9 +275,9 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(numCongruent);
 		matrix3.add(new JLabel("NumIncongruent"));
 		matrix3.add(this.numInCongruent);
-		matrix3.add(new JLabel("NumMissing"));
-		matrix3.add(this.numMissingStimulus);
-
+		matrix3.add(new JLabel("Num Neutral"));
+		matrix3.add(this.numNeutral);
+       
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);
 
@@ -270,4 +290,5 @@ public class GenerateWindow extends JFrame {
 		add(matrix2);
 		add(jscrollpane);
 	}
+	
 }
