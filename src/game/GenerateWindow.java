@@ -54,7 +54,7 @@ public class GenerateWindow extends JFrame {
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
-	JTextField nonMoudlatedVisual = new JTextField("0");
+	JTextField nonModulatedVisual = new JTextField("0");
 	Checkbox hasAvatar = new Checkbox();
 
 	JTextField minSizeTF = new JTextField("100");
@@ -63,7 +63,7 @@ public class GenerateWindow extends JFrame {
 
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
-	JButton nonMoudlated=new JButton("sounds/...");
+	JButton nonModulatedSound=new JButton("sounds/...");
 	JButton imageSelect = new JButton("Open");
 
 	ScriptGenerator sgen = new ScriptGenerator();
@@ -120,6 +120,7 @@ public class GenerateWindow extends JFrame {
 				gs.numNeutral = Integer.parseInt(numNeutral.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
 				gs.bad.update("soundFile", badSoundTF.getText());
+				gs.update("nonModulatedSound",nonModulatedSound.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()
 						.equals("Stereo"));
 				gs.good.throbRate = (int) Integer.parseInt(goodVisualHzTF
@@ -190,7 +191,7 @@ public class GenerateWindow extends JFrame {
 				}
 			}
 		});
-		nonMoudlated.addActionListener(new ActionListener() {
+		nonModulatedSound.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// Handle open button action.
@@ -198,7 +199,7 @@ public class GenerateWindow extends JFrame {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File nonmodulatedsound = fc.getSelectedFile();
-					badSoundTF.setText("sounds/" + nonmodulatedsound.getName());
+					nonModulatedSound.setText("sounds/" + nonmodulatedsound.getName());
 				}
 			}
 		});
@@ -236,8 +237,8 @@ public class GenerateWindow extends JFrame {
 		matrix1.add(this.badSoundTF);
 		matrix1.add(this.badVisualHzTF);
 		matrix1.add(new JLabel("Neutral"));
-		matrix1.add(this.nonMoudlated);
-		matrix1.add(nonMoudlatedVisual);
+		matrix1.add(this.nonModulatedSound);
+		matrix1.add(nonModulatedVisual);
 		
 		// col2.add(gs);
 		// col2.add(bs);

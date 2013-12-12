@@ -39,7 +39,9 @@ public class Trial {
 	 * @param visualHz
 	 *            the throb rate
 	 * @param congruent
-	 *            true if the sound hertz matches the visual hertz
+	 *            0 if visual/audio are congruent
+	 *            1 if they are incongruent
+	 *            2 if the not-attended-to sense is non-modulated (depends on avmode)
 	 * @param fromLeft
 	 *            true if fish comes from the left
 	 * @param spec

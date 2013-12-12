@@ -74,7 +74,7 @@ public class ScriptGenerator {
 			}
 
 			scriptFile.write(g.toScript());
-			int sixthTrials;
+
 			mode = g.avmode;
 
 			// generate good, congruent trials
@@ -117,11 +117,11 @@ public class ScriptGenerator {
 									.nextInt(2) == 1), Species.good));
 				}
 			}
-			// good silent fish
+			// good non-modulated fish
 			for (int i = 0; i < g.numNeutral / 2; i++) {
 				if (mode == 0) {
 					trials.add(new Trial(getInterval(g.interval),
-							g.silentResponseSound, g.good.throbRate, 2, (rand
+							g.nonModulatedSound , g.good.throbRate, 2, (rand
 									.nextInt(2) == 1), Species.good));
 				} else if (mode == 1) {
 					trials.add(i, new Trial(getInterval(g.interval),
@@ -129,11 +129,11 @@ public class ScriptGenerator {
 							Species.good));
 				}
 			}
-			// bad silent fish
+			// bad non-modulated fish
 			for (int i = 0; i < g.numNeutral / 2; i++) {
 				if (mode == 0) {
 					trials.add(new Trial(getInterval(g.interval),
-							g.silentResponseSound, g.bad.throbRate, 2, (rand
+							g.nonModulatedSound, g.bad.throbRate, 2, (rand
 									.nextInt(2) == 1), Species.bad));
 				} else if (mode == 1) {
 					trials.add(i, new Trial(getInterval(g.interval),
@@ -146,7 +146,7 @@ public class ScriptGenerator {
 
 			Collections.shuffle(trials);
 			for (int j = 0; j < trials.size(); j++) {
-				trials.get(j).trial = j + 1;
+				trials.get(j).trial = j + 1; // this stores the fish number inside the trial, starting with fish 1
 
 				System.out.print(trials.get(j).toScriptString());
 				scriptFile.write(trials.get(j).toScriptString());

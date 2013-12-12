@@ -203,6 +203,10 @@ public class GameView extends JPanel {
 		
 		if (gm.firstBlankScreen || gm.secondBlankScreen){
 			drawBlankScreen(g);
+			if ((bgSound != null) && gm.secondBlankScreen){
+				bgSound.stop();
+				bgSound = null;
+			}
 			return;
 		}
 

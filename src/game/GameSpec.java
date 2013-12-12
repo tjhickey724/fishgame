@@ -53,6 +53,7 @@ public class GameSpec {
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
 	public String silentResponseSound = "sounds/fish-silence/fish.wav";
+	public String nonModulatedSound = "sounds/2hz/fish.wav";
 	// we can expand to more sounds later ...
 	/*
 	 * public String eatGood = goodSound; public String eatBad = badSound;
@@ -67,7 +68,7 @@ public class GameSpec {
 	public int interval[] = { 35, 45, 55 };
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
-
+	
 	public GameSpec() {
 
 	}
@@ -92,10 +93,11 @@ public class GameSpec {
 		s += scriptLine("backgroundImage", backgroundImage);
 		s += scriptLine("goodSound", "" + goodResponseSound);
 		s += scriptLine("badSound", "" + badResponseSound);
+		s += scriptLine("nonModulatedSound", "" + nonModulatedSound);
 
 		s += scriptLine("totalCongruentTrials", "" + numCon);
 		s += scriptLine("totalInCongruentTrials", "" + numIncon);
-		s += scriptLine("totalmissingTrials", "" + numNeutral);
+		s += scriptLine("totalNeutralTrials", "" + numNeutral);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 		s += scriptLine("avmode", "" + avmode);
 		return (s);
@@ -141,6 +143,8 @@ public class GameSpec {
 			this.hasAvatar = (value.contains("true") ? true : false);
 		} else if (prop.equals("avmode")) {
 			this.avmode = Integer.parseInt(value);
+		} else if (prop.equals("nonModulatedSound")){
+			this.nonModulatedSound = value;
 		} else
 			return false;
 		return true;

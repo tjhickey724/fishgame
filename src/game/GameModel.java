@@ -698,11 +698,36 @@ public class GameModel {
 
 	private void playFishSound() {
 		// this gives the location of the soundfile
-		String clip = ((nextFish.congruent == 0) == (nextFish.species == Species.good)) 
-				? gameSpec.good.soundFile
-				: gameSpec.bad.soundFile;
+		String clip;
+		
+		if (gameSpec.avmode == 0) { // visual
+			if (nextFish.congruent == 0) { // audio/visual are congruent
+				if (nextFish.species == Species.good){
+					clip = gameSpec.good.soundFile;
+				} else {
+					clip = gameSpec.bad.soundFile;
+				}
+			} else if (nextFish.congruent == 1) { // audio/visual are not congruent
+				if (nextFish.species == Species.good){
+					clip = gameSpec.bad.soundFile;
+				} else {
+					clip = gameSpec.good.soundFile;
+				}
+			} else { // all sounds are non-modulated
+				clip = gameSpec.nonModulatedSound;
+			}
+		} else { // auditory game mode (then the clip just depends on the species ...
+
+				if (nextFish.species == Species.good){
+					clip = gameSpec.good.soundFile;
+				} else {
+					clip = gameSpec.bad.soundFile;
+				}
+			
+		}
 		System.out.println("goodfile="+gameSpec.good.soundFile);
 		System.out.println("badfile="+gameSpec.bad.soundFile);
+		System.out.println("nonmodfile="+gameSpec.nonModulatedSound);
 		
 		System.out.println("congruent="+nextFish.congruent);
 		System.out.println("species="+nextFish.species);
@@ -720,8 +745,13 @@ public class GameModel {
 		/*
 		 * 
 		 */
+		nextFish.ct.loop();
+		soundflash = true;
+		soundIndicatorUpdate = System.nanoTime() + 50000000l;
+         
 		
 		// if fish is not silent play sound
+		/*
 		if (nextFish.congruent != 2 && gameSpec.avmode != 1) {
 			nextFish.ct.loop();
 			soundflash = true;
@@ -731,6 +761,7 @@ public class GameModel {
 			soundflash = true;
 			soundIndicatorUpdate = System.nanoTime() + 50000000l;
 		}
+		*/
 		/*
 		// if fish is not silent play sound
 		if (nextFish.congruent != 2 && gameSpec.avmode != 1) {
