@@ -48,7 +48,7 @@ public class GameSpec {
 
 	public int numCon = 10;
 	public int numIncon = 10;
-	public int numMissing = 10;
+	public int numNeutral = 10;
 
 	public String goodResponseSound = "sounds/good.wav";
 	public String badResponseSound = "sounds/bad.wav";
@@ -95,7 +95,7 @@ public class GameSpec {
 
 		s += scriptLine("totalCongruentTrials", "" + numCon);
 		s += scriptLine("totalInCongruentTrials", "" + numIncon);
-		s += scriptLine("totalmissingTrials", "" + numMissing);
+		s += scriptLine("totalmissingTrials", "" + numNeutral);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 		s += scriptLine("avmode", "" + avmode);
 		return (s);

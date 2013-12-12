@@ -118,7 +118,7 @@ public class ScriptGenerator {
 				}
 			}
 			// good silent fish
-			for (int i = 0; i < g.numMissing / 2; i++) {
+			for (int i = 0; i < g.numNeutral / 2; i++) {
 				if (mode == 0) {
 					trials.add(new Trial(getInterval(g.interval),
 							g.silentResponseSound, g.good.throbRate, 2, (rand
@@ -130,7 +130,7 @@ public class ScriptGenerator {
 				}
 			}
 			// bad silent fish
-			for (int i = 0; i < g.numMissing / 2; i++) {
+			for (int i = 0; i < g.numNeutral / 2; i++) {
 				if (mode == 0) {
 					trials.add(new Trial(getInterval(g.interval),
 							g.silentResponseSound, g.bad.throbRate, 2, (rand

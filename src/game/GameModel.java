@@ -316,7 +316,7 @@ public class GameModel {
 
 
 		long now = System.nanoTime();
-		long delay = 0;
+		
 		
 		if (usingEEG){
 			this.secondBlankScreen = true;
@@ -711,6 +711,7 @@ public class GameModel {
 		// set the appropriate AudioClip
 		if (!gameSpec.stereo)
 			nextFish.ct = new AudioClip(clip + "/fish.wav");
+		    
 		else if (nextFish.fromLeft)
 			nextFish.ct = new AudioClip(clip + "/fishL.wav");
 		else

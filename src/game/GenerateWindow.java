@@ -117,7 +117,7 @@ public class GenerateWindow extends JFrame {
 				gs.interval = interval;
 				gs.numCon = Integer.parseInt(numCongruent.getText());
 				gs.numIncon = Integer.parseInt(numInCongruent.getText());
-				gs.numMissing = Integer.parseInt(numNeutral.getText());
+				gs.numNeutral = Integer.parseInt(numNeutral.getText());
 				gs.good.update("soundFile", goodSoundTF.getText());
 				gs.bad.update("soundFile", badSoundTF.getText());
 				gs.stereo = (soundtype.getSelectedItem().toString()

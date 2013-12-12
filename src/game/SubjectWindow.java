@@ -38,7 +38,9 @@ public class SubjectWindow extends JFrame {
 		frame.setSize(500, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
-
+		frame.setExtendedState(Frame.MAXIMIZED_BOTH); 
+        frame.setUndecorated(true);
+        
 		// next we create the gameview
 		gameboard = new GameView(gamemodel);
 
