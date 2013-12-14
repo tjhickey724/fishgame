@@ -36,6 +36,7 @@ public class ScriptWindow extends JFrame {
 	JButton openButton, pause;
 	JTextField scr, subId, expId;
 	JCheckBox eeg = new JCheckBox("EEG?");
+	JCheckBox eeg2=new JCheckBox("debug EEG?");
 	//JLabel eegLabel = new JLabel("EEG?");
 	JFrame theWindow;
 
@@ -83,6 +84,20 @@ public class ScriptWindow extends JFrame {
 			}
 			
 		});
+		eeg2.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					
+					gm.usingDebgEgg=true;
+				}else {
+					
+					gm.usingDebgEgg=false;
+				}
+			}
+			
+		});
 
 		openButton = new JButton("Script File");
 		openButton.addActionListener(new ActionListener() {
@@ -117,7 +132,7 @@ public class ScriptWindow extends JFrame {
 		sdone.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (gm.usingEEG){
+				if (gm.usingEEG || gm.usingDebgEgg){
 					JOptionPane.showMessageDialog(theWindow, "Please save the EEG data, then press OK");
 				}
 				gm.stop();
@@ -174,19 +189,21 @@ public class ScriptWindow extends JFrame {
 		// we could also have moved all the labels and other info into here
 		// and not given them names at all!
 		scriptpanel = new JPanel();
-		scriptpanel.setLayout(new GridLayout(5,2));
+		scriptpanel.setLayout(new GridLayout(6,2));
 
 		scriptpanel.setBorder(javax.swing.BorderFactory
 				.createTitledBorder("Main Control"));
 		
 		scriptpanel.add(this.eeg);
+		scriptpanel.add(this.eeg2);
+		
 		scriptpanel.add(openButton);
-
+		scriptpanel.add(new JLabel(""));
 		
 		scriptpanel.add(subId);
 		scriptpanel.add(expId);
 		
-		scriptpanel.add(new JLabel(""));
+		
 		scriptpanel.add(start);
 		
 		scriptpanel.add(pause);

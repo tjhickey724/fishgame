@@ -5,6 +5,8 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -26,13 +28,16 @@ import javax.swing.JSlider;
  */
 // REFACTOR: we may need to call the setVisible method from inside the EventQueue....
 
-public class RunGame {
+public class RunGame  {
 	/**
 	 * version must have the form A.B.C where A,B,C are numbers It represents
 	 * the Major/Minor/Bugfix versions of the code.
 	 */
 	public static String versionNum = "3";
     public static final String filename="images/fish/smallfish.png";
+    public static  CardLayout cl;
+    public static  boolean endSplash=true;
+    public static  JPanel cards = new JPanel(new CardLayout());
 	public static void main(String[] args) throws InterruptedException {
 		 JPanel panel = new JPanel(null)
 	        {
@@ -65,7 +70,7 @@ public class RunGame {
 	        panel.setOpaque(false);
 	        AnimatedObject.play("sounds/water/bubble.wav");
 	        JFrame frame = new JFrame();
-	        JPanel cards = new JPanel(new CardLayout());
+	      
 	        cards.add(panel,"begin");
 	        cards.add(panel2,"end");
 	        frame.getContentPane().add(cards);
@@ -73,16 +78,36 @@ public class RunGame {
 	        frame.setUndecorated(true);
 	        frame.setLocationRelativeTo( null );
 	        frame.setVisible(true);
-	        CardLayout cl = (CardLayout)(cards.getLayout());
+	        cl = (CardLayout)(cards.getLayout());
 	        cl.show(cards, "begin");
+	        frame.addKeyListener(new KeyListener() {
+	            public void keyPressed(KeyEvent e) { 
+	            	 System.out.print(e.getKeyCode());
+	        		 if (e.getKeyCode()==KeyEvent.VK_SPACE){
+	        			 cl.show(cards, "end");
+	        			 endSplash=false;
+	        		     ExperimenterWindow params = new ExperimenterWindow();
+	        			 params.setVisible(true);
+	        			 
+	        		 }
+	            	/* ... */ }
+
+	            public void keyReleased(KeyEvent e) { 
+			 } 
+
+	            public void keyTyped(KeyEvent e) { /* ... */ }
+	        });
+	        
 	        Thread.sleep(5000);
 	        cl.show(cards, "end");
-	        Thread.sleep(5000);
-	        ExperimenterWindow params = new ExperimenterWindow();
-			params.setVisible(true);
-       
+	        if(endSplash)
+	        { ExperimenterWindow params = new ExperimenterWindow();
+			params.setVisible(true);}
+			
+			
 		
 	}
+	
 	// this used to add animation to the background
 	public static void addAnimation (JPanel panel){
 		panel.add( new AnimatedObject(300, 100, 3, 2, -1, 1, 20) );
@@ -91,4 +116,10 @@ public class RunGame {
         panel.add( new AnimatedObject(-200, 000, 3, 5, 1, 1, 20,filename));
         panel.add( new AnimatedObject(0, 200, 5, 0, 1, 1, 80) );
 	}
+
+	
+	
+
+	
+	
 }

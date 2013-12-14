@@ -231,7 +231,7 @@ public class GameView extends JPanel {
 			return;
 		}
 		drawBackground(g);
-		if (gm.usingEEG){
+		if (gm.usingEEG || gm.usingDebgEgg){
 			
 			drawFixationMark(g);	
 		}

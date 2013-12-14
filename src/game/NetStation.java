@@ -22,7 +22,7 @@ public class NetStation {
 	boolean nsrecording = false; // true if the machine is recording ...
 
 	static boolean VERBOSE = true;
-	static final boolean DEBUGGING = true;
+	
 
 	long startTime = System.nanoTime();
 	
@@ -74,7 +74,7 @@ public class NetStation {
 	 */
 	public void connectNS() throws NetStationError, InterruptedException,
 			IOException {
-		if (DEBUGGING) return;
+		if (!gm.usingEEG) return;
 
 		if (con != null) {
 			this.disconnectNS();
@@ -100,6 +100,7 @@ public class NetStation {
 		} catch (IOException e) {
 			throw new NetStationError(con, "IOException:" + e
 					+ " when trying to connect");
+			
 		}
 
 		// open the input stream to read from NetStation
@@ -171,7 +172,7 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void disconnectNS() throws InterruptedException, IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		if (nsrecording) {
 			Thread.sleep(500L);
@@ -221,7 +222,7 @@ public class NetStation {
 	 * @throws NetStationError
 	 */
 	public void synchronizeNS() throws IOException, NetStationError {
-		if (DEBUGGING) return;
+		if (!gm.usingEEG) return;
 		
 		double ns_synch_limit = DEFAULT_SYNCH_LIMIT;
 		double df = 10000;
@@ -274,7 +275,7 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void startRecordingNS() throws IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		int tmp;
 
@@ -295,7 +296,7 @@ public class NetStation {
 	 * @throws IOException
 	 */
 	public void stopRecordingNS() throws IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		int tmp;
 
@@ -319,7 +320,7 @@ public class NetStation {
 	 */
 	public void eventNS0(String code, int startMS, int durationMS)
 			throws IOException {
-		if (DEBUGGING) return;
+		if (!gm.usingEEG) return;
 		
 		String[] keyCodes = new String[0];
 		int[] keyValues = new int[0];
@@ -338,7 +339,7 @@ public class NetStation {
 	 */
 	public void eventNS1(String code, int startMS, int durationMS, String key,
 			int value) throws IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		String[] keyCodes = new String[1];
 		int[] keyValues = new int[1];
@@ -361,7 +362,7 @@ public class NetStation {
 	 */
 	public void eventNS2(String code, int startMS, int durationMS, String key1,
 			int value1, String key2, int value2) throws IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		String[] keyCodes = new String[2];
 		int[] keyValues = new int[2];
@@ -390,7 +391,7 @@ public class NetStation {
 	 */
 	public void eventNS(String code, int startMS, int durationMS,
 			String[] keyCodes, int[] keyValues) throws IOException {
-		if (DEBUGGING) return;
+		if (! gm.usingEEG) return;
 		
 		
 

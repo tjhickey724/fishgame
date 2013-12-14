@@ -61,11 +61,12 @@ public class GameModel {
 	 */
 	public NetStation EEG = new NetStation(this);
 	public boolean usingEEG = false;
+	public boolean usingDebgEgg=false;
 	public boolean firstBlankScreen = false;
 	public boolean secondBlankScreen = false;
 	private long blankScreenTimeout = 0L;
 	private static long BLANK_SCREEN_DELAY = 3;  // in seconds 
-	
+	private static long DEBUG_BLANK_DELAY=3;
 	
 
 	/**
@@ -259,10 +260,13 @@ public class GameModel {
 		long delay = 0;  
 		long now = System.nanoTime();
 		
-		if (this.usingEEG){
+		if (this.usingEEG || this.usingDebgEgg  ){
 			writeToLog(now,"FirstBlankScreen");
 			initEEG();
-			delay = BLANK_SCREEN_DELAY*billion;
+			if (this.usingEEG)
+				delay = BLANK_SCREEN_DELAY*billion;
+			else 
+				delay=DEBUG_BLANK_DELAY*billion;
 			this.firstBlankScreen = true;
 			this.blankScreenTimeout = now + delay; // 3 minutes from now ...
 		}
@@ -318,9 +322,12 @@ public class GameModel {
 		long now = System.nanoTime();
 		
 		
-		if (usingEEG){
+		if (usingEEG || usingDebgEgg){
 			this.secondBlankScreen = true;
-			this.blankScreenTimeout = now + BLANK_SCREEN_DELAY*billion;
+		    if (usingEEG)
+		    	this.blankScreenTimeout = now + BLANK_SCREEN_DELAY*billion;
+		    else
+		    	this.blankScreenTimeout = now + DEBUG_BLANK_DELAY*billion;
 			this.writeToLog(now,"SecondBlankScreen");
 		} else {
 			this.paused = true;
@@ -346,7 +353,7 @@ public class GameModel {
 
 	private void stopEEG() {
 
-		if (!this.usingEEG)
+		if (this.usingDebgEgg)
 			return;
 		
 		
@@ -580,7 +587,7 @@ public class GameModel {
 
 	public void sendEEGMarker(long now,String code){
 
-		if (!this.usingEEG)
+		if (this.usingDebgEgg)
 			return;
 		
 		//this.writeToLog(now, "sendEEGMarker:"+ code);
