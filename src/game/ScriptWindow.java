@@ -78,6 +78,7 @@ public class ScriptWindow extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					gm.usingEEG = true;
+					eeg2.setSelected(false);
 				}else {
 					gm.usingEEG=false;
 				}
@@ -91,6 +92,7 @@ public class ScriptWindow extends JFrame {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					
 					gm.usingDebgEgg=true;
+					eeg.setSelected(false);
 				}else {
 					
 					gm.usingDebgEgg=false;
