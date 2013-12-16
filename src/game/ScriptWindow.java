@@ -27,6 +27,7 @@ import javax.swing.*;
 
 // Refactor: this has not been refactored yet
 
+
 public class ScriptWindow extends JFrame {
 	JPanel scriptpanel;
 	GameModel gm;
@@ -66,7 +67,7 @@ public class ScriptWindow extends JFrame {
 		JButton start = new JButton("start");
 		pause = new JButton("pause");
 
-		JButton restart = new JButton("Restart");
+		
 		// stop = new JButton("Stop");
 		JButton sdone = new JButton("Done");
 
