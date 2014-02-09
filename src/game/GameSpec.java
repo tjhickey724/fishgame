@@ -18,10 +18,10 @@ import java.util.ArrayList;
 
 public class GameSpec {
 	public FishSpec good = new FishSpec(), bad = new FishSpec();
-
+    public boolean Equity=false;
 	public boolean changed = true;
 	public boolean requireGameViewUpdate = true;
-
+    public int equityN=0;
 	public boolean stereo = true;
 	
 	/** 
@@ -68,7 +68,7 @@ public class GameSpec {
 	public int interval[] = { 35, 45, 55 };
 	public int minBrightness = 10;
 	public int maxBrightness = 14;
-	
+
 	public GameSpec() {
 
 	}
@@ -99,6 +99,7 @@ public class GameSpec {
 		s += scriptLine("totalInCongruentTrials", "" + numIncon);
 		s += scriptLine("totalNeutralTrials", "" + numNeutral);
 		s += scriptLine("hasAvatar", "" + hasAvatar);
+		s+=scriptLine("hasEquity", "" + Equity);
 		s += scriptLine("avmode", "" + avmode);
 		return (s);
 
@@ -118,6 +119,7 @@ public class GameSpec {
 		if (prop.equals("backgroundImage")) {
 			this.backgroundImage = value;
 			this.requireGameViewUpdate = true;
+	
 		} else if (prop.equals("maxFishRelease")) {
 			this.maxFishRelease = Integer.parseInt(value);
 		} else if (prop.equals("minFishRelease")) {
@@ -144,7 +146,9 @@ public class GameSpec {
 		} else if (prop.equals("avmode")) {
 			this.avmode = Integer.parseInt(value);
 		} else if (prop.equals("nonModulatedSound")){
-			this.nonModulatedSound = value;
+			this.nonModulatedSound = value;}
+			else if (prop.equals("hasEquity")) {
+				this.Equity = (value.contains("true") ? true : false);
 		} else
 			return false;
 		return true;

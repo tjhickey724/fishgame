@@ -1,10 +1,6 @@
 package game;
 
-import java.awt.Color;
-import java.io.IOException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * a Fish has a position and a velocity and a speed they also have a
@@ -91,6 +87,7 @@ public class Fish {
 	 */
 	public boolean fromLeft; 
 	
+	public String equityN;
 	/**
 	 * true if the fish audio and video cues have the same oscillation frequency
 	 * 0=congruent,  1=incongruent, 2=noaudio, 3=novideo
@@ -146,7 +143,10 @@ public class Fish {
 
 	public int avmode = 0;
 
-	
+	public int minBright=0;
+	public int maxBright=0;
+	public int minSize=0;
+	public int maxSize=0;
 
 	public java.util.Random rand = new java.util.Random();
 
@@ -159,9 +159,11 @@ public class Fish {
 				+ fromLeft + ",congruent=" + congruent + 
 				",trial=" + trial + ",birthtime=" + birthTime
 				+ ",lastUpdate=" + lastUpdate + ",lifeSpan="  + lifeSpan + "]";
-
+    
 	}
-
+    public String toString(String str){
+    	return toString()+ " Equity#= " + equityN +",minBright = " + minBright+", maxBright= " +maxBright +",minSize= "+ minSize+", maxSize= "+maxSize;
+    }
 	/**
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that

@@ -40,7 +40,12 @@ public class GameModel {
 	 * sound, the sound files for the good and bad fish, etc.
 	 */
 	public GameSpec gameSpec;
-
+    public String[] minBrightness=new String[5];
+    public String [] maxBrightness=new String[5];
+    public String[]minSize=new String[5];
+    public String[] maxSize=new String[5];
+    public int[]goodEquity=new int[5];
+    public int[] badEquity=new int[5];
 	// here are some convenient constants for converting between nanoseconds
 	// and milliseconds and seconds
 	private static long million = 1000000L;
@@ -451,7 +456,14 @@ public class GameModel {
 		// storing the info about that fish in this.nextFish
 		// and setting this.nextFishTime
 		// Note: this does not launch the fish!
-
+        if( gameSpec.Equity && ge.correctResponse)
+        {
+        	if(lastFish.species.equals(Species.bad))
+        		badEquity[Integer.parseInt(lastFish.equityN)-1]+=1;
+        	else
+        		goodEquity[Integer.parseInt(lastFish.equityN)-1]+=1;
+        	
+        }
 		this.createNextFish(ge.when); //
 
 		// get the response time, in nanoseconds, and write it to the log
@@ -528,7 +540,11 @@ public class GameModel {
 	
 		}
 		
-		if (isPaused() || isGameOver()){
+		if ( isGameOver()){
+			if(gameSpec.Equity){
+				writeEquityStat();
+				
+			}
 			closeLogfile();
 			return;
 		}
@@ -738,17 +754,29 @@ public class GameModel {
 		
 		System.out.println("congruent="+nextFish.congruent);
 		System.out.println("species="+nextFish.species);
+		System.out.println("Equity#= "+nextFish.equityN);
 		System.out.println("clip="+clip);
 
 		// set the appropriate AudioClip
-		if (!gameSpec.stereo)
-			nextFish.ct = new AudioClip(clip + "/fish.wav");
-		    
-		else if (nextFish.fromLeft)
-			nextFish.ct = new AudioClip(clip + "/fishL.wav");
-		else
-			nextFish.ct = new AudioClip(clip + "/fishR.wav");
-
+		if (gameSpec.Equity==false || gameSpec.avmode==0)
+		{
+			if (!gameSpec.stereo)
+				nextFish.ct = new AudioClip(clip + "/fish.wav");
+			    
+			else if (nextFish.fromLeft)
+				nextFish.ct = new AudioClip(clip + "/fishL.wav");
+			else
+				nextFish.ct = new AudioClip(clip + "/fishR.wav");
+		}
+		else{
+			if (!gameSpec.stereo)
+				nextFish.ct = new AudioClip(clip + "/fish" + nextFish.equityN+".wav");
+			    
+			else if (nextFish.fromLeft)
+				nextFish.ct = new AudioClip(clip + "/fishL" + nextFish.equityN+".wav");
+			else
+				nextFish.ct = new AudioClip(clip + "/fishR" + nextFish.equityN+".wav");
+		}
 		/*
 		 * 
 		 */
@@ -862,7 +890,8 @@ public class GameModel {
 		String fromLeft = scan.next();
 
 		String species = scan.next();
-
+        String EquityN=scan.next();
+       
 		/*
 		 * System.out.println("Next fish release in "+interval+" milliseconds\n"
 		 * + "from \n"+ System.nanoTime() + " at \n"+ nextFishTime
@@ -882,9 +911,16 @@ public class GameModel {
 				: Species.bad;
 		nextFish.active = true;
 		nextFish.lastUpdate = now;
-
+        nextFish.equityN=EquityN;
 		nextFishTime = now + interval * million;
-		
+		System.out.println(" Avmode" +gameSpec.avmode);
+		if(gameSpec.avmode==0 && gameSpec.Equity==true)
+		{
+			nextFish.minBright=Integer.parseInt(minBrightness[Integer.parseInt(EquityN)-1]);
+			nextFish.maxBright=Integer.parseInt(maxBrightness[Integer.parseInt(EquityN)-1]);
+			nextFish.minSize=Integer.parseInt(minSize[Integer.parseInt(EquityN)-1]);
+			nextFish.maxSize=Integer.parseInt(maxSize[Integer.parseInt(EquityN)-1]);
+		}
 		// this is the beginning of the trial so we can post some EEG markers
 		sendEEGTrialStartMarker(now,nextFish.congruent,nextFish.fromLeft,nextFish.species);
 	}
@@ -902,20 +938,60 @@ public class GameModel {
 		long now = System.nanoTime();
 		String prop = scan.next();
 		String value = scan.next();
+	
+			if(prop.equals("minBrightnesslevels")|| prop.equals("maxBrightnesslevels")|| (prop.equals("minSizelevels")) || (prop.equals("maxSizelevels"))){
+				while (value.indexOf(']')==-1){
+					value+=scan.next();
+				}
+			
+			scan.nextLine(); // skip over the rest of the line
+			writeToLog(now, "0\t" + prop + "\t" + value);
+			if (prop.equals("minBrightnesslevels")) 
+				minBrightness=(value.replace("[", "").replace("]", "")).split(",");
+			else if	(prop.equals("maxBrightnesslevels")) 
+				maxBrightness=value.replace("[", "").replace("]", "").split(",");
+			else  if	(prop.equals("minSizelevels")) 
+				minSize=value.replace("[", "").replace("]", "").split(",");
+			else if	(prop.equals("maxSizelevels")) 
+				maxSize=value.replace("[", "").replace("]", "").split(",");
+			
+			interval = scan.nextLong();
+			return interval;
+		}
 		scan.nextLine(); // skip over the rest of the line
 		writeToLog(now, "0\t" + prop + "\t" + value);
 		if (prop.equals("gameover")) {
+		
 			this.stop();
+		
 			this.nextFishTime = now + 10 * 1000000000L;
 			return 0;
 		}
+		
 		// System.out.println("interval="+interval+" prop="+prop+" value="+value);
 		interval = scan.nextLong();
-
+        
 		gameSpec.update(prop, value);
 		return interval;
 	}
-
+    private void writeEquityStat() 
+    {
+    	String logLine="Equity Statistics \n";
+    	logLine+="Species \t Equity# \t accuracy \n";
+    	for (int i=0; i<goodEquity.length;i++)
+    		logLine+="Good   \t"+ (i+1)+"      \t" +((goodEquity[i])/(gameSpec.numNeutral/(2*5.0))) +"\n";
+    	for (int i=0; i<badEquity.length;i++)
+    		logLine+="bad    \t"+ (i+1)+"      \t" +(badEquity[i]/(gameSpec.numNeutral/(2*5.0))) +"\n";
+    	try {
+			this.logfile.write(logLine);
+			System.out.println(logLine);
+			this.logfile.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    }
 	/**
 	 * if no scanner exists yet, then create it using the inputScriptFileName
 	 */
@@ -996,10 +1072,18 @@ public class GameModel {
 	 */
 
 	public void writeToLog(long now, Fish f) {
-
-		String logLine = "launch\t" + f.species + "\t" + f.congruent + "\t"
+		String fish="";
+        if (f.species.equals(Species.bad))
+        		fish="bad ";
+        else
+        	fish="good";
+		String logLine = "launch\t" +fish + "\t" + f.congruent + "\t"
 				+ f.trial + "\t" + (f.fromLeft ? "left" : "right");
-
+		if (gameSpec.Equity)
+		{	 logLine+=" EquityN= " + f.equityN ;
+        if (gameSpec.avmode==0)
+    	   logLine+="  [minb= "+ f.minBright+"\t"+"maxb= "+f.maxBright+"\t"+"minSize="+f.minSize+"\t"+"maxSize="+f.maxSize + "]";
+		}
 		writeToLog(now, logLine);
 	}
 

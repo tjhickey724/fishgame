@@ -96,7 +96,7 @@ public class GameView extends JPanel {
 				// when there are no fish!!
 				if (gm.getNumFish() == 0) {
 					long keyPressTime = e.getWhen() * 1000000L;
-					
+					 
 					badclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
 					return;
 				}
@@ -360,13 +360,14 @@ public class GameView extends JPanel {
 	private void drawBackground(Graphics g) {
 		int width = this.getWidth();
 		int height = this.getHeight();
+		
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, width, height);
 		double seconds = System.nanoTime() / 1000000000.0;
 		double frames = seconds * 0.1;
 		double framePart = frames - Math.floor(frames);
 		int y_offset = (int) Math.round(framePart * height);
-
+      
 		if (gm.isPaused() || gm.isGameOver()) {
 			y_offset = 0;
 			if (gm.getNumFish() > 0) {
@@ -441,7 +442,13 @@ public class GameView extends JPanel {
 				visualHz = 0;
 			}
 		}
-
+        if (gm.gameSpec.avmode==0 && gm.gameSpec.Equity==true)
+        {
+        	gm.gameSpec.minBrightness=aFish.minBright;
+        	gm.gameSpec.maxBrightness=aFish.maxBright;
+        	gm.gameSpec.minThrobSize=aFish.minSize;
+        	gm.gameSpec.maxThrobSize=aFish.maxSize;
+        }
 		int theSize = interpolateSize(gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize, aFish.birthTime, System.nanoTime(),
 				visualHz);

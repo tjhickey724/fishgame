@@ -3,14 +3,12 @@
  */
 package game;
 
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -47,25 +45,29 @@ public class GenerateWindow extends JFrame {
 			numCongruent = new JTextField("10"),
 			numInCongruent = new JTextField("10"),
 			numNeutral = new JTextField("10"),
-	        numConstatntVisual=new JTextField("10");
+	        numConstatntVisual=new JTextField("10"),mbtf2=new JTextField("24"),
+	        mbtf3=new JTextField("24"),mbtf4=new JTextField("24"),
+	        		mbtf5=new JTextField("24");
 	Font font1 = new Font("SansSerif", Font.BOLD, 10);
 	
-	JComboBox soundtype, vol, tiedto;
+	JComboBox soundtype, vol, tiedto,tabletcontrol;
 	JTextArea jtextarea = new JTextArea(5, 20);
 	JTextField goodVisualHzTF = new JTextField("6");
 	JTextField badVisualHzTF = new JTextField("8");
 	JTextField nonModulatedVisual = new JTextField("0");
-	Checkbox hasAvatar = new Checkbox();
-
+	JCheckBox hasAvatar = new JCheckBox();
+    JCheckBox hasEquity = new JCheckBox();
+    
 	JTextField minSizeTF = new JTextField("100");
 
 	JTextField maxSizeTF = new JTextField("120");
 
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
-	JButton nonModulatedSound=new JButton("sounds/...");
+	JButton nonModulatedSound=new JButton("sounds/2hz");
 	JButton imageSelect = new JButton("Open");
-
+	JButton VisualBrightenss = new JButton("Equity Brightenss");
+	JButton VisualSize = new JButton("Equity size");
 	ScriptGenerator sgen = new ScriptGenerator();
 
 	JFileChooser fc;
@@ -76,32 +78,32 @@ public class GenerateWindow extends JFrame {
 		setLayout(new GridLayout(4, 1));
 		setSize(300, 800);
 
-		JPanel matrix1, matrix2, matrix3;
+		JPanel matrix1, matrix2, matrix3, matrix4;
 
 		String currentDir = System.getProperty("user.dir");
 		System.out.println("Current dir using System:" + currentDir);
 		fc = new JFileChooser(currentDir + "/sounds");
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
 		/*
 		 * all of these initializations should be done as the variables are
 		 * being declared. That makes it clear what the variables are and it
 		 * simplifies the body of the constructor. REFACTOR....
 		 */
-
+		
 		JLabel volLabel = new JLabel("Volume:");
 
 		JScrollPane jscrollpane = new JScrollPane(jtextarea);
 
 		String[] soundtypes = new String[] { "Stereo", "Mono" };
 		soundtype = new JComboBox(soundtypes);
-
+		
 		String[] volumes = new String[] { "low", "med", "hi" };
 		vol = new JComboBox(volumes);
 
 		String[] modes = new String[] { "Visual", "Auditory" };
 		tiedto = new JComboBox(modes);
-
+		String[] Tabletmodes = new String[] { "Forward", "backward" };
+		tabletcontrol=new JComboBox(Tabletmodes);
 		JButton gdone = new JButton("Done");
 		JButton gen = new JButton("Generate");
 
@@ -135,8 +137,9 @@ public class GenerateWindow extends JFrame {
 						.getText());
 				gs.avmode = (tiedto.getSelectedItem().toString()
 						.equals("Visual") ? 0 : 1);
-				gs.hasAvatar = hasAvatar.getState();
-
+				gs.hasAvatar = hasAvatar.isSelected();
+                gs.Equity=hasEquity.isSelected();
+           
 				String volumeLevel = (vol.getSelectedItem()).toString();
 				if (volumeLevel.equals("low")) {
 					gs.bgSound = "water1.wav";
@@ -178,7 +181,30 @@ public class GenerateWindow extends JFrame {
 				}
 			}
 		});
-
+//		VisualBrightenss.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//
+//				// Handle open button action.
+//				int returnVal = fc.showOpenDialog(GenerateWindow.this);
+//
+//				if (returnVal == JFileChooser.APPROVE_OPTION) {
+//					File Brightenssfile = fc.getSelectedFile();
+//					VisualBrightenss.setText("Brightenss/" + Brightenssfile.getName());
+//				}
+//			}
+//		});
+//		VisualSize.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//
+//				// Handle open button action.
+//				int returnVal = fc.showOpenDialog(GenerateWindow.this);
+//
+//				if (returnVal == JFileChooser.APPROVE_OPTION) {
+//					File sizefile = fc.getSelectedFile();
+//					VisualBrightenss.setText("Size/" + sizefile.getName());
+//				}
+//			}
+//		});
 		badSoundTF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -215,15 +241,16 @@ public class GenerateWindow extends JFrame {
 				}
 			}
 		});
-
+		
+        
 		matrix1 = new JPanel();
-		matrix1.setLayout(new GridLayout(4, 3));
+		matrix1.setLayout(new GridLayout(5, 3));
 		matrix2 = new JPanel();
-		matrix2.setLayout(new GridLayout(6, 2));
+		matrix2.setLayout(new GridLayout(9, 2));
 
 		matrix3 = new JPanel();
 
-		matrix3.setLayout(new GridLayout(9, 2));
+		matrix3.setLayout(new GridLayout(8, 2));
 
 		matrix1.add(new JLabel("Fish Type:"));
 		matrix1.add(new JLabel("Sound"));
@@ -232,14 +259,15 @@ public class GenerateWindow extends JFrame {
 		matrix1.add(new JLabel("Good"));
 		matrix1.add(this.goodSoundTF);
 		matrix1.add(this.goodVisualHzTF);
-
+        
 		matrix1.add(new JLabel("Bad"));
 		matrix1.add(this.badSoundTF);
 		matrix1.add(this.badVisualHzTF);
 		matrix1.add(new JLabel("Neutral"));
 		matrix1.add(this.nonModulatedSound);
 		matrix1.add(nonModulatedVisual);
-		
+		matrix1.add(new JLabel("GoodFishDT"));
+		matrix1.add(tabletcontrol);
 		// col2.add(gs);
 		// col2.add(bs);
 
@@ -248,15 +276,23 @@ public class GenerateWindow extends JFrame {
 
 		matrix2.add(new JLabel("Sound Type: "));
 		matrix2.add(soundtype);
-		matrix2.add(new JLabel("Tied to"));
-		matrix2.add(tiedto);
-
 		matrix2.add(volLabel);
 		matrix2.add(vol);
+		matrix2.add(new JLabel("Tied to"));
+		matrix2.add(tiedto);
+        matrix4=new JPanel();
+        matrix2.add(new JLabel("Equity?"));
+		matrix2.add(hasEquity);
 		matrix2.add(new JLabel("Max Brightness"));
 		matrix2.add(maxBrightnessTF);
 		matrix2.add(new JLabel("MainBrightness"));
 		matrix2.add(minBrightnessTF);
+		matrix2.add(new JLabel("Min Size(%)"));
+		matrix2.add(minSizeTF);
+		matrix2.add(new JLabel("Max Size(%)"));
+		matrix2.add(maxSizeTF);
+		//matrix2.add(VisualBrightenss);
+		//matrix2.add(VisualSize);
 		matrix2.add(gen);
 		matrix2.add(gdone);
 
@@ -268,10 +304,7 @@ public class GenerateWindow extends JFrame {
 		matrix3.add(int2);
 		matrix3.add(new JLabel("Interval 3"));
 		matrix3.add(int3);
-		matrix3.add(new JLabel("Min Size(%)"));
-		matrix3.add(minSizeTF);
-		matrix3.add(new JLabel("Max Size(%)"));
-		matrix3.add(maxSizeTF);
+		
 		matrix3.add(new JLabel("NumCongruent"));
 		matrix3.add(numCongruent);
 		matrix3.add(new JLabel("NumIncongruent"));
@@ -281,11 +314,10 @@ public class GenerateWindow extends JFrame {
        
 		matrix3.add(new JLabel("Avatar?"));
 		matrix3.add(hasAvatar);
-
 		matrix2.setBackground(Color.green);
 		matrix3.setBackground(Color.pink);
 		matrix1.setBackground(Color.cyan);
-
+        
 		add(matrix1);
 		add(matrix3);
 		add(matrix2);
@@ -293,3 +325,4 @@ public class GenerateWindow extends JFrame {
 	}
 	
 }
+

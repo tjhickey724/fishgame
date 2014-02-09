@@ -29,6 +29,7 @@ public class Trial {
 	public int trial;
 	public boolean fromLeft;
 	public Species spec;
+	public int equityno;
 
 	/**
 	 * 
@@ -57,11 +58,20 @@ public class Trial {
 		this.fromLeft = fromLeft;
 		this.spec = spec;
 	}
-
+	public Trial(Long interval, String soundFile, int visualHz, int congruent,
+			Boolean fromLeft, Species spec,int equity) {
+		this.interval = interval;
+		this.soundFile = soundFile;
+		this.visualHz = visualHz;
+		this.congruent = congruent;
+		this.fromLeft = fromLeft;
+		this.spec = spec;
+		this.equityno=equity;
+	}
 	public String toScriptString() {
 		return interval.toString() + " " + soundFile + " " + visualHz + " "
 				+ congruent + " " + trial + " " + (fromLeft ? "left" : "right")
-				+ " " + spec.toString() + "\n";
+				+ " " + spec.toString() +  " "+equityno +"\n";
 
 	}
 }
