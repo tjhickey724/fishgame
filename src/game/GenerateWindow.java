@@ -63,7 +63,7 @@ public class GenerateWindow extends JFrame {
 
 	JButton goodSoundTF = new JButton("sounds/6hz");
 	JButton badSoundTF = new JButton("sounds/8hz");
-	JButton nonModulatedSound=new JButton("sounds/...");
+	JButton nonModulatedSound=new JButton("sounds/2hz");
 	JButton imageSelect = new JButton("Open");
 
 	ScriptGenerator sgen = new ScriptGenerator();
