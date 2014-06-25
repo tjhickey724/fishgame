@@ -70,7 +70,7 @@ public class GameModel {
 	public boolean firstBlankScreen = false;
 	public boolean secondBlankScreen = false;
 	private long blankScreenTimeout = 0L;
-	private static long BLANK_SCREEN_DELAY = 3;  // in seconds 
+	private static long BLANK_SCREEN_DELAY = 3*60;  // in seconds 
 	private static long DEBUG_BLANK_DELAY=3;
 	
 
@@ -129,7 +129,11 @@ public class GameModel {
 			currentFish.ct.stop();
 		}
 		currentFish = null;
+		long now = System.nanoTime();
+		sendEEGMarker(now,"EFIS");
 	}
+	
+
 
 	/*
 	 * methods related to the gameOver field which is true when the game is over
@@ -274,6 +278,8 @@ public class GameModel {
 				delay=DEBUG_BLANK_DELAY*billion;
 			this.firstBlankScreen = true;
 			this.blankScreenTimeout = now + delay; // 3 minutes from now ...
+			//send SRES indicating that the initial resting period has started
+			sendEEGMarker(now,"SRES");
 		}
 
 
@@ -524,6 +530,8 @@ public class GameModel {
 		 */
 		if (this.firstBlankScreen){
 			if (now > this.blankScreenTimeout){
+				//send ERES indicating that the initial rest period has ended.
+				sendEEGMarker(now,"ERES");
 				this.firstBlankScreen = false;
 			}else
 				return;
@@ -598,6 +606,7 @@ public class GameModel {
 		createNextFish(now);
 		this.writeToLog(now, missedFishEvent);
 		currentFish = null;
+		sendEEGMarker(now,"EFIS");
 	}
 	
 
@@ -656,7 +665,7 @@ public class GameModel {
 		// send marker to EEG
 		sendEEGMarker(now,"GO--");
 
-		// System.out.println("Spawning new fish: "+nextFish);
+		 System.out.println("Spawning new fish: "+nextFish);
 
 		/*
 		 * this decides which sound file to play and starts it in a loop
@@ -780,7 +789,16 @@ public class GameModel {
 		/*
 		 * 
 		 */
+		
+		
+		
+		//send marker that fish sound has started
+		long now = System.nanoTime();
+		sendEEGMarker(now,"SOUN");
 		nextFish.ct.loop();
+		
+		
+		
 		soundflash = true;
 		soundIndicatorUpdate = System.nanoTime() + 50000000l;
          
@@ -890,7 +908,12 @@ public class GameModel {
 		String fromLeft = scan.next();
 
 		String species = scan.next();
-        String EquityN=scan.next();
+        String EquityN;
+        if(gameSpec.Equity) {
+        	EquityN = scan.next();
+        } else {
+        	EquityN = null;
+        }
        
 		/*
 		 * System.out.println("Next fish release in "+interval+" milliseconds\n"

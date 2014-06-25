@@ -75,7 +75,7 @@ public class RunGame  {
 	        cards.add(panel2,"end");
 	        frame.getContentPane().add(cards);
 	        frame.setExtendedState(Frame.MAXIMIZED_BOTH); 
-	        frame.setUndecorated(true);
+	      //  frame.setUndecorated(true);
 	        frame.setLocationRelativeTo( null );
 	        frame.setVisible(true);
 	        cl = (CardLayout)(cards.getLayout());
