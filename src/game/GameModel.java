@@ -131,6 +131,8 @@ public class GameModel {
 		currentFish = null;
 		long now = System.nanoTime();
 		sendEEGMarker(now,"EFIS");
+		flash = true;
+		indicatorUpdate = System.nanoTime() + 50000000l;
 	}
 	
 
@@ -607,6 +609,8 @@ public class GameModel {
 		this.writeToLog(now, missedFishEvent);
 		currentFish = null;
 		sendEEGMarker(now,"EFIS");
+		flash = true;
+		indicatorUpdate = System.nanoTime() + 50000000l;
 	}
 	
 
