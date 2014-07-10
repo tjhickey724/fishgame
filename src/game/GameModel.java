@@ -238,6 +238,8 @@ public class GameModel {
 	private void getLogFile() {
 		if (this.logfile == null) {
 			// open the logfile
+			File logsFolder = new File("logs");
+			logsFolder.mkdirs();
 			long now = System.currentTimeMillis();
 			String logname = "logs/log" + now + ".txt";
 			try {
