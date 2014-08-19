@@ -154,6 +154,7 @@ public class GameModel {
 	public boolean checkForPause() {
 		if(fishSoFar == gameSpec.numTrialsBeforePause) {
 			midBlankScreen = true;
+			sendEEGMarker(System.nanoTime(),"BPAU");
 			return true;
 		}
 		return false;
@@ -444,6 +445,7 @@ public class GameModel {
 			midBlankScreen = false;
 			long now = System.nanoTime();
 			this.createNextFish(now);
+			sendEEGMarker(now,"EPAU");
 		}
 	}
 	
