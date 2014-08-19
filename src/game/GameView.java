@@ -201,7 +201,7 @@ public class GameView extends JPanel {
 		if (gm == null)
 			return; // this shouldn't ever happen!
 		
-		if (gm.firstBlankScreen || gm.secondBlankScreen){
+		if (gm.firstBlankScreen || gm.secondBlankScreen || gm.midBlankScreen){
 			drawBlankScreen(g);
 			if ((bgSound != null) && gm.secondBlankScreen){
 				bgSound.stop();

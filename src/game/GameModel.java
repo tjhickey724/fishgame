@@ -69,9 +69,15 @@ public class GameModel {
 	public boolean usingDebgEgg=false;
 	public boolean firstBlankScreen = false;
 	public boolean secondBlankScreen = false;
+	public boolean midBlankScreen = false;
 	private long blankScreenTimeout = 0L;
 	private static long BLANK_SCREEN_DELAY = 3*60;  // in seconds 
 	private static long DEBUG_BLANK_DELAY=3;
+	
+	
+	
+	private int fishSoFar = 0;
+	
 	
 
 	/**
@@ -133,9 +139,25 @@ public class GameModel {
 		sendEEGMarker(now,"EFIS");
 		flash = true;
 		indicatorUpdate = System.nanoTime() + 50000000l;
+		
+		fishSoFar++;
+		boolean timeForPause = checkForPause();
+		if(!timeForPause) {
+			this.createNextFish(now);
+		}
 	}
 	
 
+	/**
+	 * Check if it's time for the mid-game pause, and if so, pause the game.
+	 */
+	public boolean checkForPause() {
+		if(fishSoFar == gameSpec.numTrialsBeforePause) {
+			midBlankScreen = true;
+			return true;
+		}
+		return false;
+	}
 
 	/*
 	 * methods related to the gameOver field which is true when the game is over
@@ -289,7 +311,8 @@ public class GameModel {
 
 		// I think we need to send a "new trial" marker to the EEG
 		// and update the time in the call to createNextFish accordingly...
-		createNextFish(System.nanoTime()+delay);
+		//createNextFish(System.nanoTime()+delay);
+		//this is now done in update so that it happens after the resting period
 
 	}
 
@@ -416,6 +439,15 @@ public class GameModel {
 		this.writeToLog(now, "RESUME");
 	}
 
+	public void resumeMidGame() {
+		if(midBlankScreen) {
+			midBlankScreen = false;
+			long now = System.nanoTime();
+			this.createNextFish(now);
+		}
+	}
+	
+	
 	/**
 	 * if an actor moves off the board, in the x (or y) direction, it is bounced
 	 * back into the board and its velocity in the offending direction is
@@ -474,7 +506,7 @@ public class GameModel {
         		goodEquity[Integer.parseInt(lastFish.equityN)-1]+=1;
         	
         }
-		this.createNextFish(ge.when); //
+        //this.createNextFish(ge.when); //
 
 		// get the response time, in nanoseconds, and write it to the log
 		// long responseTime = ge.when - lastFish.birthTime;
@@ -537,8 +569,14 @@ public class GameModel {
 				//send ERES indicating that the initial rest period has ended.
 				sendEEGMarker(now,"ERES");
 				this.firstBlankScreen = false;
-			}else
+				//create fish for start of game
+				createNextFish(System.nanoTime());
+			}else {
 				return;
+			}
+		}
+		if(this.midBlankScreen){
+			return;
 		}
 		
 		if (this.secondBlankScreen){
@@ -607,7 +645,11 @@ public class GameModel {
 		a.ct.stop();
 
 		GameEvent missedFishEvent = new GameEvent(a);
-		createNextFish(now);
+		fishSoFar++;
+		boolean timeForPause = checkForPause();
+		if(!timeForPause) {
+			createNextFish(now);
+		}
 		this.writeToLog(now, missedFishEvent);
 		currentFish = null;
 		sendEEGMarker(now,"EFIS");
@@ -640,6 +682,8 @@ public class GameModel {
 		if (this.isGameOver())
 			return;
 
+		
+		
 		// first we initialize its position and velocity
 		double y = GameModel.HEIGHT / 2;
 		double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;

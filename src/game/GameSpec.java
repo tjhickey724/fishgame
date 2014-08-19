@@ -23,6 +23,7 @@ public class GameSpec {
 	public boolean requireGameViewUpdate = true;
     public int equityN=0;
 	public boolean stereo = true;
+	public int numTrialsBeforePause = -1;
 	
 	/** 
 	 * delay inserted before playing clips, in milliseconds
@@ -101,6 +102,7 @@ public class GameSpec {
 		s += scriptLine("hasAvatar", "" + hasAvatar);
 		s+=scriptLine("hasEquity", "" + Equity);
 		s += scriptLine("avmode", "" + avmode);
+		s += scriptLine("trialsBeforePause",""+numTrialsBeforePause);
 		return (s);
 
 	}
@@ -149,7 +151,9 @@ public class GameSpec {
 			this.nonModulatedSound = value;}
 			else if (prop.equals("hasEquity")) {
 				this.Equity = (value.contains("true") ? true : false);
-		} else
+		} else if(prop.equals("trialsBeforePause")) {
+			this.numTrialsBeforePause = Integer.parseInt(value);
+		} else 
 			return false;
 		return true;
 	}

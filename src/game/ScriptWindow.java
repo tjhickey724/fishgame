@@ -65,7 +65,7 @@ public class ScriptWindow extends JFrame {
 		subId = new JTextField("Subject");
 		scr = new JTextField("scripts/demoscriptv1.txt");
 		JButton start = new JButton("start");
-		pause = new JButton("pause");
+		pause = new JButton("resume");
 
 		
 		// stop = new JButton("Stop");
@@ -121,13 +121,16 @@ public class ScriptWindow extends JFrame {
 		pause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (pause.getText().equals("pause")) {
+				
+				gm.resumeMidGame();
+				
+				/*if (pause.getText().equals("pause")) {
 					gm.pause();
-					pause.setText("resume");
+					//pause.setText("resume");
 				} else {
 					gm.resume();
-					pause.setText("pause");
-				}
+					//pause.setText("pause");
+				}*/
 
 			}
 		});
