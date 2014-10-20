@@ -688,7 +688,10 @@ public class GameModel {
 		
 		// first we initialize its position and velocity
 		double y = GameModel.HEIGHT / 2;
-		double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;
+		
+		//fish now start in the center and remain there
+		//double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;
+		double x = GameModel.WIDTH/2;
 		nextFish.x = x;
 		nextFish.y = y;
 		nextFish.vx = (nextFish.fromLeft) ? 10 : -10;

@@ -176,6 +176,12 @@ public class Fish {
 		// so we don't have to recompute it every time in this "if"
 		// and so it is clearer...
 
+		/*
+		 * NOTE
+		 * 
+		 * Fish are now stationary, x and y are not updated!
+		 */
+		
 		if (now < birthTime + maxTimeOnScreen * millionL) {
 			this.lifeSpan = now - birthTime;
 			double dt = (now - this.lastUpdate) / billionD;
@@ -202,8 +208,12 @@ public class Fish {
 			double dx = vx * speed * dt;
 			double dy = vy * speed * dt;
 
-			x += dx;
-			y += dy;
+			/*
+			 * Restore these two lines to make fish move again
+			 */
+			
+		//	x += dx;
+		//	y += dy;
 
 			this.lastUpdate = now;
 		} else {
