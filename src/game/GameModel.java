@@ -72,7 +72,7 @@ public class GameModel {
 	public boolean firstBlankScreen = false;
 	public boolean secondBlankScreen = false;
 	private long blankScreenTimeout = 0L;
-	private static long BLANK_SCREEN_DELAY = 3;  // in seconds 
+	private static long BLANK_SCREEN_DELAY = 3*60;  // in seconds 
 	private static long DEBUG_BLANK_DELAY=3;
 	
 
