@@ -76,6 +76,7 @@ public class GameView extends JPanel {
 	public GameView(final GameModel gm) {
 		super();
 		this.gm = gm;
+		this.gm.setGameView(this);
 		this.updateGameState(gm.gameSpec);
 		this.requestFocus();
 
@@ -87,10 +88,7 @@ public class GameView extends JPanel {
 					return;
 				// when a key is pressed, we send a 'flash' to the indicator in
 				// the corner
-				flash = true;
-				// we set the update time to be 50 ms after the keypress, so the
-				// indicator stays lit for 50 ms
-				indicatorUpdate = System.nanoTime() + 50000000l;
+				visualDim();
 
 				// first check to see if they pressed
 				// when there are no fish!!
@@ -109,8 +107,10 @@ public class GameView extends JPanel {
 
 				if (correctResponse) {
 					goodclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
+					audioDim();
 				} else {
 					badclip.playDelayed(gm.EEG, gm.gameSpec.audioDelay);
+					audioDim();
 				}
 
 			}
@@ -130,11 +130,11 @@ public class GameView extends JPanel {
 			return;
 		}
 
-		goodclip = new AudioClip(gs.goodResponseSound);
+		goodclip = new AudioClip(gs.goodResponseSound,gm);
 		goodclip.gm = this.gm;
 		goodclip.codeForEEG = "FPOS";
 
-		badclip = new AudioClip(gs.badResponseSound);
+		badclip = new AudioClip(gs.badResponseSound,gm);
 		badclip.gm = this.gm;
 		badclip.codeForEEG = "FNEG";
 
@@ -162,7 +162,7 @@ public class GameView extends JPanel {
 				if (bgSound != null)
 					bgSound.stop();
 
-				bgSound = new AudioClip(gs.bgSound);
+				bgSound = new AudioClip(gs.bgSound,gm);
 				bgSound.loop();
 
 			}
@@ -272,11 +272,11 @@ public class GameView extends JPanel {
 
 			if (indicatorUpdate < System.nanoTime())
 				flash = false;
-		} else if (gm.flash) {
+		} /*else if (gm.flash) {
 			g.setColor(Color.white);
 			if (gm.indicatorUpdate < System.nanoTime())
 				gm.flash = false;
-		} else {
+		}*/ else {
 			g.setColor(Color.black);
 		}
 
@@ -289,11 +289,11 @@ public class GameView extends JPanel {
 			g.setColor(Color.white);
 			if (soundIndicatorUpdate < System.nanoTime())
 				soundflash = false;
-		} else if (gm.soundflash) {
+		}/* else if (gm.soundflash) {
 			g.setColor(Color.white);
 			if (gm.soundIndicatorUpdate < System.nanoTime())
 				gm.soundflash = false;
-		} else {
+		}*/ else {
 			g.setColor(Color.black);
 		}
 
@@ -386,6 +386,24 @@ public class GameView extends JPanel {
 		g.drawImage(streamImage, 0, y_offset, width, height / 2 + 2, null);
 		g.drawImage(streamImage2, 0, y_offset + height / 2, width,
 				height / 2 + 2, null);
+
+	}
+	/*
+	 * Calling visualDim causes drawIndicator (called by paintComponent) to draw a white box in the lower left
+	 */
+	public void visualDim() {
+
+		flash = true;
+		indicatorUpdate = System.nanoTime() + 50000000l;
+
+	}
+	/*
+	 * Calling audioDim causes drawSoundIndicator (called by paintComponent) to draw a white box in the lower right
+	 */
+	public void audioDim() {
+
+		soundflash = true;
+		soundIndicatorUpdate = System.nanoTime() + 50000000l;
 
 	}
 
@@ -524,5 +542,5 @@ public class GameView extends JPanel {
 		g.dispose();
 		return dimg;
 	}
-
+	
 }

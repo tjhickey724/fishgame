@@ -65,6 +65,7 @@ public class AudioClip extends TimerTask {
 
 		gm.writeToLog(System.nanoTime(), "playFeedback: "+this.filename);
 		clip.start();
+		gm.getGameView().audioDim();
 
 		if (this.codeForEEG != ""){
 			gm.sendEEGMarker(System.nanoTime(), this.codeForEEG);
@@ -82,9 +83,14 @@ public class AudioClip extends TimerTask {
 			}
 		});
 	}
-	
-
 	public void loop() {
+		loop(false);
+	}
+
+	/*
+	 * Loop with optional dim
+	 */
+	public void loop(boolean dim) {
 		// play the sound clip
 		try {
 			loadClip(filename);
@@ -100,6 +106,9 @@ public class AudioClip extends TimerTask {
 		}
 		// clip.start();
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		if(dim) {
+			gm.getGameView().audioDim();
+		}
 		// REFACTOR -- do we need this LineListener?
 		clip.addLineListener(new LineListener() {
 

@@ -167,6 +167,8 @@ public class Fish {
 	 * remains the same. Update slightly modifies their velocity and uses that
 	 * to compute their new position. Note that velocity is in model units per second.
 	 * 
+	 * NOTE: FISH NO LONGER MOVE.  To make them move again, restore the two lines updating x and y
+	 * 
 	 */
 	public void update() {
 		long now = System.nanoTime();
@@ -200,8 +202,10 @@ public class Fish {
 			double dx = vx * speed * dt;
 			double dy = vy * speed * dt;
 
-			x += dx;
-			y += dy;
+			
+			//restore these two lines to make fish move again
+			//x += dx;
+			//y += dy;
 
 			this.lastUpdate = now;
 		} else {

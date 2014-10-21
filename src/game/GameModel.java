@@ -40,6 +40,13 @@ public class GameModel {
 	 * sound, the sound files for the good and bad fish, etc.
 	 */
 	public GameSpec gameSpec;
+	private GameView view;
+	public void setGameView(GameView v) {
+		view = v;
+	}
+	public GameView getGameView() {
+		return view;
+	}
 
 	// here are some convenient constants for converting between nanoseconds
 	// and milliseconds and seconds
@@ -122,8 +129,10 @@ public class GameModel {
 		System.out.println("currentFish = "+currentFish);
 		if (currentFish != null){ // DEBUG - FIND OUT WHY THIS HAPPENS!!!
 			currentFish.ct.stop();
+			view.audioDim();
 		}
 		currentFish = null;
+		view.visualDim();
 	}
 
 	/*
@@ -229,6 +238,8 @@ public class GameModel {
 			// open the logfile
 			long now = System.currentTimeMillis();
 			String logname = "logs/log" + now + ".txt";
+			File tempLogFolder = new File("logs");
+			tempLogFolder.mkdirs();
 			try {
 				this.logfile = new BufferedWriter(new FileWriter(new File(
 						logname)));
@@ -440,7 +451,7 @@ public class GameModel {
 	public synchronized boolean handleKeyPress(KeyEvent e) {
 
 		Fish lastFish = this.getCurrentFish();
-
+		view.visualDim();
 
 		// create a GameEvent for logging purposes
 		// this also determines if it was a correct or incorrect key press
@@ -470,8 +481,9 @@ public class GameModel {
 		// it is current in GameView, all AudioClips should be played in the
 		// same thread
 
-		this.soundflash = true;
-		this.soundIndicatorUpdate = System.nanoTime() + 50 * million;
+		//view.audioDim();
+		//this.soundflash = true;
+		//this.soundIndicatorUpdate = System.nanoTime() + 50 * million;
 
 		// update the summary data and send markers to the EEG
 		if (ge.correctResponse) {
@@ -513,6 +525,7 @@ public class GameModel {
 		if (this.firstBlankScreen){
 			if (now > this.blankScreenTimeout){
 				this.firstBlankScreen = false;
+				view.visualDim();
 			}else
 				return;
 		}
@@ -522,7 +535,8 @@ public class GameModel {
 				System.out.println("ending the 2nd blank screen");
 				this.secondBlankScreen=false;
 				this.paused=true;
-				this.gameOver = true;	
+				this.gameOver = true;
+				view.visualDim();
 				stopEEG();
 			} else return;
 	
@@ -577,11 +591,12 @@ public class GameModel {
 
 	private void removeFish(long now, Fish a) {
 		a.ct.stop();
-
+		view.audioDim();	
 		GameEvent missedFishEvent = new GameEvent(a);
 		createNextFish(now);
 		this.writeToLog(now, missedFishEvent);
 		currentFish = null;
+		view.visualDim();
 	}
 	
 
@@ -610,8 +625,10 @@ public class GameModel {
 			return;
 
 		// first we initialize its position and velocity
+		
 		double y = GameModel.HEIGHT / 2;
-		double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;
+		//double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;
+		double x = GameModel.WIDTH/2; //fish now stays in the center
 		nextFish.x = x;
 		nextFish.y = y;
 		nextFish.vx = (nextFish.fromLeft) ? 10 : -10;
@@ -652,8 +669,7 @@ public class GameModel {
 		currentFish = nextFish;
 
 		// send a flash to the indicator
-		flash = true;
-		indicatorUpdate = System.nanoTime() + 50000000l;
+		view.visualDim();
 
 		// log this event
 		writeToLog(now, nextFish); // indicate that a was spawned
@@ -742,19 +758,18 @@ public class GameModel {
 
 		// set the appropriate AudioClip
 		if (!gameSpec.stereo)
-			nextFish.ct = new AudioClip(clip + "/fish.wav");
+			nextFish.ct = new AudioClip(clip + "/fish.wav",this);
 		    
 		else if (nextFish.fromLeft)
-			nextFish.ct = new AudioClip(clip + "/fishL.wav");
+			nextFish.ct = new AudioClip(clip + "/fishL.wav",this);
 		else
-			nextFish.ct = new AudioClip(clip + "/fishR.wav");
+			nextFish.ct = new AudioClip(clip + "/fishR.wav",this);
 
 		/*
 		 * 
 		 */
-		nextFish.ct.loop();
-		soundflash = true;
-		soundIndicatorUpdate = System.nanoTime() + 50000000l;
+		nextFish.ct.loop(true);
+		//view.audioDim();
          
 		
 		// if fish is not silent play sound
@@ -954,13 +969,13 @@ public class GameModel {
 	public int health = 10;
 	public int wealth = 0;
 
-	public boolean flash;
+	/*public boolean flash;
 
 	public long indicatorUpdate;
 
 	public boolean soundflash;
 
-	public long soundIndicatorUpdate;
+	public long soundIndicatorUpdate;*/
 
 	/** these variables record good/bad hits */
 	private int hits, misses, noKeyPress;
