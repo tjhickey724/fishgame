@@ -75,6 +75,19 @@ public class GameModel {
 	private static long BLANK_SCREEN_DELAY = 3*60;  // in seconds 
 	private static long DEBUG_BLANK_DELAY=3;
 	
+	/*
+	 * These variables are used to insert blank screens after a certain number
+	 * of fish have passed.  The blank screen will appear after fishBetweenBreaks fish, and will last
+	 * for fishBreakTime seconds.
+	 * 
+	 * fishCount is updated in removeFish() and is compared against fishBetweenBreaks
+	 */
+	private static int fishBetweenBreaks = 50;
+	private boolean breakBeep = false;
+	public boolean breakBlankScreen = false;
+	private static int fishBreakTime = 2 * 60 ;//in seconds, 2 minutes total
+	private int fishCount = 0; 
+	
 
 	/**
 	 * the SIZE of the GameBoard is 100x100 in model units when it is drawn to a
@@ -127,12 +140,25 @@ public class GameModel {
 	 */
 	public void removeLastFish() {
 		System.out.println("currentFish = "+currentFish);
+		
 		if (currentFish != null){ // DEBUG - FIND OUT WHY THIS HAPPENS!!!
 			currentFish.ct.stop();
 			view.audioDim();
 		}
 		currentFish = null;
 		view.visualDim();
+		
+		fishCount++;
+		if(fishCount%fishBetweenBreaks==0) {
+			System.out.println("BREAK! " + fishCount);
+			breakBlankScreen = true;
+			view.beep.play();
+			view.audioDim();
+			breakBeep = true;
+			long delay = fishBreakTime*billion;
+			long now = System.nanoTime();
+			blankScreenTimeout = now + delay;
+		} 
 	}
 
 	/*
@@ -259,7 +285,7 @@ public class GameModel {
 
 	/**
 	 * this starts the game by initializing the GAME_START variable and reading
-	 * the script to set the properties and create the next fish and set its
+	 * the script to set the properties and create the l;next fish and set its
 	 * launch time.
 	 */
 	public void start() {
@@ -530,6 +556,29 @@ public class GameModel {
 				return;
 		}
 		
+		if(this.breakBlankScreen) {
+			System.out.println("BREAK BLANK SCREEN");
+			
+			if(breakBeep && now>this.blankScreenTimeout - 1000000000L) {
+				view.beep.play();
+				view.audioDim();
+				breakBeep = false;
+			}
+			
+			if(now>this.blankScreenTimeout) {
+				System.out.println("TIMEOUT OVER");
+				this.breakBlankScreen = false;
+				
+				view.visualDim();
+				createNextFish(now);
+				
+				currentFish = null;
+				
+			} else {
+				return;
+			}
+		}
+		
 		if (this.secondBlankScreen){
 			if (now > this.blankScreenTimeout){
 				System.out.println("ending the 2nd blank screen");
@@ -593,10 +642,23 @@ public class GameModel {
 		a.ct.stop();
 		view.audioDim();	
 		GameEvent missedFishEvent = new GameEvent(a);
-		createNextFish(now);
 		this.writeToLog(now, missedFishEvent);
-		currentFish = null;
-		view.visualDim();
+		
+		fishCount++;
+		if(fishCount%fishBetweenBreaks==0) {
+			breakBlankScreen = true;
+			breakBeep = true;
+			view.beep.play();
+			view.audioDim();
+			long delay = fishBreakTime*billion;
+			blankScreenTimeout = now + delay;
+		} else {
+		
+			createNextFish(now);
+			
+			currentFish = null;
+			view.visualDim();
+		}
 	}
 	
 

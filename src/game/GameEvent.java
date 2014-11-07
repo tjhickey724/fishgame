@@ -112,7 +112,9 @@ public class GameEvent {
 	 */
 	public GameEvent(KeyEvent e, Fish fish) {
 		this.eventType = "hitfish   ";
-		this.when = e.getWhen()*1000000; // this.when is System time in nanosecs
+		//this.when = e.getWhen()*1000000; // this.when is System time in nanosecs
+		this.when = System.nanoTime();
+		
 		this.keyPressed = e.getKeyChar();
 		this.fish = fish;
 		this.species = fish.species;

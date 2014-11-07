@@ -50,6 +50,7 @@ public class GameView extends JPanel {
 	String lastbgSound;
 
 	public AudioClip goodclip, badclip;
+	public AudioClip beep;
 
 	ArrayList<String> keylog = new ArrayList<String>();
 
@@ -137,6 +138,8 @@ public class GameView extends JPanel {
 		badclip = new AudioClip(gs.badResponseSound,gm);
 		badclip.gm = this.gm;
 		badclip.codeForEEG = "FNEG";
+		
+		
 
 		// here we read in the background image which tiles the scene
 		try {
@@ -156,6 +159,7 @@ public class GameView extends JPanel {
 			bubble=ImageIO.read(new File("images/bubble2.png"));
 			fishL = spriteImageArray(fish, 5, 5);
 			fishR = spriteImageArray(horizontalFlip(fish), 5, 5);
+			beep = new AudioClip("sounds/restingBeep.wav",gm);
 			hasAvatar = gs.hasAvatar;
 			if (!gs.bgSound.equals(this.lastbgSound)) {
 				this.lastbgSound = gs.bgSound;
@@ -164,7 +168,7 @@ public class GameView extends JPanel {
 
 				bgSound = new AudioClip(gs.bgSound,gm);
 				bgSound.loop();
-
+				
 			}
 		} catch (Exception e) {
 			System.out.println("can't find background images" + e);
@@ -201,7 +205,7 @@ public class GameView extends JPanel {
 		if (gm == null)
 			return; // this shouldn't ever happen!
 		
-		if (gm.firstBlankScreen || gm.secondBlankScreen){
+		if (gm.firstBlankScreen || gm.secondBlankScreen || gm.breakBlankScreen){
 			drawBlankScreen(g);
 			if ((bgSound != null) && gm.secondBlankScreen){
 				bgSound.stop();
