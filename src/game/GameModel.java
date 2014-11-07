@@ -151,12 +151,14 @@ public class GameModel {
 		fishCount++;
 		if(fishCount%fishBetweenBreaks==0) {
 			System.out.println("BREAK! " + fishCount);
+			
 			breakBlankScreen = true;
 			view.beep.play();
 			view.audioDim();
 			breakBeep = true;
 			long delay = fishBreakTime*billion;
 			long now = System.nanoTime();
+			sendEEGMarker(now,"SRON");
 			blankScreenTimeout = now + delay;
 		} 
 	}
@@ -566,6 +568,7 @@ public class GameModel {
 			}
 			
 			if(now>this.blankScreenTimeout) {
+				sendEEGMarker(now,"SROF");
 				System.out.println("TIMEOUT OVER");
 				this.breakBlankScreen = false;
 				
@@ -646,6 +649,7 @@ public class GameModel {
 		
 		fishCount++;
 		if(fishCount%fishBetweenBreaks==0) {
+			sendEEGMarker(now,"SRON");
 			breakBlankScreen = true;
 			breakBeep = true;
 			view.beep.play();
