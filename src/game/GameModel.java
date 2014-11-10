@@ -307,6 +307,7 @@ public class GameModel {
 			else 
 				delay=DEBUG_BLANK_DELAY*billion;
 			this.firstBlankScreen = true;
+			sendEEGMarker(now,"SRES");
 			this.blankScreenTimeout = now + delay; // 3 minutes from now ...
 		}
 
@@ -363,6 +364,7 @@ public class GameModel {
 		
 		if (usingEEG || usingDebgEgg){
 			this.secondBlankScreen = true;
+			sendEEGMarker(now,"SRES");
 		    if (usingEEG)
 		    	this.blankScreenTimeout = now + BLANK_SCREEN_DELAY*billion;
 		    else
@@ -553,6 +555,7 @@ public class GameModel {
 		if (this.firstBlankScreen){
 			if (now > this.blankScreenTimeout){
 				this.firstBlankScreen = false;
+				sendEEGMarker(now,"ERES");
 				view.visualDim();
 			}else
 				return;
@@ -585,6 +588,7 @@ public class GameModel {
 		if (this.secondBlankScreen){
 			if (now > this.blankScreenTimeout){
 				System.out.println("ending the 2nd blank screen");
+				sendEEGMarker(now,"ERES");
 				this.secondBlankScreen=false;
 				this.paused=true;
 				this.gameOver = true;
