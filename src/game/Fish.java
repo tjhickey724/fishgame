@@ -213,6 +213,10 @@ public class Fish {
 
 
 	}
+	public int audioHz;
+	public void setAudioHz(int ahz) {
+		audioHz = ahz;
+	}
 
 
 

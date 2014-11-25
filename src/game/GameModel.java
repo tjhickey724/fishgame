@@ -1,8 +1,14 @@
 package game;
 
-import java.util.*;
 import java.awt.event.KeyEvent;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the model for the game. It represents the entire state of the game at
@@ -228,6 +234,10 @@ public class GameModel {
 			// open the logfile
 			long now = System.currentTimeMillis();
 			String logname = "logs/log" + now + ".txt";
+			
+			File logFolder = new File("logs");
+			logFolder.mkdirs();
+			
 			try {
 				this.logfile = new BufferedWriter(new FileWriter(new File(
 						logname)));
@@ -695,7 +705,7 @@ public class GameModel {
 		now = System.nanoTime();
 		sendEEGMarker(now+3*million,code);		
 	}
-
+	private Pattern hzPattern = Pattern.compile("(\\d+)hz");
 	private void playFishSound() {
 		// this gives the location of the soundfile
 		String clip;
@@ -732,6 +742,11 @@ public class GameModel {
 		System.out.println("congruent="+nextFish.congruent);
 		System.out.println("species="+nextFish.species);
 		System.out.println("clip="+clip);
+		
+		Matcher hzMatcher = hzPattern.matcher(clip);
+		if(hzMatcher.find()) {
+			nextFish.setAudioHz(Integer.parseInt(hzMatcher.group(1)));
+		}
 
 		// set the appropriate AudioClip
 		if (!gameSpec.stereo)
@@ -742,6 +757,8 @@ public class GameModel {
 		else
 			nextFish.ct = new AudioClip(clip + "/fishR.wav");
 
+		
+		
 		/*
 		 * 
 		 */

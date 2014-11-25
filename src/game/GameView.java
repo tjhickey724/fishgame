@@ -389,6 +389,21 @@ public class GameView extends JPanel {
 
 	}
 
+	
+	/*
+	 * This is the number of half-cycles during which only audio plays.
+	 * After these cycles, the fish will be drawn on screen.
+	 */
+	private static int halfCyclesBeforeVisual = 4;
+	
+	/*
+	 * If the fish is drawn after an odd number of half-cycles, the audio modulation
+	 * will be on a down-swing.  If this value is true, the fish will also begin on a matching down-swing
+	 * otherwise, the fish will begin on an up-swing. This value has no effect if the number
+	 * of half cycles before drawing the fish is even.
+	 */
+	
+	private static boolean invertAfterOddHalfCycles = true;
 	/**
 	 * drawActor(g,a,c) - draws a single actor a using the Graphics object g.
 	 * The color c is the default color used for new species, but is ignored for
@@ -411,7 +426,7 @@ public class GameView extends JPanel {
 		int visualHz = 1;
 		// System.out.println("+++ fx="+fx+" gm.x="+aFish.x+" w ="+this.getWidth()+" gv.x="+x);
 		// System.out.println("+++ fy="+fy+" gm.y="+aFish.y+" w ="+this.getHeight()+" gv.y="+y);
-
+		
 		// set the default visual hertz for the fish
 		// this should be done when the fish is created!
 		// the visualhz should be a field of the fish...
@@ -444,12 +459,14 @@ public class GameView extends JPanel {
 
 		int theSize = interpolateSize(gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize, aFish.birthTime, System.nanoTime(),
-				visualHz);
+				visualHz, aFish.audioHz);
 
 		thisFrame = interpolateBrightness(gm.gameSpec.minBrightness,
 				gm.gameSpec.maxBrightness, aFish.birthTime, System.nanoTime(),
-				visualHz);
+				visualHz, aFish.audioHz);
 
+		
+		
 		// double aspectRatio = fishL[12].getHeight() / (1.0 *
 		// fishL[12].getWidth());
 
@@ -459,6 +476,10 @@ public class GameView extends JPanel {
 																				// *
 																				// aspectRatio)/100);
 
+		
+		double audioCycles = ((System.nanoTime() - aFish.birthTime) / 1000000000.0) * aFish.audioHz;
+		if(audioCycles<halfCyclesBeforeVisual/2.0) return;
+		
 		if (aFish.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
 					theWidth, theHeight, null);
@@ -472,12 +493,14 @@ public class GameView extends JPanel {
 	// brightness works by cycling through a sprite image that has 25 different
 	// levels of brightness.
 	private int interpolateBrightness(int min, int max, long birth, long now,
-			double freq) {
+			double freq, double audioFreq) {
 		// t is the number of cycles so far; take the time in seconds that the
 		// actor has been active, multiply by the frequency
-		double t = ((now - birth) / 1000000000.0) * freq;
+		double secondsOld = (now - birth) / 1000000000.0;
+		double t = freq  * (secondsOld - (halfCyclesBeforeVisual/2 * 1.0/audioFreq));
+		double offset = (halfCyclesBeforeVisual%2==1 && invertAfterOddHalfCycles)?-Math.PI:0;
 		// y is the sinusoidal position of the cycle
-		double y = 0.5 * (Math.sin(Math.PI * 2 * t) + 1);
+		double y = 0.5 * (Math.sin(Math.PI * 2 * t + offset) + 1);
 		// frame oscillates between min and max, as y oscillates from 0 to 1.
 		int range = (int) (max - min);
 		// int segment = (int) range/25;
@@ -486,13 +509,17 @@ public class GameView extends JPanel {
 	}
 
 	private int interpolateSize(double min, double max, long birth, long now,
-			double freq) {
-		double t = ((now - birth) / 1000000000.0) * freq;
-		double y = 1 - 0.5 * (Math.sin(Math.PI * 2 * t) + 1);
+			double freq, double audioFreq) {
+		double secondsOld = (now - birth) / 1000000000.0;
+		double t = freq  * (secondsOld - (halfCyclesBeforeVisual/2 * 1.0/audioFreq));
+		
+		double offset = (halfCyclesBeforeVisual%2==1 && invertAfterOddHalfCycles)?-Math.PI/2:0;
+		double y = 1 - 0.5 * (Math.sin(Math.PI * 2 * t + offset) + 1);
 		double s = min * y + max * (1 - y);
 		int size = (int) Math.round(s);
 		return size;
 	}
+
 
 	// code from http://www.javalobby.org/articles/ultimate-image/
 	public static BufferedImage[] spriteImageArray(BufferedImage img, int cols,
