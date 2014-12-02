@@ -394,7 +394,7 @@ public class GameView extends JPanel {
 	 * This is the number of half-cycles during which only audio plays.
 	 * After these cycles, the fish will be drawn on screen.
 	 */
-	private static int halfCyclesBeforeVisual = 4;
+
 	
 	/*
 	 * If the fish is drawn after an odd number of half-cycles, the audio modulation
@@ -459,11 +459,11 @@ public class GameView extends JPanel {
 
 		int theSize = interpolateSize(gm.gameSpec.minThrobSize,
 				gm.gameSpec.maxThrobSize, aFish.birthTime, System.nanoTime(),
-				visualHz, aFish.audioHz);
+				visualHz, aFish.audioHz, aFish.visualDelayHalfCycles);
 
 		thisFrame = interpolateBrightness(gm.gameSpec.minBrightness,
 				gm.gameSpec.maxBrightness, aFish.birthTime, System.nanoTime(),
-				visualHz, aFish.audioHz);
+				visualHz, aFish.audioHz, aFish.visualDelayHalfCycles);
 
 		
 		
@@ -478,7 +478,12 @@ public class GameView extends JPanel {
 
 		
 		double audioCycles = ((System.nanoTime() - aFish.birthTime) / 1000000000.0) * aFish.audioHz;
-		if(audioCycles<halfCyclesBeforeVisual/2.0) return;
+		if(aFish.visualDelayHalfCycles>0 && audioCycles<aFish.visualDelayHalfCycles/2.0) return;
+		if(aFish.visualDelayHalfCycles>0 && !aFish.positionReset) { //this happens once the visual delay ends
+			aFish.resetPosition();
+			x = toXViewCoords(aFish.x);
+			y = toYViewCoords(aFish.y);
+		}
 		
 		if (aFish.fromLeft) {
 			g.drawImage(fishL[thisFrame], x - theWidth / 2, y - theHeight / 2,
@@ -493,12 +498,15 @@ public class GameView extends JPanel {
 	// brightness works by cycling through a sprite image that has 25 different
 	// levels of brightness.
 	private int interpolateBrightness(int min, int max, long birth, long now,
-			double freq, double audioFreq) {
+			double freq, double audioFreq, int visualDelayHalfCycles) {
 		// t is the number of cycles so far; take the time in seconds that the
 		// actor has been active, multiply by the frequency
 		double secondsOld = (now - birth) / 1000000000.0;
-		double t = freq  * (secondsOld - (halfCyclesBeforeVisual/2 * 1.0/audioFreq));
-		double offset = (halfCyclesBeforeVisual%2==1 && invertAfterOddHalfCycles)?-Math.PI:0;
+		double t = freq * secondsOld;
+		if(visualDelayHalfCycles>0) {
+			t = freq  * (secondsOld - (visualDelayHalfCycles/2 * 1.0/audioFreq));
+		}
+		double offset = (visualDelayHalfCycles%2==1 && invertAfterOddHalfCycles)?-Math.PI:0;
 		// y is the sinusoidal position of the cycle
 		double y = 0.5 * (Math.sin(Math.PI * 2 * t + offset) + 1);
 		// frame oscillates between min and max, as y oscillates from 0 to 1.
@@ -509,11 +517,15 @@ public class GameView extends JPanel {
 	}
 
 	private int interpolateSize(double min, double max, long birth, long now,
-			double freq, double audioFreq) {
+			double freq, double audioFreq, int visualDelayHalfCycles) {
 		double secondsOld = (now - birth) / 1000000000.0;
-		double t = freq  * (secondsOld - (halfCyclesBeforeVisual/2 * 1.0/audioFreq));
 		
-		double offset = (halfCyclesBeforeVisual%2==1 && invertAfterOddHalfCycles)?-Math.PI/2:0;
+		double t = freq * secondsOld;
+		if(visualDelayHalfCycles > 0) {
+			t = freq  * (secondsOld - (visualDelayHalfCycles/2 * 1.0/audioFreq));
+		}
+		
+		double offset = (visualDelayHalfCycles%2==1 && invertAfterOddHalfCycles)?-Math.PI:0;
 		double y = 1 - 0.5 * (Math.sin(Math.PI * 2 * t + offset) + 1);
 		double s = min * y + max * (1 - y);
 		int size = (int) Math.round(s);

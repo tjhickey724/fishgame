@@ -91,6 +91,9 @@ public class Fish {
 	 */
 	public boolean fromLeft; 
 	
+	public int visualDelayHalfCycles;
+	public boolean positionReset = false;
+	
 	/**
 	 * true if the fish audio and video cues have the same oscillation frequency
 	 * 0=congruent,  1=incongruent, 2=noaudio, 3=novideo
@@ -147,7 +150,26 @@ public class Fish {
 	public int avmode = 0;
 
 	
-
+	private double origX, origY, origVx, origVy;
+	public void setInitialPosition(double x, double y, double vx, double vy) {
+		this.x = x;
+		this.origX = x;
+		this.y = y;
+		this.origY = y;
+		this.vx = vx;
+		this.origVx = vx;
+		this.vy = vy;
+		this.origVy = vy;
+		positionReset = false;
+	}
+	public void resetPosition() {
+		this.x = origX;
+		this.y = origY;
+		this.vx = origVx;
+		this.vy = origVy;
+		positionReset = true;
+	}
+	
 	public java.util.Random rand = new java.util.Random();
 
 	/**
@@ -174,8 +196,12 @@ public class Fish {
 		// so we don't have to recompute it every time in this "if"
 		// and so it is clearer...
 
-		if (now < birthTime + maxTimeOnScreen * millionL) {
-			this.lifeSpan = now - birthTime;
+		long visualDelayNanos = (visualDelayHalfCycles/(2*audioHz))*1000000000L;
+		long deathTime = birthTime + (long)maxTimeOnScreen*millionL + visualDelayNanos;
+	//	System.out.println(now + " " + birthTime + " " + deathTime + " " + (deathTime - birthTime));
+		if (now < deathTime) {
+			this.lifeSpan = now - (birthTime+visualDelayNanos);
+			if(this.lifeSpan < 0) lifeSpan = 0;
 			double dt = (now - this.lastUpdate) / billionD;
 
 			// this is the rate at which the y-velocity changes per frame

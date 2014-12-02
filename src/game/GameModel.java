@@ -615,10 +615,7 @@ public class GameModel {
 		// first we initialize its position and velocity
 		double y = GameModel.HEIGHT / 2;
 		double x = (nextFish.fromLeft) ? 1 : GameModel.WIDTH - 1;
-		nextFish.x = x;
-		nextFish.y = y;
-		nextFish.vx = (nextFish.fromLeft) ? 10 : -10;
-		nextFish.vy = 0;
+		nextFish.setInitialPosition(x, y, (nextFish.fromLeft) ? 10 : -10, 0);
 
 		// next we initialize a few other fields
 		// REFACTOR: some of these are redundant -- remove and simplify the
@@ -872,6 +869,8 @@ public class GameModel {
 		String fromLeft = scan.next();
 
 		String species = scan.next();
+		
+		int visualDelay = scan.nextInt();
 
 		/*
 		 * System.out.println("Next fish release in "+interval+" milliseconds\n"
@@ -892,6 +891,7 @@ public class GameModel {
 				: Species.bad;
 		nextFish.active = true;
 		nextFish.lastUpdate = now;
+		nextFish.visualDelayHalfCycles = visualDelay;
 
 		nextFishTime = now + interval * million;
 		
