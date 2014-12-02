@@ -93,6 +93,7 @@ public class Fish {
 	
 	public int visualDelayHalfCycles;
 	public boolean positionReset = false;
+	public int visualhz;
 	
 	/**
 	 * true if the fish audio and video cues have the same oscillation frequency
@@ -242,6 +243,10 @@ public class Fish {
 	public int audioHz;
 	public void setAudioHz(int ahz) {
 		audioHz = ahz;
+		if(audioHz==2) {
+			audioHz = visualhz;
+		}
+		
 	}
 
 

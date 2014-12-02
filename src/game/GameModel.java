@@ -742,7 +742,8 @@ public class GameModel {
 		
 		Matcher hzMatcher = hzPattern.matcher(clip);
 		if(hzMatcher.find()) {
-			nextFish.setAudioHz(Integer.parseInt(hzMatcher.group(1)));
+			int ahz = Integer.parseInt(hzMatcher.group(1));
+			nextFish.setAudioHz(ahz);
 		}
 
 		// set the appropriate AudioClip
@@ -884,6 +885,7 @@ public class GameModel {
 		// create the next Fish to be launched
 		nextFish.interval = interval;
 		nextFish.avmode = gameSpec.avmode;
+		nextFish.visualhz = visualhz;
 		nextFish.fromLeft = fromLeft.equals("left");
 		nextFish.congruent = congruent;
 		nextFish.trial = trialnum; 

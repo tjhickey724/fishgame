@@ -145,7 +145,7 @@ public class GameEvent {
 		String response =
 		// convertNanoToMSfromGS(this.when) + sep +
 		this.eventType + sep + this.responseTime + sep + this.correctResponse
-				+ sep + this.keyPressed + sep
+				+ sep + this.keyPressed + sep + fish.visualDelayHalfCycles;
 		// + convertNanoToMSfromGS(this.fishRelease) + sep
 		// + this.when + sep
 		// + convertNanoToMSfromGS(this.keyPress) + sep;
