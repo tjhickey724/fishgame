@@ -205,7 +205,7 @@ public class Fish {
 			this.lifeSpan = now - (birthTime+visualDelayNanos);
 			if(this.lifeSpan < 0) lifeSpan = 0;
 			
-			System.out.println("LIFESPAN: " + lifeSpan);
+			
 			
 			double dt = (now - this.lastUpdate) / billionD;
 
