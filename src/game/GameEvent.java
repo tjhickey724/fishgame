@@ -100,7 +100,7 @@ public class GameEvent {
 
 		this.side = (fish.fromLeft) ? "left" : "right";
 		this.correctResponse = false;
-		this.fishRelease = fish.birthTime;
+		this.fishRelease = fish.timeWhenFirstDrawn();
 		this.keyPress = this.when;
 	}
 
@@ -110,16 +110,16 @@ public class GameEvent {
 	 * @param keyPressed
 	 * @param fish
 	 */
-	public GameEvent(KeyEvent e, Fish fish) {
+	public GameEvent(KeyEvent e, Fish fish, long when) {
 		this.eventType = "hitfish   ";
-		this.when = e.getWhen()*1000000; // this.when is System time in nanosecs
+		this.when = when; // this.when is System time in nanosecs
 		this.keyPressed = e.getKeyChar();
 		this.fish = fish;
 		this.species = fish.species;
 
 		this.congruent = fish.congruent;
 		this.side = (fish.fromLeft) ? "left" : "right";
-		this.fishRelease = fish.birthTime;
+		this.fishRelease = fish.timeWhenFirstDrawn();
 		this.correctResponse = hitCorrectKey(keyPressed, fish);
 		this.keyPress = this.when;
 		this.responseTime = (int) Math

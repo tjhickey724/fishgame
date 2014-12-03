@@ -447,7 +447,8 @@ public class GameModel {
 
 		// create a GameEvent for logging purposes
 		// this also determines if it was a correct or incorrect key press
-		GameEvent ge = new GameEvent(e, lastFish);
+		
+		GameEvent ge = new GameEvent(e, lastFish, System.nanoTime());
 
 		// then we update the NextFishTime which means reading in another line
 		// and
@@ -554,7 +555,9 @@ public class GameModel {
 		 * but we won't create a new fish until this one disappears!
 		 */
 		if (currentFish == null) {
+			
 			if (now > this.nextFishTime) {
+				
 				currentActorTime = 0;
 				spawnFish(now);
 			}
@@ -895,7 +898,7 @@ public class GameModel {
 		nextFish.lastUpdate = now;
 		nextFish.visualDelayHalfCycles = visualDelay;
 
-		nextFishTime = now + interval * million;
+		nextFishTime = System.nanoTime() + interval * million;
 		
 		// this is the beginning of the trial so we can post some EEG markers
 		sendEEGTrialStartMarker(now,nextFish.congruent,nextFish.fromLeft,nextFish.species);
@@ -1016,6 +1019,7 @@ public class GameModel {
 	}
 
 	public void writeToLog(long now, GameEvent e) {
+		System.out.println("WRITING " + e.responseTime);
 		writeToLog(now, e.toString());
 	}
 

@@ -111,6 +111,11 @@ public class Fish {
 	 */
 	long birthTime;
 	
+	public long timeWhenFirstDrawn() {
+		long visualDelayNanos = (long)((visualDelayHalfCycles*1000000000L)/(2.0*audioHz));
+		return birthTime + visualDelayNanos;
+	}
+	
 	/**
 	 * the System time, in nanoseconds, that the fish was last updated
 	 * this is used to calculate dt in the update formula position += dt*velocity
@@ -185,6 +190,8 @@ public class Fish {
 
 	}
 
+	
+	
 	/**
 	 * actors change their velocity slightly at every step but their speed
 	 * remains the same. Update slightly modifies their velocity and uses that
