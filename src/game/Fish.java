@@ -197,12 +197,16 @@ public class Fish {
 		// so we don't have to recompute it every time in this "if"
 		// and so it is clearer...
 
-		long visualDelayNanos = (visualDelayHalfCycles/(2*audioHz))*1000000000L;
+		long visualDelayNanos = (long)((visualDelayHalfCycles*1000000000L)/(2.0*audioHz));
+		System.out.println(audioHz + " " + visualDelayNanos + " " + visualDelayHalfCycles);
 		long deathTime = birthTime + (long)maxTimeOnScreen*millionL + visualDelayNanos;
-	//	System.out.println(now + " " + birthTime + " " + deathTime + " " + (deathTime - birthTime));
+		System.out.println(now + " " + birthTime + " " + deathTime + " " + (deathTime - birthTime));
 		if (now < deathTime) {
 			this.lifeSpan = now - (birthTime+visualDelayNanos);
 			if(this.lifeSpan < 0) lifeSpan = 0;
+			
+			System.out.println("LIFESPAN: " + lifeSpan);
+			
 			double dt = (now - this.lastUpdate) / billionD;
 
 			// this is the rate at which the y-velocity changes per frame
