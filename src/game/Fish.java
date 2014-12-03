@@ -198,9 +198,9 @@ public class Fish {
 		// and so it is clearer...
 
 		long visualDelayNanos = (long)((visualDelayHalfCycles*1000000000L)/(2.0*audioHz));
-		System.out.println(audioHz + " " + visualDelayNanos + " " + visualDelayHalfCycles);
+		//System.out.println(audioHz + " " + visualDelayNanos + " " + visualDelayHalfCycles);
 		long deathTime = birthTime + (long)maxTimeOnScreen*millionL + visualDelayNanos;
-		System.out.println(now + " " + birthTime + " " + deathTime + " " + (deathTime - birthTime));
+		//System.out.println(now + " " + birthTime + " " + deathTime + " " + (deathTime - birthTime));
 		if (now < deathTime) {
 			this.lifeSpan = now - (birthTime+visualDelayNanos);
 			if(this.lifeSpan < 0) lifeSpan = 0;
