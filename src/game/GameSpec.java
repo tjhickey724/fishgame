@@ -117,6 +117,8 @@ public class GameSpec {
 	 * @return
 	 */
 	public boolean update(String prop, String value) {
+		
+		
 		this.changed = true;
 		if (prop.equals("backgroundImage")) {
 			this.backgroundImage = value;

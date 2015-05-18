@@ -219,7 +219,7 @@ public class GameModel {
 	/*
 	 * this variable holds the information about the next fish to be released!
 	 */
-	private Fish nextFish = new Fish();
+	private Fish nextFish;
 
 	/*
 	 * this stores the time, in nanoseconds, at which the game part of the
@@ -566,6 +566,9 @@ public class GameModel {
 		 * cases ... If you are not in EEG mode, these boolean variables
 		 * will always be false.
 		 */
+		
+	
+		
 		if (this.firstBlankScreen){
 			if (now > this.blankScreenTimeout){
 				//send ERES indicating that the initial rest period has ended.
@@ -621,6 +624,17 @@ public class GameModel {
 		if (currentFish == null) {
 			if (now > this.nextFishTime) {
 				currentActorTime = 0;
+				
+				/*
+				 * 
+				 * If we're not in EEG mode, we won't have called createNextFish when ending the
+				 * resting period (because non-EEG has no resting period).  
+				 * We therefore call createNextFish to generate the first fish and make sure the
+				 * game script is read.
+				 * 
+				 */
+				
+				if(nextFish==null) createNextFish(System.nanoTime());
 				spawnFish(now);
 			}
 		} else { // update the fish state
@@ -812,6 +826,7 @@ public class GameModel {
 				}
 			
 		}
+		
 		System.out.println("goodfile="+gameSpec.good.soundFile);
 		System.out.println("badfile="+gameSpec.bad.soundFile);
 		System.out.println("nonmodfile="+gameSpec.nonModulatedSound);
@@ -927,7 +942,6 @@ public class GameModel {
 		long interval = scan.nextLong();
 
 		// process all the 0 interval commands (which set game properties)
-
 		while (interval == -1) {
 			interval = updateGameSpec();
 		}
@@ -944,6 +958,10 @@ public class GameModel {
 	}
 
 	private void readNextFishData(long now, long interval) {
+		
+		
+		if(nextFish==null) nextFish = new Fish();
+		
 		nextFishTime = interval * million + System.nanoTime(); // now;
 		// the sound file and visual hertz in the input files are not used and
 		// are just documentation....
@@ -1016,7 +1034,6 @@ public class GameModel {
 		long now = System.nanoTime();
 		String prop = scan.next();
 		String value = scan.next();
-	
 			if(prop.equals("minBrightnesslevels")|| prop.equals("maxBrightnesslevels")|| (prop.equals("minSizelevels")) || (prop.equals("maxSizelevels"))){
 				while (value.indexOf(']')==-1){
 					value+=scan.next();
